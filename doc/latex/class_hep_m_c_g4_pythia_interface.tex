@@ -1,0 +1,88 @@
+\hypertarget{class_hep_m_c_g4_pythia_interface}{}\section{Hep\+M\+C\+G4\+Pythia\+Interface Class Reference}
+\label{class_hep_m_c_g4_pythia_interface}\index{Hep\+M\+C\+G4\+Pythia\+Interface@{Hep\+M\+C\+G4\+Pythia\+Interface}}
+
+
+A generic interface class with Pythia event generator via Hep\+M\+C.  
+
+
+
+
+{\ttfamily \#include $<$Hep\+M\+C\+G4\+Pythia\+Interface.\+hh$>$}
+
+Inheritance diagram for Hep\+M\+C\+G4\+Pythia\+Interface\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_hep_m_c_g4_pythia_interface}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_a6bebc88001f05ded58041b4f0426926f}{}void {\bfseries Set\+Verbose\+Level} (G4int i)\label{class_hep_m_c_g4_pythia_interface_a6bebc88001f05ded58041b4f0426926f}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_abf6c19f7c69d397cef873502ae387531}{}G4int {\bfseries Get\+Verbose\+Level} () const \label{class_hep_m_c_g4_pythia_interface_abf6c19f7c69d397cef873502ae387531}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_a5cf44f1b169369fed4a0456901867c2d}{}void {\bfseries Set\+Pylist} (G4int i)\label{class_hep_m_c_g4_pythia_interface_a5cf44f1b169369fed4a0456901867c2d}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_a41f2d519af2273d7b99b5eb62e67894d}{}G4int {\bfseries Get\+Pylist} () const \label{class_hep_m_c_g4_pythia_interface_a41f2d519af2273d7b99b5eb62e67894d}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_a5b8d73fc3d65b4539cfca4168101ce14}{}void {\bfseries Call\+Pyinit} (G4\+String frame, G4\+String beam, G4\+String target, G4double win)\label{class_hep_m_c_g4_pythia_interface_a5b8d73fc3d65b4539cfca4168101ce14}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_a7f853e52f16a3fba0265380932c9cf43}{}void {\bfseries Call\+Pystat} (G4int istat)\label{class_hep_m_c_g4_pythia_interface_a7f853e52f16a3fba0265380932c9cf43}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_a609e892870a9592cdea8be836c21573c}{}void {\bfseries Set\+Random\+Seed} (G4int iseed)\label{class_hep_m_c_g4_pythia_interface_a609e892870a9592cdea8be836c21573c}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_ae8163e7f051487ed2284dd89d0c6890d}{}void {\bfseries Call\+Pygive} (G4\+String par)\label{class_hep_m_c_g4_pythia_interface_ae8163e7f051487ed2284dd89d0c6890d}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_ae61079ec925b5d7ba40bae6e8dda09ea}{}void {\bfseries Call\+Pyrget} (G4int lun, G4int move)\label{class_hep_m_c_g4_pythia_interface_ae61079ec925b5d7ba40bae6e8dda09ea}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_a250ad0eb10834f554314fae10b454710}{}void {\bfseries Call\+Pyrset} (G4int lun, G4int move)\label{class_hep_m_c_g4_pythia_interface_a250ad0eb10834f554314fae10b454710}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_abdb8a01a6157c91de6bff2177a4cf3fd}{}void {\bfseries Print\+Random\+Status} (std\+::ostream \&ostr=G4cout) const \label{class_hep_m_c_g4_pythia_interface_abdb8a01a6157c91de6bff2177a4cf3fd}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_aa17ddba03c246a9f0011c31a3a601b24}{}virtual void {\bfseries Set\+User\+Parameters} ()\label{class_hep_m_c_g4_pythia_interface_aa17ddba03c246a9f0011c31a3a601b24}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_a01e0ffc1f48ee73cde6f1a7af383db17}{}virtual void {\bfseries Print} () const \label{class_hep_m_c_g4_pythia_interface_a01e0ffc1f48ee73cde6f1a7af383db17}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_a35f96ffb6e7e846e1784321a87aa4859}{}virtual Hep\+M\+C\+::\+Gen\+Event $\ast$ {\bfseries Generate\+Hep\+M\+C\+Event} ()\label{class_hep_m_c_g4_pythia_interface_a35f96ffb6e7e846e1784321a87aa4859}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_a53097ae82a7f0288e75c063679579d64}{}G4int {\bfseries verbose}\label{class_hep_m_c_g4_pythia_interface_a53097ae82a7f0288e75c063679579d64}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_a327b9fdcde2ff2601ceccf1650a4fb48}{}G4int {\bfseries mpylist}\label{class_hep_m_c_g4_pythia_interface_a327b9fdcde2ff2601ceccf1650a4fb48}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_a5aa2077f91e9bd75e551bca38742046e}{}Hep\+M\+C\+::\+I\+O\+\_\+\+H\+E\+P\+E\+V\+T {\bfseries hepevtio}\label{class_hep_m_c_g4_pythia_interface_a5aa2077f91e9bd75e551bca38742046e}
+
+\item 
+\hypertarget{class_hep_m_c_g4_pythia_interface_ac0541688df49e9ba60bd7771000eb483}{}\hyperlink{class_hep_m_c_g4_pythia_messenger}{Hep\+M\+C\+G4\+Pythia\+Messenger} $\ast$ {\bfseries messenger}\label{class_hep_m_c_g4_pythia_interface_ac0541688df49e9ba60bd7771000eb483}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A generic interface class with Pythia event generator via Hep\+M\+C. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Hep\+M\+C\+G4\+Pythia\+Interface.\+hh\end{DoxyCompactItemize}

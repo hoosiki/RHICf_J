@@ -1,0 +1,186 @@
+#include "B5PrimaryGeneratorAction.hh"
+
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4GenericMessenger.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
+: G4VUserPrimaryGeneratorAction(),     
+  fParticleGun(0), fMessenger(0), 
+  fElectron(0), fNeutron(0), fPion(0), fProton(0),
+  fMomentum(100.*GeV),
+  fSigmaMomentum(0.*MeV),
+  fSigmaAngle(0.*deg),
+  fSigmaRange(1.*mm),
+  fX(0), fY(0), fZ(0),
+  fRandomizePrimary(false)
+{
+    G4int n_particle = 1;
+    fParticleGun  = new G4ParticleGun(n_particle);
+    
+    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+    G4String particleName;
+    fElectron = particleTable->FindParticle(particleName="e-");
+    fNeutron = particleTable->FindParticle(particleName="neutron");
+    fPion = particleTable->FindParticle(particleName="pi0");
+    fNeutron = particleTable->FindParticle(particleName="neutron");
+    fProton = particleTable->FindParticle(particleName="proton");
+    
+    // default particle kinematics
+    fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,50*cm,50.*cm));
+    fParticleGun->SetParticleDefinition(fElectron);
+    //fParticleGun->SetParticleDefinition(fNeutron);
+    
+    //G4cout << "***********************" << (fParticleGun -> GetMomentum())/GeV << "*****************"<< G4endl;
+    // define commands for this class
+    DefineCommands();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B5PrimaryGeneratorAction::~B5PrimaryGeneratorAction()
+{
+    delete fParticleGun;
+    delete fMessenger;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B5PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
+{
+    G4ParticleDefinition* particle;
+   
+
+    if (fRandomizePrimary)
+    {
+        G4int i = (int)(5.*G4UniformRand());
+        switch(i)
+        {
+            case 0:
+                particle = fElectron;
+                break;
+            case 1:
+                particle = fNeutron;
+                break;
+            case 2:
+                particle = fPion;
+                break;
+            case 3:
+                particle = fProton;
+                break;
+            default:
+                particle = fProton;
+                break;
+        }
+        fParticleGun->SetParticleDefinition(particle);
+    }
+    else
+    {
+        particle = fParticleGun->GetParticleDefinition();
+    }
+    
+    G4double pp = fMomentum + (G4UniformRand()-0.5)*fSigmaMomentum;
+    G4double mass = particle->GetPDGMass();
+    G4double Ekin = std::sqrt(pp*pp+mass*mass)-mass;
+    fParticleGun->SetParticleEnergy(Ekin);
+    
+   
+    G4double angle = (G4UniformRand()-0.5)*fSigmaAngle;
+    G4ThreeVector position = G4ThreeVector((fX+fSigmaRange*(G4UniformRand()-0.5))*mm, (fY+fSigmaRange*(G4UniformRand()-0.5)+4.05/sqrt(2.))*mm, (fZ+500)*mm);
+
+    fParticleGun->SetParticlePosition(position);
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(std::sin(angle),0.,-std::cos(angle)));
+
+
+
+
+    fParticleGun->GeneratePrimaryVertex(event);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B5PrimaryGeneratorAction::DefineCommands()
+{
+    // Define /B5/generator command directory using generic messenger class
+    fMessenger 
+      = new G4GenericMessenger(this, 
+                               "/B5/generator/", 
+                               "Primary generator control");
+              
+    // momentum command
+    G4GenericMessenger::Command& momentumCmd
+      = fMessenger->DeclarePropertyWithUnit("momentum", "GeV", fMomentum, 
+                                    "Mean momentum of primaries.");
+    momentumCmd.SetParameterName("p", true);
+    momentumCmd.SetRange("p>=0.");                                
+    momentumCmd.SetDefaultValue("1.");
+    // ok
+    //momentumCmd.SetParameterName("p", true);
+    //momentumCmd.SetRange("p>=0.");                                
+    
+    // sigmaMomentum command
+    G4GenericMessenger::Command& sigmaMomentumCmd
+      = fMessenger->DeclarePropertyWithUnit("sigmaMomentum",
+          "MeV", fSigmaMomentum, "Sigma momentum of primaries.");
+    sigmaMomentumCmd.SetParameterName("sp", true);
+    sigmaMomentumCmd.SetRange("sp>=0.");                                
+    sigmaMomentumCmd.SetDefaultValue("50.");
+
+    // sigmaAngle command
+    G4GenericMessenger::Command& sigmaAngleCmd
+      = fMessenger->DeclarePropertyWithUnit("sigmaAngle", "deg", fSigmaAngle, 
+                                    "Sigma angle divergence of primaries.");
+    sigmaAngleCmd.SetParameterName("t", true);
+    sigmaAngleCmd.SetRange("t>=0.");                                
+    sigmaAngleCmd.SetDefaultValue("2.");
+
+    // sigmarange command
+    G4GenericMessenger::Command& sigmaRangeCmd
+      = fMessenger->DeclarePropertyWithUnit("sigmaRange", "mm", fSigmaRange, 
+                                    "Sigma range divergence of primaries.");
+    sigmaAngleCmd.SetParameterName("st", true);
+    sigmaAngleCmd.SetRange("st>=0.");                                
+    sigmaAngleCmd.SetDefaultValue("1.");
+
+    // X command
+    G4GenericMessenger::Command& XCmd
+      = fMessenger->DeclarePropertyWithUnit("X", "mm", fX, 
+                                    "X of position");
+    sigmaAngleCmd.SetParameterName("X", true);
+    sigmaAngleCmd.SetDefaultValue("0.");
+
+    // Y command
+    G4GenericMessenger::Command& YCmd
+      = fMessenger->DeclarePropertyWithUnit("Y", "mm", fY, 
+                                    "Y of position");
+    sigmaAngleCmd.SetParameterName("Y", true);
+    sigmaAngleCmd.SetDefaultValue("0.");
+
+    // Z command
+    G4GenericMessenger::Command& ZCmd
+      = fMessenger->DeclarePropertyWithUnit("Z", "mm", fZ, 
+                                    "Z of position");
+    sigmaAngleCmd.SetParameterName("Z", true);
+    sigmaAngleCmd.SetDefaultValue("0.");
+
+
+    // randomizePrimary command
+    G4GenericMessenger::Command& randomCmd
+      = fMessenger->DeclareProperty("randomizePrimary", fRandomizePrimary);
+    G4String guidance
+       = "Boolean flag for randomizing primary particle types.\n";   
+    guidance
+       += "In case this flag is false, you can select the primary particle\n";
+    guidance += "  with /gun/particle command.";                               
+    randomCmd.SetGuidance(guidance);
+    randomCmd.SetParameterName("flg", true);
+    randomCmd.SetDefaultValue("true");
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

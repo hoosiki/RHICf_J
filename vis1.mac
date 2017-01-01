@@ -1,0 +1,4 @@
+/vis/open OGL 900x900
+/vis/drawVolume paraWorld
+/vis/viewer/set/viewpointThetaPhi 100 100
+/vis/viewer/set/style w

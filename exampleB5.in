@@ -1,0 +1,61 @@
+#
+# Test macro file for exampleB5
+#
+
+/run/initialize
+
+/B5/generator/randomizePrimary false
+/B5/generator/sigmaMomentum 0. 
+/B5/generator/sigmaRange 0
+
+/gun/particle neutron
+/B5/generator/momentum 10. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 20. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 30. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 40. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 50. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 60. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 70. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 80. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 90. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 100. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 110. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 120. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 130. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 140. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 150. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 200. GeV
+/run/beamOn 10
+/gun/particle neutron
+/B5/generator/momentum 250. GeV
+/run/beamOn 10

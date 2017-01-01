@@ -1,0 +1,5 @@
+/generator/select hepmcAscii
+/generator/hepmcAscii/open SimuData/py510G_pp.dat
+/generator/hepmcAscii/verbose 1
+/run/beamOn 3
+
