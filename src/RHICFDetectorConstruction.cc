@@ -362,7 +362,7 @@ void RHICFDetectorConstruction::DefineDimension()
         pipeOutr            = 5*cm;
         pipeInr             = 4.5*cm;
         pipeLength          = 20*cm;
-        Nmod                = 3;
+        Nmod                = 1;
         zdcPar[0]           = 5.0;
         zdcPar[1]           = (gapper[2]*cos + gapper[1]*sin);
         zdcPar[2]           = (zdcPar[1]/tan + Lmod);
@@ -509,36 +509,6 @@ void RHICFDetectorConstruction::DefineDimension()
 void RHICFDetectorConstruction::ConstructSDandField()
 ///////////////////////////////////////////////////////////////////////////////
 {
-/*
-    // Set Sensitive Detector
-    //
-    //
-    G4SDManager* fSDman = G4SDManager::GetSDMpointer();
-    G4String sdName;
-
-    G4VSensitiveDetector* fFCSCSensitive = new fibSD(sdName = "/FCSC");
-    fSDman -> AddNewDetector(fFCSCSensitive);
-    FCSCLogical -> SetSensitiveDetector(fFCSCSensitive);
-    SetSensitiveDetector("FCSCLogical", fFCSCSensitive);
-
-    G4VSensitiveDetector* fRCSCSensitive = new smdSD(sdName = "/RCSC");
-    fSDman -> AddNewDetector(fRCSCSensitive);
-    RCSCLogical -> SetSensitiveDetector(fRCSCSensitive);
-    SetSensitiveDetector("RCSCLogical", fRCSCSensitive);
-
-    G4VSensitiveDetector* fSMDSensitive = new smdSD(sdName = "/SMD");
-    //fSDman -> AddNewDetector(fSMDSensitive);
-    //SMDVLogical -> SetSensitiveDetector(fSMDSensitive);
-    SetSensitiveDetector("SMDLLogical", fSMDSensitive);
-
-
-    G4VSensitiveDetector* fFIBRSensitive = new smdSD(sdName = "/FIBR");
-    //fSDman -> AddNewDetector(fFIBRSensitive);
-    //fFIBR_1Logical -> SetSensitiveDetector(fFIBRSensitive);
-    SetSensitiveDetector("fFIBR_1Logical", fFIBRSensitive);
-*/
-    
-//--------------------------------Changes on 20150301-----------------------
 
 
     G4SDManager::GetSDMpointer() -> SetVerboseLevel(1);

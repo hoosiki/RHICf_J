@@ -67,7 +67,7 @@ RHICFPhysicsList::RHICFPhysicsList(G4String physName) : G4VModularPhysicsList()
        RegisterPhysics(elem);
     }
 
-    fAbsorptionOn = true;
+    fAbsorptionOn = false;
     
     //This looks complex, but it is not:
     //Get from base-class the pointer of the phsyicsVector
@@ -78,10 +78,10 @@ RHICFPhysicsList::RHICFPhysicsList(G4String physName) : G4VModularPhysicsList()
                 GetSubInstanceManager().offset[GetInstanceID()].physicsVector;
     
     fPhysicsVector->push_back(new RHICFExtraPhysics());
-    fPhysicsVector->push_back(fOpticalPhysics =
-                                        new RHICFOpticalPhysics(fAbsorptionOn));
-
-    fPhysicsVector->push_back(new G4RadioactiveDecayPhysics());
+    //Junsang****fPhysicsVector->push_back(fOpticalPhysics =
+                                        //Junsang****new RHICFOpticalPhysics(fAbsorptionOn));
+//Junsang****
+    //Junsang****fPhysicsVector->push_back(new G4RadioactiveDecayPhysics());
 
     fStepMaxProcess = new RHICFStepMax();
 }
@@ -315,10 +315,10 @@ void RHICFPhysicsList::SetNbOfPhotonsCerenkov(G4int maxNumber)
 
 void RHICFPhysicsList::SetVerbose(G4int verbose)
 {
-   fOpticalPhysics->GetCerenkovProcess()->SetVerboseLevel(verbose);
-   fOpticalPhysics->GetScintillationProcess()->SetVerboseLevel(verbose);
-   fOpticalPhysics->GetAbsorptionProcess()->SetVerboseLevel(verbose);
-   fOpticalPhysics->GetRayleighScatteringProcess()->SetVerboseLevel(verbose);
-   fOpticalPhysics->GetMieHGScatteringProcess()->SetVerboseLevel(verbose);
-   fOpticalPhysics->GetBoundaryProcess()->SetVerboseLevel(verbose);
+   //Junsang****fOpticalPhysics->GetCerenkovProcess()->SetVerboseLevel(verbose);
+   //Junsang****fOpticalPhysics->GetScintillationProcess()->SetVerboseLevel(verbose);
+   //Junsang****fOpticalPhysics->GetAbsorptionProcess()->SetVerboseLevel(verbose);
+   //Junsang****fOpticalPhysics->GetRayleighScatteringProcess()->SetVerboseLevel(verbose);
+   //Junsang****fOpticalPhysics->GetMieHGScatteringProcess()->SetVerboseLevel(verbose);
+   //Junsang****fOpticalPhysics->GetBoundaryProcess()->SetVerboseLevel(verbose);
 }

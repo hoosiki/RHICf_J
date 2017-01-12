@@ -34,8 +34,8 @@ B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
     
     // default particle kinematics
     fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,50*cm,50.*cm));
-    fParticleGun->SetParticleDefinition(fElectron);
-    //fParticleGun->SetParticleDefinition(fNeutron);
+    //Junsang****fParticleGun->SetParticleDefinition(fElectron);
+    fParticleGun->SetParticleDefinition(fNeutron);
     
     //G4cout << "***********************" << (fParticleGun -> GetMomentum())/GeV << "*****************"<< G4endl;
     // define commands for this class
