@@ -78,9 +78,8 @@ RHICFPhysicsList::RHICFPhysicsList(G4String physName) : G4VModularPhysicsList()
                 GetSubInstanceManager().offset[GetInstanceID()].physicsVector;
     
     fPhysicsVector->push_back(new RHICFExtraPhysics());
-    //Junsang****fPhysicsVector->push_back(fOpticalPhysics =
-                                        //Junsang****new RHICFOpticalPhysics(fAbsorptionOn));
-//Junsang****
+    //Junsang****fPhysicsVector->push_back(fOpticalPhysics = new RHICFOpticalPhysics(fAbsorptionOn));
+
     //Junsang****fPhysicsVector->push_back(new G4RadioactiveDecayPhysics());
 
     fStepMaxProcess = new RHICFStepMax();

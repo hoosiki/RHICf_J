@@ -4,7 +4,7 @@
 #include "B5PrimaryGeneratorAction.hh"
 ///////////////////////////////////////////////////////////////////////////////
 #include "G4Event.hh"
-//#include "g4root.hh"
+#include "g4root.hh"
 #include "G4RunManager.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -13,6 +13,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
+//Junsang****#include "G4Analysis.hh"
 #include "Randomize.hh"
 #include <fstream>
 #include <cstdlib>
@@ -126,8 +127,8 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     G4double* kDepE_3 = (*fEnergyMap_3)[0];
     G4double* kDepEW_3 = (*fDetEZDCMap_3)[0];
 
-    G4double* kDepSMDH = (*fDetESMDHMap)[0];
-    G4double* kDepSMDV = (*fDetESMDVMap)[0];
+    G4double* kDepSMDH = NULL; 
+    G4double* kDepSMDV = (*fDetESMDVMap)[1];
     G4double* kDepI_PL = (*fDetEI_PLMap)[0];
 
     G4double* kDepFIBR = (*fDetFIBRMap)[0];
@@ -137,6 +138,19 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     std::vector<G4double> kXPosition;
     std::vector<G4double> kYPosition;
 
+    if(!kDepSMDH) kDepSMDH = new G4double(0.0);
+    if(!kDepSMDV) kDepSMDV = new G4double(0.0);
+    for(G4int i=1; i<9; i++)
+    {
+        kDepSMDH = (*fDetESMDHMap)[i];
+        if(!kDepSMDH) kDepSMDH = new G4double(0.0);
+        G4cout << i << "+++" << *kDepSMDH << G4endl;
+    }
+
+    //Junsang****for(G4int i=1; i<8; i++)
+    //Junsang****{
+        //Junsang****G4cout << i << "+++" << *(*fDetESMDVMap)[i] << G4endl;
+    //Junsang****}
   
     G4double Temp14 = 0;
     G4double Temp15 = 0;
@@ -205,6 +219,11 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     G4double PositionY = Temp15/TempSumYN;
 
 
+    G4cout << "X: " << PositionX << G4endl;
+    G4cout << "Y: " << PositionY << G4endl;
+    G4cout << "TX: " << Temp14 << G4endl;
+    G4cout << "TY: " << Temp15 << G4endl;
+
     
 
    
@@ -231,31 +250,29 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     nameAdd2 = tempy.str();
     //std::string x = std::to_string(ParticleEnergy);
 
-    fileName = "./SimuData/NDEDEW";
-    fileName += nameE;
-    fileName += ".out";
-/*
 
-    fileName = "./SimuData/NDEDEW";
-    fileName += nameAdd1;
-    fileName += "_";
-    fileName += nameAdd2;
-    fileName += ".out";
-*/
-
-
-
-    std::ofstream fout;
-    fout.open(fileName.c_str(), std::ios::app);//"./SimuData/NDEDEW"+x+".out",std::ios::app);
-
-    fout << kTemp1 << " " << kTemp3/GeV << " " << kTemp4 << " " << kTemp6/GeV << " " << kTemp7 << " " << kTemp9/GeV <<  " " << kTemp1+kTemp4+kTemp7 << " " << (kTemp3+kTemp6+kTemp9+kTemp10+kTemp11+kTemp12+kTemp13)/GeV  << " " << PositionX << " " << PositionY << G4endl;
+// Get analysis manager
+//
+    G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
     
-    //G4BestUnit(fcscEdep,"Energy") << G4endl;
+    fAnalysisManager->FillNtupleIColumn(0, kTemp1);
+    fAnalysisManager->FillNtupleIColumn(1, kTemp4);
+    fAnalysisManager->FillNtupleIColumn(2, kTemp7);
+    fAnalysisManager->FillNtupleIColumn(3, kTemp1+kTemp4+kTemp7);
 
 
-    fout.close();
+    fAnalysisManager->FillNtupleDColumn(4, kTemp3/GeV);
+    fAnalysisManager->FillNtupleDColumn(5, kTemp6/GeV);
+    fAnalysisManager->FillNtupleDColumn(6, kTemp9/GeV);
+    fAnalysisManager->FillNtupleDColumn(6, kTemp3/GeV+kTemp6/GeV+kTemp9/GeV);
+
+    fAnalysisManager->FillNtupleDColumn(7, PositionX);
+    fAnalysisManager->FillNtupleDColumn(8, PositionY);
 
 
+
+
+    fAnalysisManager->AddNtupleRow();
 
 
 

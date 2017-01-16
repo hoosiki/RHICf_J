@@ -14,7 +14,7 @@ B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),     
   fParticleGun(0), fMessenger(0), 
   fElectron(0), fNeutron(0), fPion(0), fProton(0),
-  fMomentum(100.*GeV),
+  fMomentum(100.*MeV),
   fSigmaMomentum(0.*MeV),
   fSigmaAngle(0.*deg),
   fSigmaRange(1.*mm),
@@ -34,8 +34,8 @@ B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
     
     // default particle kinematics
     fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,50*cm,50.*cm));
-    //Junsang****fParticleGun->SetParticleDefinition(fElectron);
-    fParticleGun->SetParticleDefinition(fNeutron);
+    fParticleGun->SetParticleDefinition(fElectron);
+    //Junsang****fParticleGun->SetParticleDefinition(fNeutron);
     
     //G4cout << "***********************" << (fParticleGun -> GetMomentum())/GeV << "*****************"<< G4endl;
     // define commands for this class

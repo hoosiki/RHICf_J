@@ -527,9 +527,47 @@ void RHICFDetectorConstruction::ConstructSDandField()
 
         G4String detName = calName[j];
 
-
+        //Junsang****if(j==2)
+        //Junsang****{
+//Junsang****
+//Junsang****
+            //Junsang****detName = calName[j];
+//Junsang****
+            //Junsang****for(G4int i=1; i<9; i++)
+            //Junsang****{
+                //Junsang****detName+="_";
+                //Junsang****detName+=std::to_string(i);
+                //Junsang****detName+="Logical";
+//Junsang****
+                //Junsang****G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector(detName);
+       //Junsang****
+                //Junsang****G4VPrimitiveScorer* primitive;
+                //Junsang****primitive = new G4PSEnergyDeposit("DE",1);
+                //Junsang****det -> RegisterPrimitive(primitive);
+            //Junsang****}
+//Junsang****
+        //Junsang****}else if(j==3)
+        //Junsang****{
+            //Junsang****detName = calName[j];
+//Junsang****
+            //Junsang****for(G4int i=1; i<8; i++)
+            //Junsang****{
+                //Junsang****detName+="_";
+                //Junsang****detName+=std::to_string(i);
+                //Junsang****detName+="Logical";
+//Junsang****
+                //Junsang****G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector(detName);
+       //Junsang****
+                //Junsang****G4VPrimitiveScorer* primitive;
+                //Junsang****primitive = new G4PSEnergyDeposit("DE",1);
+                //Junsang****det -> RegisterPrimitive(primitive);
+            //Junsang****}
+//Junsang****
+        //Junsang****}else if(j<2)
         if(j<2)
         {
+
+
             for( G4int i=0; i<3; i++)
             {
        
@@ -547,7 +585,6 @@ void RHICFDetectorConstruction::ConstructSDandField()
                 }
        
             
-       
        
                 G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector(detName);
        
@@ -743,11 +780,11 @@ G4VPhysicalVolume* RHICFDetectorConstruction::WCNT(G4VPhysicalVolume* world_phys
     // Define 'Tengsten plate' : W_PL is plate which made of tungsten
     fW_PLSolid              = new G4Box("W_PLSolid", wplPar[0]*cm, wplPar[2]*cm, wplPar[1]*cm);
     // Define 'PMT'
-    fPMTSolid               = new G4Box("PMTSolid", gapper[0]*cm, gapper[1]*cm, 0.005*cm);
+    fPMTSolid               = new G4Box("PMTSolid", gapper[0]*cm, fibPar[1]*cm, 0.005*cm);
     // Define 'PPMT is Pb bar for collecting energy of optical photon'
-    fPPMTSolid              = new G4Box("PPMTSolid", gapper[0]*cm, gapper[1]*cm, 0.0025*cm);
+    fPPMTSolid              = new G4Box("PPMTSolid", gapper[0]*cm, fibPar[1]*cm, 0.0025*cm);
     // Define 'Bar for eliminating optical photon propagating downward'
-    fBlockerSolid           = new G4Box("BlockerSolid", gapper[0]*cm, gapper[1]*cm, 0.005*cm);
+    fBlockerSolid           = new G4Box("BlockerSolid", gapper[0]*cm, fibPar[1]*cm, 0.005*cm);
     // Define 'Scintillator plate'
     fRCSCSolid              = new G4Box("RCSCSolid", rcPar[0]*cm, rcPar[1]*cm, rcPar[2]*cm);
     // Define 'SMD'
@@ -776,14 +813,10 @@ G4VPhysicalVolume* RHICFDetectorConstruction::WCNT(G4VPhysicalVolume* world_phys
     // Define LogicalVolume
 
     fZDCLogical             = new G4LogicalVolume(fZDCSolid, FindMaterial("G4_AIR"), "ZDCLogical");
-    //Junsang****fGAPF_1Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("G4_AIR"), "GAPF_1Logical");
-    //Junsang****fGAPF_2Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("G4_AIR"), "GAPF_2Logical");
-    //Junsang****fGAPF_3Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("G4_AIR"), "GAPF_3Logical");
-    fGAPF_1Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("PMMA"), "GAPF_1Logical");
-    fGAPF_2Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("PMMA"), "GAPF_2Logical");
-    fGAPF_3Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("PMMA"), "GAPF_3Logical");
-    //Junsang****fGAPF1Logical           = new G4LogicalVolume(fGAPF1Solid, FindMaterial("G4_Galactic"), "GAPF1Logical");
-    fGAPF1Logical           = new G4LogicalVolume(fGAPF1Solid, FindMaterial("FPMMA"), "GAPF1Logical");
+    fGAPF_1Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("G4_AIR"), "GAPF_1Logical");
+    fGAPF_2Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("G4_AIR"), "GAPF_2Logical");
+    fGAPF_3Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("G4_AIR"), "GAPF_3Logical");
+    fGAPF1Logical           = new G4LogicalVolume(fGAPF1Solid, FindMaterial("G4_Galactic"), "GAPF1Logical");
     fGAPF2Logical           = new G4LogicalVolume(fGAPF2Solid, FindMaterial("FPMMA"), "GAPF2Logical");
     fI_PLLogical            = new G4LogicalVolume(fI_PLSolid, FindMaterial("G4_Fe"), "I_PLLogical");
     fFIBLogical             = new G4LogicalVolume(fFIBSolid, FindMaterial("PMMA"), "FIBLogical");
@@ -800,11 +833,28 @@ G4VPhysicalVolume* RHICFDetectorConstruction::WCNT(G4VPhysicalVolume* world_phys
     fBlockerLogical         = new G4LogicalVolume(fBlockerSolid, FindMaterial("G4_Galactic"), "BlockerLogical");
     fSMDLogical             = new G4LogicalVolume(fSMDSolid, FindMaterial("G4_AIR"), "fSMDLogical");
     fRCSCLogical            = new G4LogicalVolume(fRCSCSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "RCSCLogical");
+    // Horizontal smd bar
     fSMDHLogical            = new G4LogicalVolume(fSMDHSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDHLogical");
+    fSMDH_1Logical            = new G4LogicalVolume(fSMDHSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDH_1Logical");
+    fSMDH_2Logical            = new G4LogicalVolume(fSMDHSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDH_2Logical");
+    fSMDH_3Logical            = new G4LogicalVolume(fSMDHSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDH_3Logical");
+    fSMDH_4Logical            = new G4LogicalVolume(fSMDHSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDH_4Logical");
+    fSMDH_5Logical            = new G4LogicalVolume(fSMDHSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDH_5Logical");
+    fSMDH_6Logical            = new G4LogicalVolume(fSMDHSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDH_6Logical");
+    fSMDH_7Logical            = new G4LogicalVolume(fSMDHSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDH_7Logical");
+    fSMDH_8Logical            = new G4LogicalVolume(fSMDHSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDH_8Logical");
     fFEPLLogical            = new G4LogicalVolume(fFEPLSolid, FindMaterial("G4_Al"), "FEPLLogical");
     fFCSCLogical            = new G4LogicalVolume(fFCSCSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "FCSCLogical");
     fALPLLogical            = new G4LogicalVolume(fALPLSolid, FindMaterial("G4_Fe"), "ALPLLogical");
+    // Vertical smd bar
     fSMDVLogical            = new G4LogicalVolume(fSMDVSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDVLogical");
+    fSMDV_1Logical            = new G4LogicalVolume(fSMDVSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDV_1Logical");
+    fSMDV_2Logical            = new G4LogicalVolume(fSMDVSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDV_2Logical");
+    fSMDV_3Logical            = new G4LogicalVolume(fSMDVSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDV_3Logical");
+    fSMDV_4Logical            = new G4LogicalVolume(fSMDVSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDV_4Logical");
+    fSMDV_5Logical            = new G4LogicalVolume(fSMDVSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDV_5Logical");
+    fSMDV_6Logical            = new G4LogicalVolume(fSMDVSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDV_6Logical");
+    fSMDV_7Logical            = new G4LogicalVolume(fSMDVSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDV_7Logical");
     fSMDHPMTLogical            = new G4LogicalVolume(fSMDHPMTSolid, FindMaterial("G4_AIR"), "SMDHPMTLogical");
     fSMDVPMTLogical            = new G4LogicalVolume(fSMDVPMTSolid, FindMaterial("G4_AIR"), "SMDVPMTLogical");
     fSMDVPMTCoreLogical            = new G4LogicalVolume(fSMDVPMTCoreSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDVPMTCoreLogical");
@@ -852,34 +902,34 @@ G4VPhysicalVolume* RHICFDetectorConstruction::WCNT(G4VPhysicalVolume* world_phys
 
     // Put fibers into gap
     //
-    //Junsang****for(G4int i=0; i<200; i++)
-    //Junsang****{
-        //Junsang****putFx               = (i+1)*0.05 - 5.0 - 0.05/2.0;
-        //Junsang****fFIBRPhysical       = new G4PVPlacement(fNonRotation,G4ThreeVector(putFx*cm, 0.0*cm, -gapper[2]/2.*cm), fFIBLogical, "FIBRPhysical", fGAPF_1Logical, true, i, checkOverlaps);
-        //Junsang****fFIBRPhysical       = new G4PVPlacement(fNonRotation,G4ThreeVector(putFx*cm, 0.0*cm, -gapper[2]/2.*cm), fFIBLogical, "FIBRPhysical", fGAPF_2Logical, true, i, checkOverlaps);
-        //Junsang****fFIBRPhysical       = new G4PVPlacement(fNonRotation,G4ThreeVector(putFx*cm, 0.0*cm, -gapper[2]/2.*cm), fFIBLogical, "FIBRPhysical", fGAPF_3Logical, true, i, checkOverlaps);
-        //Junsang****fFIBPhysical        = new G4PVPlacement(fNonRotation, G4ThreeVector(putFx*cm, 0.0*cm, 0.0*cm), fFIBRLogical, "FIBPhysical", fGAPF2Logical, true, i, false);
-    //Junsang****}
+    for(G4int i=0; i<200; i++)
+    {
+        putFx               = (i+1)*0.05 - 5.0 - 0.05/2.0;
+        fFIBRPhysical       = new G4PVPlacement(fNonRotation,G4ThreeVector(putFx*cm, 0.0*cm, -gapper[2]/2.*cm), fFIBLogical, "FIBRPhysical", fGAPF_1Logical, true, i, checkOverlaps);
+        fFIBRPhysical       = new G4PVPlacement(fNonRotation,G4ThreeVector(putFx*cm, 0.0*cm, -gapper[2]/2.*cm), fFIBLogical, "FIBRPhysical", fGAPF_2Logical, true, i, checkOverlaps);
+        fFIBRPhysical       = new G4PVPlacement(fNonRotation,G4ThreeVector(putFx*cm, 0.0*cm, -gapper[2]/2.*cm), fFIBLogical, "FIBRPhysical", fGAPF_3Logical, true, i, checkOverlaps);
+        fFIBPhysical        = new G4PVPlacement(fNonRotation, G4ThreeVector(putFx*cm, 0.0*cm, 0.0*cm), fFIBRLogical, "FIBPhysical", fGAPF2Logical, true, i, false);
+    }
   
     
     // Put gaps which include fibers into WCNT
     //
 
-   if(Nmod>0 && Nmod<4)
-   {
-        for(G4int i=1; i<Nlay + 1; i++)
-        {
-            ypos            = 1.85*cos;
-            interval        = (gapper[1]+wplPar[1])*2.0/sin;
-            zpos            = 8 + Lmod - (2.0*iplPar[1]+2.0*wplPar[1]+gapper[1])/sin - interval*(i-1)-1.85*cos;
-            if(Nmod>=1)
-                fGAPF_1Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-2) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + smdPar[1]*2.0/sin + zpos)*cm), fGAPF_1Logical, "GAPF_1Physical", fWCNTLogical, true, 0, checkOverlaps);
-            if(Nmod>=2)
-                fGAPF_2Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-4) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fGAPF_2Logical, "GAPF_2Physical", fWCNTLogical, true, 0, checkOverlaps);
-            if(Nmod>=3)
-                fGAPF_3Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-6) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fGAPF_3Logical, "GAPF_3Physical", fWCNTLogical, true, 0, checkOverlaps);
-        }
-   }
+   //Junsang****if(Nmod>0 && Nmod<4)
+   //Junsang****{
+        //Junsang****for(G4int i=1; i<Nlay + 1; i++)
+        //Junsang****{
+            //Junsang****ypos            = 1.85*cos;
+            //Junsang****interval        = (gapper[1]+wplPar[1])*2.0/sin;
+            //Junsang****zpos            = 8 + Lmod - (2.0*iplPar[1]+2.0*wplPar[1]+gapper[1])/sin - interval*(i-1)-1.85*cos;
+            //Junsang****if(Nmod>=1)
+                //Junsang****fGAPF_1Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-2) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + smdPar[1]*2.0/sin + zpos)*cm), fGAPF_1Logical, "GAPF_1Physical", fWCNTLogical, true, 0, checkOverlaps);
+            //Junsang****if(Nmod>=2)
+                //Junsang****fGAPF_2Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-4) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fGAPF_2Logical, "GAPF_2Physical", fWCNTLogical, true, 0, checkOverlaps);
+            //Junsang****if(Nmod>=3)
+                //Junsang****fGAPF_3Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-6) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fGAPF_3Logical, "GAPF_3Physical", fWCNTLogical, true, 0, checkOverlaps);
+        //Junsang****}
+   //Junsang****}
 
 
    // Nmod = 0;
@@ -1003,6 +1053,21 @@ G4VPhysicalVolume* RHICFDetectorConstruction::WCNT(G4VPhysicalVolume* world_phys
         zpos                = (4.5-i)*2.0*11.0/10.5;
         new G4PVPlacement(fNonRotation, G4ThreeVector(0.0, -0.405*cm, zpos*cm), fSMDHLogical, "SMDHPhysical", fSMDLogical, true, i, checkOverlaps);
     }
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(0.0, -0.405*cm, zpos*cm), fSMDH_1Logical, "SMDHPhysical", fSMDLogical, true, 1, checkOverlaps);
+        //Junsang****zpos                = (4.5-2)*2.0*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(0.0, -0.405*cm, zpos*cm), fSMDH_2Logical, "SMDHPhysical", fSMDLogical, true, 2, checkOverlaps);
+        //Junsang****zpos                = (4.5-3)*2.0*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(0.0, -0.405*cm, zpos*cm), fSMDH_3Logical, "SMDHPhysical", fSMDLogical, true, 3, checkOverlaps);
+        //Junsang****zpos                = (4.5-4)*2.0*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(0.0, -0.405*cm, zpos*cm), fSMDH_4Logical, "SMDHPhysical", fSMDLogical, true, 4, checkOverlaps);
+        //Junsang****zpos                = (4.5-5)*2.0*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(0.0, -0.405*cm, zpos*cm), fSMDH_5Logical, "SMDHPhysical", fSMDLogical, true, 5, checkOverlaps);
+        //Junsang****zpos                = (4.5-6)*2.0*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(0.0, -0.405*cm, zpos*cm), fSMDH_6Logical, "SMDHPhysical", fSMDLogical, true, 6, checkOverlaps);
+        //Junsang****zpos                = (4.5-7)*2.0*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(0.0, -0.405*cm, zpos*cm), fSMDH_7Logical, "SMDHPhysical", fSMDLogical, true, 7, checkOverlaps);
+        //Junsang****zpos                = (4.5-8)*2.0*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(0.0, -0.405*cm, zpos*cm), fSMDH_8Logical, "SMDHPhysical", fSMDLogical, true, 8, checkOverlaps);
 
 
     fSMDRotation            = new G4RotationMatrix();
@@ -1016,6 +1081,19 @@ G4VPhysicalVolume* RHICFDetectorConstruction::WCNT(G4VPhysicalVolume* world_phys
         xpos                = (i-4)*1.5*11.0/10.5;
         new G4PVPlacement(fNonRotation, G4ThreeVector(xpos*cm, 0.405*cm, 0.*cm), fSMDVLogical, "SMDVPhysical", fSMDLogical, true, i, checkOverlaps);
     }
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(xpos*cm, 0.405*cm, 0.*cm), fSMDVLogical_1, "SMDVPhysical", fSMDLogical, true, 1, checkOverlaps);
+        //Junsang****xpos                = (2-4)*1.5*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(xpos*cm, 0.405*cm, 0.*cm), fSMDV_2Logical, "SMDVPhysical", fSMDLogical, true, 2, checkOverlaps);
+        //Junsang****xpos                = (3-4)*1.5*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(xpos*cm, 0.405*cm, 0.*cm), fSMDV_3Logical, "SMDVPhysical", fSMDLogical, true, 3, checkOverlaps);
+        //Junsang****xpos                = (4-4)*1.5*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(xpos*cm, 0.405*cm, 0.*cm), fSMDV_4Logical, "SMDVPhysical", fSMDLogical, true, 4, checkOverlaps);
+        //Junsang****xpos                = (5-4)*1.5*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(xpos*cm, 0.405*cm, 0.*cm), fSMDV_5Logical, "SMDVPhysical", fSMDLogical, true, 5, checkOverlaps);
+        //Junsang****xpos                = (6-4)*1.5*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(xpos*cm, 0.405*cm, 0.*cm), fSMDV_6Logical, "SMDVPhysical", fSMDLogical, true, 6, checkOverlaps);
+        //Junsang****xpos                = (7-4)*1.5*11.0/10.5;
+        //Junsang****new G4PVPlacement(fNonRotation, G4ThreeVector(xpos*cm, 0.405*cm, 0.*cm), fSMDV_7Logical, "SMDVPhysical", fSMDLogical, true, 7, checkOverlaps);
 
     fSMDVPMTCorePhysical    = new G4PVReplica("SMDVPMTCorePhysical", fSMDVPMTCoreLogical, fSMDVPMTLogical, kXAxis, 7, (1.5*11.0/10.5)*cm);
     fSMDVPMTPhysical        = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.405*cm, (8.0+0.025)*cm), fSMDVPMTLogical, "SMDVPMTPhysical", fSMDLogical, false, 0, checkOverlaps);
@@ -1039,24 +1117,24 @@ G4VPhysicalVolume* RHICFDetectorConstruction::WCNT(G4VPhysicalVolume* world_phys
     new G4LogicalBorderSurface("surfaceIn1_1",  fGAPF_1Physical, fPMT_1Physical, fOpsurface);
 
 
-    new G4LogicalBorderSurface("surfaceOut2_1", fWCNTPhysical, fGAPF_1Physical, fOpsurface);
-    new G4LogicalBorderSurface("surfaceIn2_1", fGAPF_1Physical, fWCNTPhysical, fOpsurface);
+    new G4LogicalBorderSurface("surfaceOut2_1", fFIBRPhysical, fGAPF_1Physical, fOpsurface);
+    new G4LogicalBorderSurface("surfaceIn2_1", fGAPF_1Physical, fFIBRPhysical, fOpsurface);
 
     
     new G4LogicalBorderSurface("surfaceOut1_2", fPMT_2Physical, fGAPF_2Physical, fOpsurface);
     new G4LogicalBorderSurface("surfaceIn1_2",  fGAPF_2Physical, fPMT_2Physical, fOpsurface);
 
 
-    new G4LogicalBorderSurface("surfaceOut2_2", fWCNTPhysical, fGAPF_2Physical, fOpsurface);
-    new G4LogicalBorderSurface("surfaceIn2_2", fGAPF_2Physical, fWCNTPhysical, fOpsurface);
+    new G4LogicalBorderSurface("surfaceOut2_2", fFIBRPhysical, fGAPF_2Physical, fOpsurface);
+    new G4LogicalBorderSurface("surfaceIn2_2", fGAPF_2Physical, fFIBRPhysical, fOpsurface);
 
 
     new G4LogicalBorderSurface("surfaceOut1_3", fPMT_3Physical, fGAPF_3Physical, fOpsurface);
     new G4LogicalBorderSurface("surfaceIn1_3",  fGAPF_3Physical, fPMT_3Physical, fOpsurface);
 
 
-    new G4LogicalBorderSurface("surfaceOut2_3", fWCNTPhysical, fGAPF_3Physical, fOpsurface);
-    new G4LogicalBorderSurface("surfaceIn2_3", fGAPF_3Physical, fWCNTPhysical, fOpsurface);
+    new G4LogicalBorderSurface("surfaceOut2_3", fFIBRPhysical, fGAPF_3Physical, fOpsurface);
+    new G4LogicalBorderSurface("surfaceIn2_3", fGAPF_3Physical, fFIBRPhysical, fOpsurface);
     //new G4LogicalBorderSurface("surfaceOut3", fFIBR_1Physical, fWorldPhysical, fOpsurface);
     //new G4LogicalBorderSurface("surfaceIn3", fWorldPhysical, fFIBR_1Physical, fOpsurface);
 
@@ -1115,17 +1193,17 @@ G4VPhysicalVolume* RHICFDetectorConstruction::WCNT(G4VPhysicalVolume* world_phys
     visAttributes           = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
     visAttributes           -> SetVisibility(false);
     fWCNTLogical            -> SetVisAttributes(visAttributes);
-    //Junsang****fGAPF_1Logical          -> SetVisAttributes(visAttributes);
-    //Junsang****fGAPF_2Logical          -> SetVisAttributes(visAttributes);
-    //Junsang****fGAPF_3Logical          -> SetVisAttributes(visAttributes);
+    fGAPF_1Logical          -> SetVisAttributes(visAttributes);
+    fGAPF_2Logical          -> SetVisAttributes(visAttributes);
+    fGAPF_3Logical          -> SetVisAttributes(visAttributes);
     fGAPF1Logical           -> SetVisAttributes(visAttributes);
     fGAPF2Logical           -> SetVisAttributes(visAttributes);
-    //Junsang****fPMT_1Logical           -> SetVisAttributes(visAttributes);
-    //Junsang****fPMT_2Logical           -> SetVisAttributes(visAttributes);
-    //Junsang****fPMT_3Logical           -> SetVisAttributes(visAttributes);
-    //Junsang****fPPMT_1Logical          -> SetVisAttributes(visAttributes);
-    //Junsang****fPPMT_2Logical          -> SetVisAttributes(visAttributes);
-    //Junsang****fPPMT_3Logical          -> SetVisAttributes(visAttributes);
+    fPMT_1Logical           -> SetVisAttributes(visAttributes);
+    fPMT_2Logical           -> SetVisAttributes(visAttributes);
+    fPMT_3Logical           -> SetVisAttributes(visAttributes);
+    fPPMT_1Logical          -> SetVisAttributes(visAttributes);
+    fPPMT_2Logical          -> SetVisAttributes(visAttributes);
+    fPPMT_3Logical          -> SetVisAttributes(visAttributes);
 
     fVisAttributes.push_back(visAttributes);
 

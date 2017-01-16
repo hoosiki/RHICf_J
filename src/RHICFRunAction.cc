@@ -15,9 +15,30 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////
-RHICFRunAction::RHICFRunAction(): G4UserRunAction()
+RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction(), fEventAction(eventAction)
 ////////////////////////////////////////////////////////////////////////////////
 {
+
+    G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
+    fAnalysisManager->SetVerboseLevel(1);
+    fAnalysisManager->SetFileName("RHICf_J");
+
+    if( fEventAction )
+    {
+    
+        fAnalysisManager->CreateNtuple("RHICf_J", "Hits");
+        fAnalysisManager->CreateNtupleIColumn("NOfPinZDC1");
+        fAnalysisManager->CreateNtupleIColumn("NOfPinZDC2");
+        fAnalysisManager->CreateNtupleIColumn("NOfPinZDC3");
+        fAnalysisManager->CreateNtupleIColumn("TotalNumberOfPhotons");
+        fAnalysisManager->CreateNtupleDColumn("DEinZDC1");
+        fAnalysisManager->CreateNtupleDColumn("DEinZDC2");
+        fAnalysisManager->CreateNtupleDColumn("DEinZDC3");
+        fAnalysisManager->CreateNtupleDColumn("TotalDepositE");
+        fAnalysisManager->CreateNtupleDColumn("XinSMD");
+        fAnalysisManager->CreateNtupleDColumn("YinSMD");
+        fAnalysisManager->FinishNtuple();
+    }
 
 }
 
@@ -25,6 +46,7 @@ RHICFRunAction::RHICFRunAction(): G4UserRunAction()
 RHICFRunAction::~RHICFRunAction()
 ////////////////////////////////////////////////////////////////////////////////
 {
+    delete G4AnalysisManager::Instance();
 }
 
 
@@ -45,6 +67,11 @@ void RHICFRunAction::BeginOfRunAction(const G4Run* run)
     G4Random::setTheSeeds(seeds);
 
 
+    G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
+
+    fAnalysisManager->OpenFile();
+
+
 }
 
 
@@ -54,6 +81,9 @@ void RHICFRunAction::EndOfRunAction(const G4Run* run)
 ////////////////////////////////////////////////////////////////////////////////
 {
 
+    G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
+    fAnalysisManager->Write();
+    fAnalysisManager->CloseFile();
 
  
 }
