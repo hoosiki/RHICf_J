@@ -62,26 +62,14 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VSolid*                   fGAPF2Solid;
         G4VSolid*                   fFIBSolid;
         G4VSolid*                   fFIBRSolid;
-        G4VSolid*                   fPMTSolid;
-        G4VSolid*                   fPPMTSolid;
         G4VSolid*                   fBlockerSolid;
         G4VSolid*                   fW_PLSolid;
         G4VSolid*                   fI_PLSolid;
         G4VSolid*                   fFEPLSolid;
         G4VSolid*                   fALPLSolid;
-        G4VSolid*                   fRCSCSolid;
-        G4VSolid*                   fFCSCSolid;
         G4VSolid*                   fSMDSolid;
         G4VSolid*                   fSMDHSolid;
         G4VSolid*                   fSMDVSolid;
-        G4VSolid*                   fSMDHPMTSolid;
-        G4VSolid*                   fSMDVPMTSolid;
-        G4VSolid*                   fSMDHPMTCoreSolid;
-        G4VSolid*                   fSMDVPMTCoreSolid;
-        G4LogicalVolume*            fSMDHPMTLogical;
-        G4LogicalVolume*            fSMDVPMTLogical;
-        G4LogicalVolume*            fSMDHPMTCoreLogical;
-        G4LogicalVolume*            fSMDVPMTCoreLogical;
         G4LogicalVolume*            fSMDLogical;
         G4LogicalVolume*            fZDCLogical;
         G4LogicalVolume*            fWCNTLogical;
@@ -93,8 +81,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            fGAPF_3Logical;
         G4LogicalVolume*            fGAPF1Logical;
         G4LogicalVolume*            fGAPF2Logical;
-        G4LogicalVolume*            fRCSCLogical;
-        G4LogicalVolume*            fFCSCLogical;
+        // SMDV
         G4LogicalVolume*            fSMDVLogical;
         G4LogicalVolume*            fFIBRLogical;
         G4LogicalVolume*            fMagneticLogical;
@@ -104,16 +91,11 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            fFIBLogical;
         G4LogicalVolume*            fBBCRLogical;
         G4LogicalVolume*            fBBCPLogical;
-        G4LogicalVolume*            fPMT_1Logical;
-        G4LogicalVolume*            fPMT_2Logical;
-        G4LogicalVolume*            fPMT_3Logical;
-        G4LogicalVolume*            fPPMT_1Logical;
-        G4LogicalVolume*            fPPMT_2Logical;
-        G4LogicalVolume*            fPPMT_3Logical;
         G4LogicalVolume*            fBlockerLogical;
         G4LogicalVolume*            fI_PLLogical;
         G4LogicalVolume*            fFEPLLogical;
         G4LogicalVolume*            fALPLLogical;
+        // SMDH
         G4LogicalVolume*            fSMDHLogical;
         G4LogicalVolume*            RB14Logical;
         G4LogicalVolume*            FLS4Logical;
@@ -157,16 +139,6 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            SP82Logical;
         G4LogicalVolume*            SP81Logical;
 
-        G4VPhysicalVolume*          fSMDHPMTPhysical;
-        G4VPhysicalVolume*          fSMDVPMTPhysical;
-        G4VPhysicalVolume*          fSMDHPMTCorePhysical;
-        G4VPhysicalVolume*          fSMDVPMTCorePhysical;
-        G4VPhysicalVolume*          fPMT_1Physical;
-        G4VPhysicalVolume*          fPMT_2Physical;
-        G4VPhysicalVolume*          fPMT_3Physical;
-        G4VPhysicalVolume*          fPPMT_1Physical;
-        G4VPhysicalVolume*          fPPMT_2Physical;
-        G4VPhysicalVolume*          fPPMT_3Physical;
         G4VPhysicalVolume*          fBlockerPhysical;
         G4VPhysicalVolume*          fFIBRPhysical;
         G4VPhysicalVolume*          fWorldPhysical;
@@ -308,22 +280,6 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4double                    place;
 
 
-        //G4double lhollowThickness[2][16];
-        //G4double wThickness[2][22];
-        //G4double towposX[2];
-        //G4double towposY[2];
-        //G4double layerposX[2];
-        //G4double layerposY[2];
-        //G4double wepicsposX[2][22];
-        //G4double wepicsposY[2][22];
-        //G4double gtenSizeX[7];
-        //G4double gtenSizeY[7];
-        //G4double layerSizeXY[2];
-        //G4double towSizeXY[2];
-        //G4double wSizeX[2][22];
-        //G4double wSozeY[2][22];
-        //G4int nolet[7];
-        //G4int nowet[7];
 
 
         

@@ -57,7 +57,7 @@ RHICFOpticalPhysics::~RHICFOpticalPhysics() { }
 
 void RHICFOpticalPhysics::ConstructParticle()
 {
-  G4OpticalPhoton::OpticalPhotonDefinition();
+  //Junsang****G4OpticalPhoton::OpticalPhotonDefinition();
 }
 
 #include "G4ProcessManager.hh"
@@ -79,8 +79,8 @@ void RHICFOpticalPhysics::ConstructProcess()
 
   fAbsorptionProcess      = new G4OpAbsorption();
   fRayleighScattering     = new G4OpRayleigh();
-  fMieHGScatteringProcess = new G4OpMieHG();
-  fBoundaryProcess        = new G4OpBoundaryProcess();
+  //Junsang****fMieHGScatteringProcess = new G4OpMieHG();
+  //Junsang****fBoundaryProcess        = new G4OpBoundaryProcess();
 
   G4ProcessManager* pManager =
                 G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
@@ -95,9 +95,9 @@ void RHICFOpticalPhysics::ConstructProcess()
   if (fAbsorptionOn) pManager->AddDiscreteProcess(fAbsorptionProcess);
 
   pManager->AddDiscreteProcess(fRayleighScattering);
-  pManager->AddDiscreteProcess(fMieHGScatteringProcess);
-
-  pManager->AddDiscreteProcess(fBoundaryProcess);
+  //Junsang****pManager->AddDiscreteProcess(fMieHGScatteringProcess);
+//Junsang****
+  //Junsang****pManager->AddDiscreteProcess(fBoundaryProcess);
 
   fRHICFProcess->UseTimeProfile("delta");
   //fRHICFProcess->UseTimeProfile("exponential");

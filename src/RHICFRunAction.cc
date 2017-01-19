@@ -19,26 +19,22 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
 ////////////////////////////////////////////////////////////////////////////////
 {
 
-    G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
-    fAnalysisManager->SetVerboseLevel(1);
-    fAnalysisManager->SetFileName("RHICf_J");
-
-    if( fEventAction )
-    {
-    
-        fAnalysisManager->CreateNtuple("RHICf_J", "Hits");
-        fAnalysisManager->CreateNtupleIColumn("NOfPinZDC1");
-        fAnalysisManager->CreateNtupleIColumn("NOfPinZDC2");
-        fAnalysisManager->CreateNtupleIColumn("NOfPinZDC3");
-        fAnalysisManager->CreateNtupleIColumn("TotalNumberOfPhotons");
-        fAnalysisManager->CreateNtupleDColumn("DEinZDC1");
-        fAnalysisManager->CreateNtupleDColumn("DEinZDC2");
-        fAnalysisManager->CreateNtupleDColumn("DEinZDC3");
-        fAnalysisManager->CreateNtupleDColumn("TotalDepositE");
-        fAnalysisManager->CreateNtupleDColumn("XinSMD");
-        fAnalysisManager->CreateNtupleDColumn("YinSMD");
-        fAnalysisManager->FinishNtuple();
-    }
+    //Junsang****G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
+    //Junsang****fAnalysisManager->SetVerboseLevel(1);
+    //Junsang****fAnalysisManager->SetFileName("RHICf_J");
+//Junsang****
+    //Junsang****if( fEventAction )
+    //Junsang****{
+    //Junsang****
+        //Junsang****fAnalysisManager->CreateNtuple("RHICf_J", "Hits");
+        //Junsang****fAnalysisManager->CreateNtupleDColumn("DEinZDC1");
+        //Junsang****fAnalysisManager->CreateNtupleDColumn("DEinZDC2");
+        //Junsang****fAnalysisManager->CreateNtupleDColumn("DEinZDC3");
+        //Junsang****fAnalysisManager->CreateNtupleDColumn("TotalDepositE");
+        //Junsang****fAnalysisManager->CreateNtupleDColumn("XinSMD");
+        //Junsang****fAnalysisManager->CreateNtupleDColumn("YinSMD");
+        //Junsang****fAnalysisManager->FinishNtuple();
+    //Junsang****}
 
 }
 
@@ -46,7 +42,7 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
 RHICFRunAction::~RHICFRunAction()
 ////////////////////////////////////////////////////////////////////////////////
 {
-    delete G4AnalysisManager::Instance();
+    //Junsang****delete G4AnalysisManager::Instance();
 }
 
 
@@ -67,9 +63,9 @@ void RHICFRunAction::BeginOfRunAction(const G4Run* run)
     G4Random::setTheSeeds(seeds);
 
 
-    G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
-
-    fAnalysisManager->OpenFile();
+    //Junsang****G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
+//Junsang****
+    //Junsang****fAnalysisManager->OpenFile();
 
 
 }
@@ -81,9 +77,9 @@ void RHICFRunAction::EndOfRunAction(const G4Run* run)
 ////////////////////////////////////////////////////////////////////////////////
 {
 
-    G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
-    fAnalysisManager->Write();
-    fAnalysisManager->CloseFile();
+    //Junsang****G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
+    //Junsang****fAnalysisManager->Write();
+    //Junsang****fAnalysisManager->CloseFile();
 
  
 }
