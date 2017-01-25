@@ -357,7 +357,7 @@ void RHICFDetectorConstruction::DefineDimension()
     pipeOutr            = 5*cm;
     pipeInr             = 4.5*cm;
     pipeLength          = 20*cm;
-    Nmod                = 0;
+    Nmod                = 3;
     zdcPar[0]           = 5.0;
     zdcPar[1]           = (gapper[2]*cos + gapper[1]*sin);
     zdcPar[2]           = (zdcPar[1]/tan + Lmod);
@@ -508,8 +508,10 @@ void RHICFDetectorConstruction::ConstructSDandField()
 
     G4SDManager::GetSDMpointer() -> SetVerboseLevel(1);
 
+    G4String detName;
 
     G4String calName[8] = {"W_PL", "SMDH", "SMDV", "I_PL", "GAP"}; 
+    
 //Junsang****
 //Junsang****
 //Junsang****
@@ -519,33 +521,34 @@ void RHICFDetectorConstruction::ConstructSDandField()
         //Junsang****G4String detName = calName[j];
 //Junsang****
         //Junsang****if(j==0)
-        //Junsang****for( G4int i=0; i<3; i++)
-        //Junsang****{
-//Junsang****
-            //Junsang****detName = calName[j];
-//Junsang****
-            //Junsang****if(i==0)
-            //Junsang****{
-                //Junsang****detName+="_1";
-            //Junsang****}else if(i==1)
-            //Junsang****{
-                //Junsang****detName+="_2";
-            //Junsang****}else if(i==2)
-            //Junsang****{
-                //Junsang****detName+="_3";
-            //Junsang****}
-        //Junsang****}
-//Junsang****
-        //Junsang****G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector(detName);
-//Junsang****
-        //Junsang****G4VPrimitiveScorer* primitive;
-        //Junsang****primitive = new G4PSEnergyDeposit("DE",1);
-        //Junsang****det -> RegisterPrimitive(primitive);
-//Junsang****
-        //Junsang****detName += "Logical";
-//Junsang****
-//Junsang****
-        //Junsang****SetSensitiveDetector(detName, det);
+        for( G4int i=0; i<3; i++)
+        {
+
+
+            detName = calName[0];
+
+            if(i==0)
+            {
+                detName+="_1";
+            }else if(i==1)
+            {
+                detName+="_2";
+            }else if(i==2)
+            {
+                detName+="_3";
+            }
+        }
+
+        G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector(detName);
+
+        G4VPrimitiveScorer* primitive;
+        primitive = new G4PSEnergyDeposit("DE",1);
+        det -> RegisterPrimitive(primitive);
+
+        detName += "Logical";
+
+
+        SetSensitiveDetector(detName, det);
     //Junsang****}
 
 
@@ -615,7 +618,7 @@ G4Material* RHICFDetectorConstruction::FindMaterial(G4String name)
 
 ///////////////////////////////////////////////////////////////////////////////
 G4VPhysicalVolume* RHICFDetectorConstruction::HODOSCOPE(G4VPhysicalVolume* world_phys, G4RotationMatrix* mat)
-    ///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 {
 
     // Define 'HODO'
@@ -662,7 +665,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::HODOSCOPE(G4VPhysicalVolume* world
 
 ///////////////////////////////////////////////////////////////////////////////
 G4VPhysicalVolume* RHICFDetectorConstruction::WCNT(G4VPhysicalVolume* world_phys, G4ThreeVector vector, G4RotationMatrix* mat)
-    ///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 {
 
     fWCNTSolid              = new G4Box("WCNTSolid", wcntPar[0]*cm, wcntPar[1]*cm, wcntPar[2]*3.6/5*cm);
