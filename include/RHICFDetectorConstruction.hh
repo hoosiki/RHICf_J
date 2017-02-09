@@ -42,7 +42,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VisAttributes*            visAttributes;
                                     
         G4VPhysicalVolume*          HODOSCOPE(G4VPhysicalVolume*, G4RotationMatrix*);
-        G4VPhysicalVolume*          WCNT(G4VPhysicalVolume*, G4ThreeVector,  G4RotationMatrix*);
+        G4VPhysicalVolume*          LOCALPOL(G4VPhysicalVolume*, G4ThreeVector,  G4RotationMatrix*);
         G4VPhysicalVolume*          BBC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
         G4VPhysicalVolume*          PIPE();
         G4VPhysicalVolume*          ARM2(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
@@ -55,7 +55,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VSolid*                   fWorldSolid;
         G4VSolid*                   fHODOSolid;
         G4VSolid*                   fSCINSolid;
-        G4VSolid*                   fWCNTSolid;
+        G4VSolid*                   fLOCALPOLSolid;
         G4VSolid*                   fZDCSolid;
         G4VSolid*                   fGAPFSolid;
         G4VSolid*                   fGAPF1Solid;
@@ -72,7 +72,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VSolid*                   fSMDVSolid;
         G4LogicalVolume*            fSMDLogical;
         G4LogicalVolume*            fZDCLogical;
-        G4LogicalVolume*            fWCNTLogical;
+        G4LogicalVolume*            fLOCALPOLLogical;
         G4LogicalVolume*            fSCINLogical;
         G4LogicalVolume*            fWorldLogical;
         G4LogicalVolume*            fHODOLogical;
@@ -154,7 +154,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          fW_PL_2Physical;
         G4VPhysicalVolume*          fW_PL_3Physical;
         G4VPhysicalVolume*          fFIBPhysical;
-        G4VPhysicalVolume*          fWCNTPhysical;
+        G4VPhysicalVolume*          fLOCALPOLPhysical;
         G4VPhysicalVolume*          fBBCMPhysical;
         G4VPhysicalVolume*          HODOINSTALL;
         G4VPhysicalVolume*          LOCALPOLINSTALL;
