@@ -106,6 +106,12 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     G4THitsMap<G4double>* fEvMapForGAP_3        = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbGAP_3));
 
 
+    // Deposit energy in I_PL
+    G4double* kDepI_PL = (*fEvMapForI_PL)[0];
+    if(!kDepI_PL) kDepI_PL = new G4double(0.0);
+    TDE_I_PL = *kDepI_PL;
+
+
     // Deposit energy in SMDH-vertical
     G4double* kDepSMDH[8];
 
@@ -171,9 +177,9 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     }
 
     // Deposit energy in W_1
-    G4double* kDepW_1[27];
+    G4double* kDepW_1[26];
 
-    for(G4int i=0; i<27; i++)
+    for(G4int i=0; i<26; i++)
     {
         kDepW_1[i] = (*fEvMapForW_1)[i+1];
         if(!kDepW_1[i]) kDepW_1[i] = new G4double(0.0);
@@ -184,9 +190,9 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     }
 
     // Deposit energy in W_2
-    G4double* kDepW_2[27];
+    G4double* kDepW_2[26];
 
-    for(G4int i=0; i<27; i++)
+    for(G4int i=0; i<26; i++)
     {
         kDepW_2[i] = (*fEvMapForW_2)[i+1];
         if(!kDepW_2[i]) kDepW_2[i] = new G4double(0.0);
@@ -197,9 +203,9 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     }
 
     // Deposit energy in W_3
-    G4double* kDepW_3[27];
+    G4double* kDepW_3[26];
 
-    for(G4int i=0; i<27; i++)
+    for(G4int i=0; i<26; i++)
     {
         kDepW_3[i] = (*fEvMapForW_3)[i+1];
         if(!kDepW_3[i]) kDepW_3[i] = new G4double(0.0);
@@ -211,17 +217,17 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     }
 
     TDE_ZDC = TDE_W_1+ TDE_W_2+ TDE_W_3+ TDE_W+ TDE_SMDH+ TDE_SMDV+ TDE_I_PL+ TDE_GAP_1+ TDE_GAP_2+ TDE_GAP_3;
-    G4cout << "TDE_ZDC: " << TDE_ZDC << G4endl;
-    G4cout << "TDE_W_1: " << TDE_W_1 << G4endl;
-    G4cout << "TDE_W_2: " << TDE_W_2 << G4endl;
-    G4cout << "TDE_W_3: " << TDE_W_3 << G4endl;
+    G4cout << "TDE_ZDC: " << TDE_ZDC/GeV << G4endl;
+    G4cout << "TDE_W_1: " << TDE_W_1/GeV << G4endl;
+    G4cout << "TDE_W_2: " << TDE_W_2/GeV << G4endl;
+    G4cout << "TDE_W_3: " << TDE_W_3/GeV << G4endl;
     G4cout << "TDE_W: "   << TDE_W << G4endl;
-    G4cout << "TDE_SMDH: " << TDE_SMDH << G4endl;
-    G4cout << "TDE_SMDV: " << TDE_SMDV << G4endl;
+    G4cout << "TDE_SMDH: " << TDE_SMDH/MeV << G4endl;
+    G4cout << "TDE_SMDV: " << TDE_SMDV/MeV << G4endl;
     G4cout << "TDE_I_PL: " << TDE_I_PL << G4endl;
-    G4cout << "TDE_GAP_1: " << TDE_GAP_1 << G4endl;
-    G4cout << "TDE_GAP_2: " << TDE_GAP_2 << G4endl;
-    G4cout << "TDE_GAP_3: " << TDE_GAP_3 << G4endl;
+    G4cout << "TDE_GAP_1: " << TDE_GAP_1/MeV << G4endl;
+    G4cout << "TDE_GAP_2: " << TDE_GAP_2/MeV << G4endl;
+    G4cout << "TDE_GAP_3: " << TDE_GAP_3/MeV << G4endl;
               
 
 
