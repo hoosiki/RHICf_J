@@ -382,27 +382,25 @@ void RHICFDetectorConstruction::ConstructSDandField()
 
     G4String detName;
 
-    G4String calName[8] = {"W_PL", "SMDH", "SMDV", "I_PL", "GAP"}; 
+    G4String calName[8] = {"W_PL_1Logical", "fW_PL_2Logical", "W_PL_2Logical","SMDHLogical", "SMDVLogical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical"}; 
 
 
-    G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[1]);
+    for(G4int i=0; i<8; i++)
+    {
 
-    G4VPrimitiveScorer* primitive0;
 
-    primitive0 = new G4PSEnergyDeposit("DE0",0);
+
+    G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
+
+    G4VPrimitiveScorer* PriDEL0;
+
+    primitive0 = new G4PSEnergyDeposit("DE",0);
     SDforDE -> RegisterPrimitive(primitive0);
 
-    G4VPrimitiveScorer* primitive1;
-
-    primitive1 = new G4PSEnergyDeposit("DE1",1);
-    SDforDE -> RegisterPrimitive(primitive1);
-
-
-
-
-    SetSensitiveDetector("SMDHLogical", SDforDE);
+    SetSensitiveDetector(calName[i], SDforDE);
     
 
+    }
 
 
 
@@ -569,7 +567,6 @@ G4VPhysicalVolume* RHICFDetectorConstruction::LOCALPOL(G4VPhysicalVolume* world_
     fW_PL_2Logical          = new G4LogicalVolume(fW_PLSolid, FindMaterial("G4_W"), "W_PL_2Logical");
     fW_PL_3Logical          = new G4LogicalVolume(fW_PLSolid, FindMaterial("G4_W"), "W_PL_3Logical");
     fFIBRLogical            = new G4LogicalVolume(fFIBRSolid, FindMaterial("PMMA"), "FIBRLogical");
-    fBlockerLogical         = new G4LogicalVolume(fBlockerSolid, FindMaterial("G4_Galactic"), "BlockerLogical");
     fSMDLogical             = new G4LogicalVolume(fSMDSolid, FindMaterial("G4_AIR"), "fSMDLogical");
     // Horizontal smd bar
     fSMDHLogical            = new G4LogicalVolume(fSMDHSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDHLogical");

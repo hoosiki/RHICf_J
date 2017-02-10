@@ -27,21 +27,12 @@ private:
 
     B5PrimaryGeneratorAction* fB5Primary;
 
-    G4int fPMT_1NP;
-    G4int fPMT_2NP;
-    G4int fPMT_3NP;
-    G4int fPMT_1DE;
-    G4int fPMT_2DE;
-    G4int fPMT_3DE;
     G4int fW_1;
     G4int fW_2;
     G4int fW_3;
     G4int fSMDH;
     G4int fSMDV;
-    G4int fSMDHN;
-    G4int fSMDVN;
     G4int fI_PL;
-    G4int fFIBRID;
 
     G4int fPrintModulo;
 };

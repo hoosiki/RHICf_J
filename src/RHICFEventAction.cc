@@ -26,7 +26,7 @@ using namespace std;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-RHICFEventAction::RHICFEventAction(B5PrimaryGeneratorAction* B5G): G4UserEventAction(), fPMT_1NP(-1), fPMT_2NP(-1), fPMT_3NP(-1), fPMT_1DE(-1), fPMT_2DE(-1), fPMT_3DE(-1), fW_1(-1), fW_2(-1), fW_3(-1), fSMDH(-1), fSMDV(-1), fI_PL(-1), fFIBRID(-1), fSMDHN(-1), fSMDVN(-1), fB5Primary(B5G)
+RHICFEventAction::RHICFEventAction(B5PrimaryGeneratorAction* B5G): G4UserEventAction(), fW_1(-1), fW_2(-1), fW_3(-1), fSMDH(-1), fSMDV(-1), fI_PL(-1), fB5Primary(B5G)
 ///////////////////////////////////////////////////////////////////////////////
 {
 
@@ -68,7 +68,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 
     G4HCofThisEvent* fHCE = event -> GetHCofThisEvent();
 
-    G4THitsMap<G4double>* fEventMap_1 = (G4THitsMap<G4double>*)(fHCE -> GetHC(fSMDHN));
+    G4THitsMap<G4double>* fEvMapForI_PL = (G4THitsMap<G4double>*)(fHCE -> GetHC(fSMDHN));
     G4THitsMap<G4double>* fEventMap_2 = (G4THitsMap<G4double>*)(fHCE -> GetHC(fSMDVN));
 
 
@@ -81,16 +81,16 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     //Junsang****G4double dd = *(itr1->second);
     //Junsang****G4cout << "total energy: " << dd/GeV << G4endl;
     
-    for(itr = fEventMap_1->GetMap()->begin(); itr != fEventMap_1->GetMap()->end(); itr++)
-    {
-
-        G4int copyNb = (itr->first);
-        G4double edep = *(itr->second);
-
-        G4cout << "\n smdh" << copyNb << ": " << edep/GeV << "GeV";
-
-
-    }
+    //Junsang****for(itr = fEventMap_1->GetMap()->begin(); itr != fEventMap_1->GetMap()->end(); itr++)
+    //Junsang****{
+//Junsang****
+        //Junsang****G4int copyNb = (itr->first);
+        //Junsang****G4double edep = *(itr->second);
+//Junsang****
+        //Junsang****G4cout << "\n smdh" << copyNb << ": " << edep/GeV << "GeV";
+//Junsang****
+//Junsang****
+    //Junsang****}
     G4cout << "Size: " << fEventMap_1->GetSize() << G4endl;
     G4cout << "entries: " << fEventMap_1->entries() << G4endl;
     
