@@ -106,6 +106,17 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     G4THitsMap<G4double>* fEvMapForGAP_3        = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbGAP_3));
 
 
+    // Deposit energy in SMDH-vertical
+    G4double* kDepSMDH[8];
+
+    for(G4int i=0; i<8; i++)
+    {
+        kDepSMDH[i] = (*fEvMapForSMDH)[i+1];
+        if(!kDepSMDH[i]) kDepSMDH[i] = new G4double(0.0);
+
+        G4cout << i+1 <<  "SMDH: " << *kDepSMDH[i] << G4endl;
+        TDE_SMDH += *kDepSMDH[i];
+    }
 
 
     // Deposit energy in SMDV-vertical
@@ -116,8 +127,8 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepSMDV[i] = (*fEvMapForSMDV)[i+1];
         if(!kDepSMDV[i]) kDepSMDV[i] = new G4double(0.0);
 
-        G4cout << i+1 <<  ": " << *kDepSMDV[i] << endl;
-
+        G4cout << i+1 <<  "SMDV: " << *kDepSMDV[i] << G4endl;
+        TDE_SMDV += *kDepSMDV[i];
     }
 
     // Deposit energy in GAP_1
@@ -128,7 +139,8 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepGAP_1[i] = (*fEvMapForGAP_1)[i+1];
         if(!kDepGAP_1[i]) kDepGAP_1[i] = new G4double(0.0);
 
-        G4cout << i+1 <<  ": " << *kDepGAP_1[i] << endl;
+        G4cout << i+1 <<  "GAP_1: " << *kDepGAP_1[i] << G4endl;
+        TDE_GAP_1 += *kDepGAP_1[i];
 
     }
 
@@ -140,7 +152,8 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepGAP_2[i] = (*fEvMapForGAP_2)[i+1];
         if(!kDepGAP_2[i]) kDepGAP_2[i] = new G4double(0.0);
 
-        G4cout << i+1 <<  ": " << *kDepGAP_2[i] << endl;
+        G4cout << i+1 <<  "GAP_2: " << *kDepGAP_2[i] << G4endl;
+        TDE_GAP_2 += *kDepGAP_2[i];
 
     }
 
@@ -152,9 +165,64 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepGAP_3[i] = (*fEvMapForGAP_3)[i+1];
         if(!kDepGAP_3[i]) kDepGAP_3[i] = new G4double(0.0);
 
-        G4cout << i+1 <<  ": " << *kDepGAP_3[i] << endl;
+        G4cout << i+1 <<  "GAP_3: " << *kDepGAP_3[i] << G4endl;
+        TDE_GAP_3 += *kDepGAP_3[i];
 
     }
+
+    // Deposit energy in W_1
+    G4double* kDepW_1[27];
+
+    for(G4int i=0; i<27; i++)
+    {
+        kDepW_1[i] = (*fEvMapForW_1)[i+1];
+        if(!kDepW_1[i]) kDepW_1[i] = new G4double(0.0);
+
+        G4cout << i+1 <<  "W_1: " << *kDepW_1[i] << G4endl;
+        TDE_W_1 += *kDepW_1[i];
+
+    }
+
+    // Deposit energy in W_2
+    G4double* kDepW_2[27];
+
+    for(G4int i=0; i<27; i++)
+    {
+        kDepW_2[i] = (*fEvMapForW_2)[i+1];
+        if(!kDepW_2[i]) kDepW_2[i] = new G4double(0.0);
+
+        G4cout << i+1 <<  "W_2: " << *kDepW_2[i] << G4endl;
+        TDE_W_2 += *kDepW_2[i];
+
+    }
+
+    // Deposit energy in W_3
+    G4double* kDepW_3[27];
+
+    for(G4int i=0; i<27; i++)
+    {
+        kDepW_3[i] = (*fEvMapForW_3)[i+1];
+        if(!kDepW_3[i]) kDepW_3[i] = new G4double(0.0);
+
+        G4cout << i+1 <<  "W_3: " << *kDepW_3[i] << G4endl;
+        TDE_W_3 += *kDepW_3[i];
+
+        
+    }
+
+    TDE_ZDC = TDE_W_1+ TDE_W_2+ TDE_W_3+ TDE_W+ TDE_SMDH+ TDE_SMDV+ TDE_I_PL+ TDE_GAP_1+ TDE_GAP_2+ TDE_GAP_3;
+    G4cout << "TDE_ZDC: " << TDE_ZDC << G4endl;
+    G4cout << "TDE_W_1: " << TDE_W_1 << G4endl;
+    G4cout << "TDE_W_2: " << TDE_W_2 << G4endl;
+    G4cout << "TDE_W_3: " << TDE_W_3 << G4endl;
+    G4cout << "TDE_W: "   << TDE_W << G4endl;
+    G4cout << "TDE_SMDH: " << TDE_SMDH << G4endl;
+    G4cout << "TDE_SMDV: " << TDE_SMDV << G4endl;
+    G4cout << "TDE_I_PL: " << TDE_I_PL << G4endl;
+    G4cout << "TDE_GAP_1: " << TDE_GAP_1 << G4endl;
+    G4cout << "TDE_GAP_2: " << TDE_GAP_2 << G4endl;
+    G4cout << "TDE_GAP_3: " << TDE_GAP_3 << G4endl;
+              
 
 
 
