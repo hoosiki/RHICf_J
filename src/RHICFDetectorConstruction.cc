@@ -382,22 +382,23 @@ void RHICFDetectorConstruction::ConstructSDandField()
 
     G4String detName;
 
-    G4String calName[8] = {"W_PL_1Logical", "fW_PL_2Logical", "W_PL_2Logical","SMDHLogical", "SMDVLogical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical"}; 
+    G4String calName[9] = {"W_PL_1Logical", "W_PL_2Logical", "W_PL_3Logical","SMDHLogical", "SMDVLogical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical"}; 
 
 
-    for(G4int i=0; i<8; i++)
+    for(G4int i=0; i<9; i++)
     {
 
 
 
-    G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
+        G4cout << "detector:" << calName[i] << G4endl;
+        G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
 
-    G4VPrimitiveScorer* PriDEL0;
+        G4VPrimitiveScorer* PriDEL0;
 
-    primitive0 = new G4PSEnergyDeposit("DE",0);
-    SDforDE -> RegisterPrimitive(primitive0);
+        PriDEL0 = new G4PSEnergyDeposit("DE",0);
+        SDforDE -> RegisterPrimitive(PriDEL0);
 
-    SetSensitiveDetector(calName[i], SDforDE);
+        SetSensitiveDetector(calName[i], SDforDE);
     
 
     }

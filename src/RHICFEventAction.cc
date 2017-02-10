@@ -25,8 +25,9 @@ using namespace std;
 
 
 
+
 ///////////////////////////////////////////////////////////////////////////////
-RHICFEventAction::RHICFEventAction(B5PrimaryGeneratorAction* B5G): G4UserEventAction(), fW_1(-1), fW_2(-1), fW_3(-1), fSMDH(-1), fSMDV(-1), fI_PL(-1), fB5Primary(B5G)
+RHICFEventAction::RHICFEventAction(B5PrimaryGeneratorAction* B5G): G4UserEventAction(), NbW_1(-1), NbW_2(-1), NbW_3(-1), NbSMDH(-1), NbSMDV(-1), NbI_PL(-1), fB5Primary(B5G)
 ///////////////////////////////////////////////////////////////////////////////
 {
 
@@ -47,12 +48,21 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
 {
 
 
-    if(fSMDHN == -1)
-    {
-        G4SDManager* fSDManager = G4SDManager::GetSDMpointer();
 
-        fSMDHN = fSDManager -> GetCollectionID("SMDH/DE0");
-        fSMDVN = fSDManager -> GetCollectionID("SMDH/DE1");
+
+    if(NbSMDH == -1)
+    {
+
+        G4SDManager* fSDManager = G4SDManager::GetSDMpointer();
+        NbW_1          = fSDManager -> GetCollectionID("W_PL_1Logical/DE");
+        NbW_2          = fSDManager -> GetCollectionID("W_PL_2Logical/DE");
+        NbW_3          = fSDManager -> GetCollectionID("W_PL_3Logical/DE");
+        NbSMDH         = fSDManager -> GetCollectionID("SMDHLogical/DE");
+        NbSMDV         = fSDManager -> GetCollectionID("SMDVLogical/DE");
+        NbI_PL         = fSDManager -> GetCollectionID("I_PLLogical/DE");
+        NbGAP_1        = fSDManager -> GetCollectionID("GAPF_1Logical/DE");
+        NbGAP_2        = fSDManager -> GetCollectionID("GAPF_2Logical/DE");
+        NbGAP_3        = fSDManager -> GetCollectionID("GAPF_3Logical/DE");
     }
 
 
@@ -64,22 +74,94 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 ///////////////////////////////////////////////////////////////////////////////
 {
    
+    G4double TDE_ZDC=0;
+    G4double TDE_W_1=0;
+    G4double TDE_W_2=0;
+    G4double TDE_W_3=0;
+    G4double TDE_W=0;
+    G4double TDE_SMDH=0;
+    G4double TDE_SMDV=0;
+    G4double TDE_I_PL=0;
+    G4double TDE_GAP_1=0;
+    G4double TDE_GAP_2=0;
+    G4double TDE_GAP_3=0;
 
 
     G4HCofThisEvent* fHCE = event -> GetHCofThisEvent();
 
-    G4THitsMap<G4double>* fEvMapForI_PL = (G4THitsMap<G4double>*)(fHCE -> GetHC(fSMDHN));
-    G4THitsMap<G4double>* fEventMap_2 = (G4THitsMap<G4double>*)(fHCE -> GetHC(fSMDVN));
+
+    //#ofMapW_1,2,3 [1-27]
+    G4THitsMap<G4double>* fEvMapForW_1          = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbW_1));
+    G4THitsMap<G4double>* fEvMapForW_2          = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbW_2));
+    G4THitsMap<G4double>* fEvMapForW_3          = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbW_3));
+    //#ofMapSMDH [1-8]
+    G4THitsMap<G4double>* fEvMapForSMDH         = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbSMDH));
+    //#ofMapSMDV [1-7]
+    G4THitsMap<G4double>* fEvMapForSMDV         = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbSMDV));
+    //#ofMapI_PL [0]
+    G4THitsMap<G4double>* fEvMapForI_PL         = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbI_PL));
+    //#ofMapGaP_1,2,3 [1-26]
+    G4THitsMap<G4double>* fEvMapForGAP_1        = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbGAP_1));
+    G4THitsMap<G4double>* fEvMapForGAP_2        = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbGAP_2));
+    G4THitsMap<G4double>* fEvMapForGAP_3        = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbGAP_3));
 
 
-    std::map<G4int, G4double*>::iterator itr;
-    std::map<G4int, G4double*>::iterator itr1;
-    G4cout << "Size: " << fEventMap_2->GetSize() << G4endl;
-    G4cout << "entries: " << fEventMap_2->entries() << G4endl;
+
+
+    // Deposit energy in SMDV-vertical
+    G4double* kDepSMDV[7];
+
+    for(G4int i=0; i<7; i++)
+    {
+        kDepSMDV[i] = (*fEvMapForSMDV)[i+1];
+        if(!kDepSMDV[i]) kDepSMDV[i] = new G4double(0.0);
+
+        G4cout << i+1 <<  ": " << *kDepSMDV[i] << endl;
+
+    }
+
+    // Deposit energy in GAP_1
+    G4double* kDepGAP_1[27];
+
+    for(G4int i=0; i<27; i++)
+    {
+        kDepGAP_1[i] = (*fEvMapForGAP_1)[i+1];
+        if(!kDepGAP_1[i]) kDepGAP_1[i] = new G4double(0.0);
+
+        G4cout << i+1 <<  ": " << *kDepGAP_1[i] << endl;
+
+    }
+
+    // Deposit energy in GAP_2
+    G4double* kDepGAP_2[27];
+
+    for(G4int i=0; i<27; i++)
+    {
+        kDepGAP_2[i] = (*fEvMapForGAP_2)[i+1];
+        if(!kDepGAP_2[i]) kDepGAP_2[i] = new G4double(0.0);
+
+        G4cout << i+1 <<  ": " << *kDepGAP_2[i] << endl;
+
+    }
+
+    // Deposit energy in GAP_3
+    G4double* kDepGAP_3[27];
+
+    for(G4int i=0; i<27; i++)
+    {
+        kDepGAP_3[i] = (*fEvMapForGAP_3)[i+1];
+        if(!kDepGAP_3[i]) kDepGAP_3[i] = new G4double(0.0);
+
+        G4cout << i+1 <<  ": " << *kDepGAP_3[i] << endl;
+
+    }
+
+
+
+    //Junsang****std::map<G4int, G4double*>::iterator itr;
+    //Junsang****std::map<G4int, G4double*>::iterator itr1;
 
     //Junsang****itr1 = fEventMap_2->GetMap()->begin();
-    //Junsang****G4double dd = *(itr1->second);
-    //Junsang****G4cout << "total energy: " << dd/GeV << G4endl;
     
     //Junsang****for(itr = fEventMap_1->GetMap()->begin(); itr != fEventMap_1->GetMap()->end(); itr++)
     //Junsang****{
@@ -91,34 +173,42 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 //Junsang****
 //Junsang****
     //Junsang****}
-    G4cout << "Size: " << fEventMap_1->GetSize() << G4endl;
-    G4cout << "entries: " << fEventMap_1->entries() << G4endl;
     
 
 
-    G4double* kDepSMDH0 = (*fEventMap_1)[0];
-    G4double* kDepSMDH1 = (*fEventMap_1)[1];
-    G4double* kDepSMDH2 = (*fEventMap_1)[2];
-    G4double* kDepSMDH3 = (*fEventMap_1)[3];
-    G4double* kDepSMDH4 = (*fEventMap_1)[4];
-    G4double* kDepSMDH5 = (*fEventMap_1)[5];
-    G4double* kDepSMDH6 = (*fEventMap_1)[6];
 
-    if(!kDepSMDH0) kDepSMDH0 = new G4double(0.0);
-    if(!kDepSMDH1) kDepSMDH1 = new G4double(0.0);
-    if(!kDepSMDH2) kDepSMDH2 = new G4double(0.0);
-    if(!kDepSMDH3) kDepSMDH3 = new G4double(0.0);
-    if(!kDepSMDH4) kDepSMDH4 = new G4double(0.0);
-    if(!kDepSMDH5) kDepSMDH5 = new G4double(0.0);
 
-    cout << "0: " << *kDepSMDH0 << endl;
-    cout << "1: " << *kDepSMDH1 << endl;
-    cout << "2: " << *kDepSMDH2 << endl;
-    cout << "3: " << *kDepSMDH3 << endl;
-    cout << "4: " << *kDepSMDH4 << endl;
-    cout << "5: " << *kDepSMDH5 << endl;
+
+    //Junsang****G4double* kDepSMDH0 = (*fEvMapForSMDH)[0];
+    //Junsang****G4double* kDepSMDH1 = (*fEvMapForSMDH)[1];
+    //Junsang****G4double* kDepSMDH2 = (*fEvMapForSMDH)[2];
+    //Junsang****G4double* kDepSMDH3 = (*fEvMapForSMDH)[3];
+    //Junsang****G4double* kDepSMDH4 = (*fEvMapForSMDH)[4];
+    //Junsang****G4double* kDepSMDH5 = (*fEvMapForSMDH)[5];
+    //Junsang****G4double* kDepSMDH6 = (*fEvMapForSMDH)[6];
+    //Junsang****G4double* kDepSMDH7 = (*fEvMapForSMDH)[7];
+    //Junsang****G4double* kDepSMDH8 = (*fEvMapForSMDH)[8];
+//Junsang****
+    //Junsang****if(!kDepSMDH0) kDepSMDH0 = new G4double(0.0);
+    //Junsang****if(!kDepSMDH1) kDepSMDH1 = new G4double(0.0);
+    //Junsang****if(!kDepSMDH2) kDepSMDH2 = new G4double(0.0);
+    //Junsang****if(!kDepSMDH3) kDepSMDH3 = new G4double(0.0);
+    //Junsang****if(!kDepSMDH4) kDepSMDH4 = new G4double(0.0);
+    //Junsang****if(!kDepSMDH5) kDepSMDH5 = new G4double(0.0);
+    //Junsang****if(!kDepSMDH6) kDepSMDH6 = new G4double(0.0);
+    //Junsang****if(!kDepSMDH7) kDepSMDH7 = new G4double(0.0);
+    //Junsang****if(!kDepSMDH8) kDepSMDH8 = new G4double(0.0);
+//Junsang****
+    //Junsang****cout << "0: " << *kDepSMDH0 << endl;
+    //Junsang****cout << "1: " << *kDepSMDH1 << endl;
+    //Junsang****cout << "2: " << *kDepSMDH2 << endl;
+    //Junsang****cout << "3: " << *kDepSMDH3 << endl;
+    //Junsang****cout << "4: " << *kDepSMDH4 << endl;
+    //Junsang****cout << "5: " << *kDepSMDH5 << endl;
+    //Junsang****cout << "6: " << *kDepSMDH6 << endl;
+    //Junsang****cout << "7: " << *kDepSMDH7 << endl;
+    //Junsang****cout << "8: " << *kDepSMDH8 << endl;
 
 
 }
-
 
