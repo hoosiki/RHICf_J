@@ -216,7 +216,8 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         
     }
 
-    TDE_ZDC = TDE_W_1+ TDE_W_2+ TDE_W_3+ TDE_W+ TDE_SMDH+ TDE_SMDV+ TDE_I_PL+ TDE_GAP_1+ TDE_GAP_2+ TDE_GAP_3;
+    TDE_ZDC = TDE_W_1+ TDE_W_2+ TDE_W_3+ TDE_SMDH+ TDE_SMDV+ TDE_I_PL+ TDE_GAP_1+ TDE_GAP_2+ TDE_GAP_3;
+    TDE_W = TDE_W_1+ TDE_W_2+ TDE_W_3;
     G4cout << "TDE_ZDC: " << TDE_ZDC/GeV << G4endl;
     G4cout << "TDE_W_1: " << TDE_W_1/GeV << G4endl;
     G4cout << "TDE_W_2: " << TDE_W_2/GeV << G4endl;
