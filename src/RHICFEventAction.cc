@@ -27,7 +27,7 @@ using namespace std;
 
 
 ///////////////////////////////////////////////////////////////////////////////
-RHICFEventAction::RHICFEventAction(B5PrimaryGeneratorAction* B5G): G4UserEventAction(), NbW_1(-1), NbW_2(-1), NbW_3(-1), NbSMDH(-1), NbSMDV(-1), NbI_PL(-1), fB5Primary(B5G)
+RHICFEventAction::RHICFEventAction(B5PrimaryGeneratorAction* B5G): G4UserEventAction(), NbW_1(-1), NbW_2(-1), NbW_3(-1), NbSMDH(-1), NbSMDV(-1), NbI_PL(-1), NbNOPSMDH(-1), NbNOPSMDV(-1), fB5Primary(B5G)
 ///////////////////////////////////////////////////////////////////////////////
 {
 
@@ -54,7 +54,7 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
     {
 
         G4SDManager* fSDManager = G4SDManager::GetSDMpointer();
-        NbW_1          = fSDManager -> GetCollectionID("W_PL_1Logical/DE");
+        NbW_1          = fSDManager -> GetCollectionID("W_PL_1Logical/DE");//Collection ID for deposit energy
         NbW_2          = fSDManager -> GetCollectionID("W_PL_2Logical/DE");
         NbW_3          = fSDManager -> GetCollectionID("W_PL_3Logical/DE");
         NbSMDH         = fSDManager -> GetCollectionID("SMDHLogical/DE");
@@ -63,6 +63,11 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
         NbGAP_1        = fSDManager -> GetCollectionID("GAPF_1Logical/DE");
         NbGAP_2        = fSDManager -> GetCollectionID("GAPF_2Logical/DE");
         NbGAP_3        = fSDManager -> GetCollectionID("GAPF_3Logical/DE");
+        NbNOPGAP_1     = fSDManager -> GetCollectionID("GAPF_1Logical/NOP");//Collection ID for Number of Photon
+        NbNOPGAP_2     = fSDManager -> GetCollectionID("GAPF_2Logical/NOP");
+        NbNOPGAP_3     = fSDManager -> GetCollectionID("GAPF_3Logical/NOP");
+        NbNOPSMDH         = fSDManager -> GetCollectionID("SMDHLogical/NOP");
+        NbNOPSMDV         = fSDManager -> GetCollectionID("SMDVLogical/NOP");
     }
 
 
@@ -74,7 +79,8 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 ///////////////////////////////////////////////////////////////////////////////
 {
    
-    G4double TDE_ZDC=0;
+    //Variables for total energy and #of Photon
+    G4double TDE_ZDC=0;//TDE:Total deposit energy
     G4double TDE_W_1=0;
     G4double TDE_W_2=0;
     G4double TDE_W_3=0;
@@ -85,8 +91,15 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     G4double TDE_GAP_1=0;
     G4double TDE_GAP_2=0;
     G4double TDE_GAP_3=0;
+    G4int    TNOSMDH=0;
+    G4int    TNOSMDV=0;
+    G4int    TNOP_GAP_1=0;//NOP:Number of Photons
+    G4int    TNOP_GAP_2=0;
+    G4int    TNOP_GAP_3=0;
 
 
+
+    //Total HitCollection in each event
     G4HCofThisEvent* fHCE = event -> GetHCofThisEvent();
 
 
@@ -98,14 +111,26 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     G4THitsMap<G4double>* fEvMapForSMDH         = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbSMDH));
     //#ofMapSMDV [1-7]
     G4THitsMap<G4double>* fEvMapForSMDV         = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbSMDV));
+    //#ofMapSMDH,V [1-8],[1-7] for Number of Photon
+    G4THitsMap<G4double>* fNOPMapForSMDH         = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbNOPSMDH));
+    G4THitsMap<G4double>* fNOPMapForSMDV         = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbNOPSMDV));
     //#ofMapI_PL [0]
     G4THitsMap<G4double>* fEvMapForI_PL         = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbI_PL));
-    //#ofMapGaP_1,2,3 [1-26]
+    //#ofMapGAP_1,2,3 [1-26]
     G4THitsMap<G4double>* fEvMapForGAP_1        = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbGAP_1));
     G4THitsMap<G4double>* fEvMapForGAP_2        = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbGAP_2));
     G4THitsMap<G4double>* fEvMapForGAP_3        = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbGAP_3));
+    //#ofMapGAP_1,2,3 [1-26] for Number of Photon
+    G4THitsMap<G4double>* fNOPMapForGAP_1        = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbNOPGAP_1));
+    G4THitsMap<G4double>* fNOPMapForGAP_2        = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbNOPGAP_2));
+    G4THitsMap<G4double>* fNOPMapForGAP_3        = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbNOPGAP_3));
+    
 
 
+
+
+//----------------------------------------------Define HitsMaps and Map HitsMaps to DE/NOP value in each components---------------------------
+//--------------------------------------------------------------------------------------------------------------------------------------------
     // Deposit energy in I_PL
     G4double* kDepI_PL = (*fEvMapForI_PL)[0];
     if(!kDepI_PL) kDepI_PL = new G4double(0.0);
@@ -113,9 +138,9 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 
 
     // Deposit energy in SMDH-vertical
-    G4double* kDepSMDH[8];
+    G4double* kDepSMDH[32];
 
-    for(G4int i=0; i<8; i++)
+    for(G4int i=0; i<32; i++)
     {
         kDepSMDH[i] = (*fEvMapForSMDH)[i+1];
         if(!kDepSMDH[i]) kDepSMDH[i] = new G4double(0.0);
@@ -126,9 +151,9 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 
 
     // Deposit energy in SMDV-vertical
-    G4double* kDepSMDV[7];
+    G4double* kDepSMDV[21];
 
-    for(G4int i=0; i<7; i++)
+    for(G4int i=0; i<21; i++)
     {
         kDepSMDV[i] = (*fEvMapForSMDV)[i+1];
         if(!kDepSMDV[i]) kDepSMDV[i] = new G4double(0.0);
@@ -147,6 +172,18 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 
         G4cout << i+1 <<  "GAP_1: " << *kDepGAP_1[i] << G4endl;
         TDE_GAP_1 += *kDepGAP_1[i];
+
+    }
+
+    // Deposit number of photon generated in GAP_1
+    G4double* kNOPGAP_1[27];
+
+    for(G4int i=0; i<27; i++)
+    {
+        kNOPGAP_1[i] = (*fNOPMapForGAP_1)[i+1];
+        if(!kNOPGAP_1[i]) kNOPGAP_1[i] = new G4double(0.0);
+
+        G4cout << i+1 <<  "GAP_1: " << *kNOPGAP_1[i] << G4endl;
 
     }
 
@@ -216,12 +253,13 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         
     }
 
-    TDE_ZDC = TDE_W_1+ TDE_W_2+ TDE_W_3+ TDE_W+ TDE_SMDH+ TDE_SMDV+ TDE_I_PL+ TDE_GAP_1+ TDE_GAP_2+ TDE_GAP_3;
+    TDE_W = TDE_W_1 + TDE_W_2 + TDE_W_3;
+    TDE_ZDC = TDE_W_1+ TDE_W_2+ TDE_W_3+ TDE_SMDH+ TDE_SMDV+ TDE_I_PL+ TDE_GAP_1+ TDE_GAP_2+ TDE_GAP_3;
     G4cout << "TDE_ZDC: " << TDE_ZDC/GeV << G4endl;
     G4cout << "TDE_W_1: " << TDE_W_1/GeV << G4endl;
     G4cout << "TDE_W_2: " << TDE_W_2/GeV << G4endl;
     G4cout << "TDE_W_3: " << TDE_W_3/GeV << G4endl;
-    G4cout << "TDE_W: "   << TDE_W << G4endl;
+    G4cout << "TDE_W: "   << TDE_W/GeV << G4endl;
     G4cout << "TDE_SMDH: " << TDE_SMDH/MeV << G4endl;
     G4cout << "TDE_SMDV: " << TDE_SMDV/MeV << G4endl;
     G4cout << "TDE_I_PL: " << TDE_I_PL << G4endl;

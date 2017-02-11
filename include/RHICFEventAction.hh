@@ -36,6 +36,11 @@ private:
     G4int NbGAP_1;
     G4int NbGAP_2;
     G4int NbGAP_3;
+    G4int NbNOPGAP_1;
+    G4int NbNOPGAP_2;
+    G4int NbNOPGAP_3;
+    G4int NbNOPSMDH;
+    G4int NbNOPSMDV;
 
 
 

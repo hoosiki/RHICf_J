@@ -5,6 +5,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "G4PVReplica.hh"
 #include "G4VSolid.hh"
+#include "G4TwoVector.hh"
+#include "G4ExtrudedSolid.hh"
 #include "G4Polyhedra.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
@@ -32,6 +34,7 @@
 #include "G4PSEnergyDeposit.hh"
 #include "G4PSTrackLength.hh"
 #include "G4PSFlatSurfaceFlux.hh"
+#include "G4PSNofSecondary.hh"
 #include "G4OpBoundaryProcess.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalBorderSurface.hh"
@@ -46,6 +49,8 @@ using namespace CLHEP;
 G4ThreadLocal MagneticField* RHICFDetectorConstruction::fMagneticField = 0;
 G4ThreadLocal G4FieldManager* RHICFDetectorConstruction::fFieldMgr = 0;
 
+
+//Kinds of Detector: ZDC(PHENIX), STARZDC, BBC, STARBBC, PIPE
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,6 +103,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     fVisAttributes.push_back(visAttributes);
 
 
+
     // Define Rotation matrix
     //
     HODORotation            = new G4RotationMatrix();
@@ -119,7 +125,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
 
 
 
-    // Define 'LOCALPOL'
+    // Define 'LOCALPOL-PHENIX ZDC'
     // LOCALPOL is space which contains 'ZDC', 'RCSC', 'FCSC'
     //
     // Structure of 'LOCALPOL'
@@ -156,7 +162,8 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     G4ThreeVector b         = G4ThreeVector(0,-4.05/sqrt(2.)*mm,-62*cm);
 
     //HODO                    = HODOSCOPE(fWorldPhysical,INVERSERotation);
-    LOCALPOLINSTALL         = LOCALPOL(fWorldPhysical, b, fNonRotation);
+    //Junsang****LOCALPOLINSTALL         = LOCALPOL(fWorldPhysical, b, fNonRotation);
+    STARZDCINSTALL         = STARZDC(fWorldPhysical, b, fNonRotation);
 
     //BBCINSTALL              = BBC(fWorldPhysical, a, fNonRotation);
 
@@ -217,7 +224,7 @@ void RHICFDetectorConstruction::DefineDimension()
 
     smdPar[0]           = 5.5;
     smdPar[1]           = 0.81;
-    smdPar[2]           = 9.0;
+    smdPar[2]           = 9.5;
 
     smdhPar[0]          = 5.25;
     smdhPar[1]          = 0.4;
@@ -379,10 +386,11 @@ void RHICFDetectorConstruction::ConstructSDandField()
 
 
     G4SDManager::GetSDMpointer() -> SetVerboseLevel(1);
+    G4SDParticleFilter* OPFilter = new G4SDParticleFilter("NOP", "opticalphoton");
 
     G4String detName;
 
-    G4String calName[9] = {"W_PL_1Logical", "W_PL_2Logical", "W_PL_3Logical","SMDHLogical", "SMDVLogical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical"}; 
+    G4String calName[9] = {"W_PL_1Logical", "W_PL_2Logical", "W_PL_3Logical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical", "SMDHLogical", "SMDVLogical"}; 
 
 
     for(G4int i=0; i<9; i++)
@@ -390,16 +398,38 @@ void RHICFDetectorConstruction::ConstructSDandField()
 
 
 
-        G4cout << "detector:" << calName[i] << G4endl;
-        G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
+        if(i<4)
+        {
+            // Sensitive detector for deposit energy
+            G4cout << "detector:" << calName[i] << G4endl;
+            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
 
-        G4VPrimitiveScorer* PriDEL0;
+            G4VPrimitiveScorer* PriDEL0;
 
-        PriDEL0 = new G4PSEnergyDeposit("DE",0);
-        SDforDE -> RegisterPrimitive(PriDEL0);
+            PriDEL0 = new G4PSEnergyDeposit("DE",0);
+            SDforDE -> RegisterPrimitive(PriDEL0);
 
-        SetSensitiveDetector(calName[i], SDforDE);
+            SetSensitiveDetector(calName[i], SDforDE);
+        }else
+        {
     
+
+            // Sensitive detector for deposit energy and number of optical photon generated
+            G4cout << "detector:" << calName[i] << G4endl;
+            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
+
+            G4VPrimitiveScorer* PriDEandNoP;
+
+            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+            SDforDE -> RegisterPrimitive(PriDEandNoP);
+            PriDEandNoP = new G4PSNofSecondary("NOP",0);
+            PriDEandNoP -> SetFilter(OPFilter);
+            SDforDE -> RegisterPrimitive(PriDEandNoP);
+
+            SetSensitiveDetector(calName[i], SDforDE);
+
+        }
+
 
     }
 
@@ -765,6 +795,308 @@ G4VPhysicalVolume* RHICFDetectorConstruction::LOCALPOL(G4VPhysicalVolume* world_
 
     //return testPhysical;
     return                  fLOCALPOLPhysical;
+
+
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+G4VPhysicalVolume* RHICFDetectorConstruction::STARZDC(G4VPhysicalVolume* world_phys, G4ThreeVector vector, G4RotationMatrix* mat)
+///////////////////////////////////////////////////////////////////////////////
+{
+
+    fSTARZDCSolid              = new G4Box("STARZDCSolid", wcntPar[0]*cm, wcntPar[1]*cm, wcntPar[2]*3.6/5*cm);
+    fSTARZDCLogical            = new G4LogicalVolume(fSTARZDCSolid, FindMaterial("G4_AIR"), "STARZDCLogical");
+    fSTARZDCPhysical           = new G4PVPlacement(mat, vector, "STARZDCPhysical", fSTARZDCLogical,  world_phys, false, 0, checkOverlaps);
+
+
+    //-----------------------------------------------------------------------------------------------------------
+    // Define SolidVolume
+
+    // Define 'ZDC'
+    fZDCSolid               = new G4Box("ZDCSolid", zdcPar[0]*cm, zdcPar1*cm, zdcPar2*cm);
+    // Define 'GAPF' : GAPF is gap which has fibers
+    fGAPFSolid              = new G4Box("GAPFSolid", gapper[0]*cm, fibPar[1]*cm, (gapper[2]+0.5)*cm);
+    // Define 'Layer between Cladding and Gap'
+    fFIBRSolid              = new G4Tubs("FIBRSolid", fibPar[0]*cm, fibPar[1]*cm, fibPar[2]/2.*cm, 0, twopi);
+    // Define 'Iron plate' : I_PL is plate which made of iron
+    fI_PLSolid              = new G4Box("I_PLSolid", iplPar[0]*cm, iplPar[1]*cm, iplPar[2]*cm);
+    // Define 'Half of PMMA fiber'
+    fFIBSolid               = new G4Tubs("FIBSolid", fibPar[0]*cm, fibPar[1]*cm, gapper[2]/2.*cm, 0, twopi);
+    // Define 'Tengsten plate' : W_PL is plate which made of tungsten
+    fW_PLSolid              = new G4Box("W_PLSolid", wplPar[0]*cm, wplPar[2]*cm, wplPar[1]*cm);
+    // Define 'Bar for eliminating optical photon propagating downward'
+    fBlockerSolid           = new G4Box("BlockerSolid", gapper[0]*cm, fibPar[1]*cm, 0.005*cm);
+    // Define 'SMDVStrip'
+    std::vector<G4TwoVector> VectorForEdge;
+    G4TwoVector EdgeOnQuadrant = {3.5*mm,5.0*mm};
+    VectorForEdge.push_back(EdgeOnQuadrant);
+    EdgeOnQuadrant = {3.5*mm,-5.0*mm};
+    VectorForEdge.push_back(EdgeOnQuadrant);
+    EdgeOnQuadrant = {-3.5*mm,0*mm};
+    VectorForEdge.push_back(EdgeOnQuadrant);
+    G4ExtrudedSolid::ZSection Bottom(-9*cm,{0,0},1);
+    G4ExtrudedSolid::ZSection Top(9*cm,{0,0},1);
+    std::vector<G4ExtrudedSolid::ZSection> zsections;
+    zsections.push_back(Bottom);
+    zsections.push_back(Top);
+    fSMDVStripSolid          = new G4ExtrudedSolid("SMDStripSolid", VectorForEdge, zsections);
+    // Define 'SMDHStrip'
+    G4ExtrudedSolid::ZSection HBottom(-5.5*cm,{0,0},1);
+    G4ExtrudedSolid::ZSection HTop(5.5*cm,{0,0},1);
+    std::vector<G4ExtrudedSolid::ZSection> Hzsections;
+    Hzsections.push_back(HBottom);
+    Hzsections.push_back(HTop);
+    fSMDHStripSolid          = new G4ExtrudedSolid("SMDHStripSolid", VectorForEdge, Hzsections);
+    // Define 'SMD'
+    fSMDSolid               = new G4Box("SMDSolid", smdPar[0]*cm, smdPar[1]*cm, smdPar[2]*cm);
+    // Define 'FEPL'
+    fFEPLSolid              = new G4Box("FEPLSolid", fePar[0]*cm, fePar[1]*cm, fePar[2]);
+    // Define 'ALPL' 
+    fALPLSolid              = new G4Box("ALPLSolid",alPar[0]*cm, alPar[1]*cm, alPar[2]*cm);
+
+
+
+
+    //------------------------------------------------------------------------------------------------------------
+    // Define LogicalVolume
+
+    fZDCLogical             = new G4LogicalVolume(fZDCSolid, FindMaterial("G4_AIR"), "ZDCLogical");
+    fGAPF_1Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("PMMA"), "GAPF_1Logical");
+    fGAPF_2Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("PMMA"), "GAPF_2Logical");
+    fGAPF_3Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("PMMA"), "GAPF_3Logical");
+    fI_PLLogical            = new G4LogicalVolume(fI_PLSolid, FindMaterial("G4_Fe"), "I_PLLogical");
+    fFIBLogical             = new G4LogicalVolume(fFIBSolid, FindMaterial("PMMA"), "FIBLogical");
+    fW_PL_1Logical          = new G4LogicalVolume(fW_PLSolid, FindMaterial("G4_W"), "W_PL_1Logical");
+    fW_PL_2Logical          = new G4LogicalVolume(fW_PLSolid, FindMaterial("G4_W"), "W_PL_2Logical");
+    fW_PL_3Logical          = new G4LogicalVolume(fW_PLSolid, FindMaterial("G4_W"), "W_PL_3Logical");
+    fFIBRLogical            = new G4LogicalVolume(fFIBRSolid, FindMaterial("PMMA"), "FIBRLogical");
+    fSMDLogical             = new G4LogicalVolume(fSMDSolid, FindMaterial("G4_AIR"), "fSMDLogical");
+    // Horizontal smd bar
+    fSMDHLogical            = new G4LogicalVolume(fSMDHStripSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDHLogical");
+    fFEPLLogical            = new G4LogicalVolume(fFEPLSolid, FindMaterial("G4_Al"), "FEPLLogical");
+    fALPLLogical            = new G4LogicalVolume(fALPLSolid, FindMaterial("G4_Fe"), "ALPLLogical");
+    // Vertical smd bar
+    fSMDVLogical            = new G4LogicalVolume(fSMDVStripSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDVLogical");
+
+
+
+    //------------------------------------------------------------------------------------------------------------
+    // Define PhysicalVolume
+
+
+
+    // Put gaps which include fibers into STARZDC
+    //
+    if(Nmod>0 && Nmod<4)
+    {
+        for(G4int i=1; i<Nlay + 1; i++)
+        {
+            ypos            = 1.85*cos;
+            interval        = (gapper[1]+wplPar[1])*2.0/sin;
+            zpos            = 8 + Lmod - (2.0*iplPar[1]+2.0*wplPar[1]+gapper[1])/sin - interval*(i-1)-1.85*cos;
+            if(Nmod>=1)
+                fGAPF_1Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]* sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-2) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + smdPar[1]*2.0/sin + zpos)*cm), fGAPF_1Logical, "GAPF_1Physical", fSTARZDCLogical, true, i, checkOverlaps);
+            if(Nmod>=2)
+                fGAPF_2Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]* sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-4) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fGAPF_2Logical, "GAPF_2Physical", fSTARZDCLogical, true, i, checkOverlaps);
+            if(Nmod>=3)
+                fGAPF_3Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]* sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-6) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fGAPF_3Logical, "GAPF_3Physical", fSTARZDCLogical, true, i, checkOverlaps);
+        }
+    }
+
+
+    // Put front and behind iron plate into STARZDC
+    //
+
+    if(Nmod>0 && Nmod<4)
+    {
+        ypos                = 1.85*cos;
+        zpos                = 8 + Lmod - iplPar[1]/sin - 1.85*cos;
+        if(Nmod>=1)
+        {
+            new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-2) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + smdPar[1]*2.0/sin + zpos)*cm), fI_PLLogical, "I_PLPhysical", fSTARZDCLogical, false, 0, checkOverlaps);
+        }
+        if(Nmod>=2)
+        {
+            new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm,(Lmod*(Nmod+1-4) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fI_PLLogical, "I_PLPhysical", fSTARZDCLogical, false, 0, checkOverlaps);
+        }
+        if(Nmod>=3)
+        {
+            new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-6) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fI_PLLogical, "I_PLPhysical", fSTARZDCLogical, false, 0, checkOverlaps);
+        }
+        zpos                = 8 + -Lmod + iplPar[1]/sin -1.85*cos;
+        if(Nmod>=1)
+        {
+            new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-2) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + smdPar[1]*2.0/sin + zpos)*cm), fI_PLLogical, "I_PLPhysical", fSTARZDCLogical, false, 0, checkOverlaps);
+        }
+        if(Nmod>=2)
+        {
+            new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-4) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fI_PLLogical, "I_PLPhysical", fSTARZDCLogical, false, 0, checkOverlaps);
+        }
+        if(Nmod>=3)
+        {
+            new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-6) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fI_PLLogical, "I_PLPhysical", fSTARZDCLogical, false, 0, checkOverlaps);
+        }
+    }
+
+
+
+
+
+    // Put tungsten plates into STARZDC
+    //
+    ypos                     = -zdcPar[1] + wplPar[1]*sin + wplPar[2]*cos +1.85*cos;
+    interval                 = (gapper[1] + wplPar[1])*2.0/sin;
+
+
+    if(Nmod>0 && Nmod<4)
+    {
+
+        for(G4int i=1; i<Nlay+2;i++)
+        {
+
+            zpos                = 8 + Lmod - ypos/tan - (2.0*iplPar[1] + wplPar[1])/sin - interval*(i-1);
+            if(Nmod>=1)
+                fW_PL_1Physical = new G4PVPlacement(fQPhi, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-2) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + smdPar[1]*2.0/sin + zpos)*cm), fW_PL_1Logical, "W_PL_1Physical", fSTARZDCLogical, true, i, checkOverlaps);
+            if(Nmod>=2)
+                fW_PL_2Physical = new G4PVPlacement(fQPhi, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-4) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fW_PL_2Logical, "W_PL_2Physical", fSTARZDCLogical, true, i, checkOverlaps);
+            if(Nmod>=3)
+                fW_PL_3Physical = new G4PVPlacement(fQPhi, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-6) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fW_PL_3Logical, "W_PL_3Physical", fSTARZDCLogical, true, i, checkOverlaps);
+        }
+    }
+
+
+
+
+
+
+    // Put 'FEPL' into 'STARZDC'
+    ypos                    = -7.7;
+    zpos                    = 8 + Lmod*Nmod + smdPar[1]/sin + Lmod/2 - 40;
+    new G4PVPlacement(fNonRotation, G4ThreeVector(0, ypos*cm, zpos*cm), fFEPLLogical, "FEPLPhysical", fSTARZDCLogical, false, 0, checkOverlaps);
+
+
+    // Put 'ALPL' into 'STARZDC'
+    ypos                    = -11.7;
+    new G4PVPlacement(fNonRotation, G4ThreeVector(0, ypos*cm, zpos*cm), fALPLLogical, "ALPLPhysical", fSTARZDCLogical, false, 0, checkOverlaps);
+
+    SMDHRotation          = new G4RotationMatrix();
+    SMDH2Rotation         = new G4RotationMatrix();
+
+    // Put 'SMDH' into 'SMD'
+    for(G4int i=1; i<33; i++)
+    {
+        // Odd Number SMDHStrip
+        if(i%2 == 1)
+        {
+            zpos                = (-8.5+0.5*i);
+            SMDHRotation -> rotateZ(90*deg);
+            SMDHRotation -> rotateX(90*deg);
+            new G4PVPlacement(SMDHRotation, G4ThreeVector(0.0, -0.36*cm, zpos*cm), fSMDHLogical, "SMDHPhysical", fSMDLogical, false, i, checkOverlaps);
+
+        }
+
+        // Even Number SMDHStrip
+        if(i%2 == 0)
+        {
+            zpos                = (-8.5+0.5*i);
+            SMDH2Rotation -> rotateZ(-90*deg);
+            SMDH2Rotation -> rotateX(90*deg);
+            new G4PVPlacement(SMDH2Rotation, G4ThreeVector(0.0, -0.36*cm, zpos*cm), fSMDHLogical, "SMDHPhysical", fSMDLogical, false, i, checkOverlaps);
+
+        }
+    }
+
+    SMDVRotation            = new G4RotationMatrix();
+
+    // Put 'SMDV' into 'SMD'
+    for(G4int i=1; i<22; i++)
+    {
+        // Odd number SMDVStrip
+        if(i%2 == 1)
+        {
+            SMDVRotation            -> rotateZ(-90*deg);
+            xpos                = 0.5*(i-11);
+            new G4PVPlacement(SMDVRotation, G4ThreeVector(xpos*cm, 0.36*cm, 0.*cm), fSMDVLogical, "SMDVPhysical", fSMDLogical, true, i, checkOverlaps);
+        }
+
+        // Even number SMDVStrip
+        if(i%2 == 0)
+        {
+            SMDVRotation            -> rotateZ(90*deg);
+            xpos                = 0.5*i-5.5;
+            new G4PVPlacement(SMDVRotation, G4ThreeVector(xpos*cm, 0.36*cm, 0.*cm), fSMDVLogical, "SMDVPhysical", fSMDLogical, true, i, checkOverlaps);
+        }
+    }
+
+
+    // Put 'SMD' into Localpol
+    zpos                    = 8 + Lmod*(Nmod-2)+smdPar[1]/sin;
+    new G4PVPlacement(GAPFRotation, G4ThreeVector(0.0, 0.0, zpos*cm), fSMDLogical, "SMDPhysical", fSTARZDCLogical, false, 0, checkOverlaps);
+
+
+
+
+    // ---------visualization attributes--------------------
+    //
+
+
+    visAttributes           = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+    visAttributes           -> SetVisibility(false);
+    fSTARZDCLogical        -> SetVisAttributes(visAttributes);
+
+    fVisAttributes.push_back(visAttributes);
+
+    visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.8888, 0.0));
+    visAttributes           -> SetVisibility(false);
+    //-fZDC_1Logical -> SetVisAttributes(visAttributes);
+    //Junsang****fSMDLogical             -> SetVisAttributes(visAttributes);
+
+    /*
+       fMagneticLogical -> SetVisAttributes(visAttributes);
+       fVisAttributes.push_back(visAttributes);
+
+*/
+
+
+    visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));
+    visAttributes           -> SetVisibility(false);
+    fVisAttributes.push_back(visAttributes);
+
+    visAttributes           = new G4VisAttributes(G4Colour(2.0, 2.0, 0)); //LighteGray
+    fW_PL_1Logical          -> SetVisAttributes(visAttributes);
+    fW_PL_2Logical          -> SetVisAttributes(visAttributes);
+    fW_PL_3Logical          -> SetVisAttributes(visAttributes);
+    fVisAttributes.push_back(visAttributes);
+
+    visAttributes           = new G4VisAttributes(G4Colour(0.9, 0.9, 0.9)); //Red
+    fSMDHLogical            -> SetVisAttributes(visAttributes);
+    fGAPF_1Logical          -> SetVisAttributes(visAttributes);
+    fGAPF_2Logical          -> SetVisAttributes(visAttributes);
+    fGAPF_3Logical          -> SetVisAttributes(visAttributes);
+    fVisAttributes.push_back(visAttributes);
+
+    visAttributes           = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));//Lightgreen
+    fI_PLLogical            -> SetVisAttributes(visAttributes);
+    fVisAttributes.push_back(visAttributes);
+
+    visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.0 ,0.0));
+
+    fVisAttributes.push_back(visAttributes);
+    visAttributes           = new G4VisAttributes(G4Colour(0.0, 5.0, 5.0));
+    fVisAttributes.push_back(visAttributes);
+
+
+    visAttributes           = new G4VisAttributes(G4Colour(0.0, 10.0, 0.0));
+    fSMDHLogical            -> SetVisAttributes(visAttributes);
+    fSMDVLogical            -> SetVisAttributes(visAttributes);
+    fVisAttributes.push_back(visAttributes);
+
+
+
+    //return testPhysical;
+    return                  fSTARZDCPhysical;
 
 
 }
