@@ -45,7 +45,8 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          LOCALPOL(G4VPhysicalVolume*, G4ThreeVector,  G4RotationMatrix*);
         G4VPhysicalVolume*          BBC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
         G4VPhysicalVolume*          PIPE();
-        G4VPhysicalVolume*          ARM2(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
+        //Junsang****G4VPhysicalVolume*          ARM1(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
+        G4VPhysicalVolume*          STARZDC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
                                     
         static G4ThreadLocal        MagneticField* fMagneticField;
         static G4ThreadLocal        G4FieldManager* fFieldMgr;
@@ -57,6 +58,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VSolid*                   fSCINSolid;
         G4VSolid*                   fLOCALPOLSolid;
         G4VSolid*                   fZDCSolid;
+        G4VSolid*                   fSTARZDCSolid;
         G4VSolid*                   fGAPFSolid;
         G4VSolid*                   fGAPF1Solid;
         G4VSolid*                   fGAPF2Solid;
@@ -70,9 +72,14 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VSolid*                   fSMDSolid;
         G4VSolid*                   fSMDHSolid;
         G4VSolid*                   fSMDVSolid;
+        G4VSolid*                   fSMDVStripSolid;
+        G4VSolid*                   fSMDHStripSolid;
+
+
         G4LogicalVolume*            fSMDLogical;
         G4LogicalVolume*            fZDCLogical;
         G4LogicalVolume*            fLOCALPOLLogical;
+        G4LogicalVolume*            fSTARZDCLogical;
         G4LogicalVolume*            fSCINLogical;
         G4LogicalVolume*            fWorldLogical;
         G4LogicalVolume*            fHODOLogical;
@@ -155,9 +162,11 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          fW_PL_3Physical;
         G4VPhysicalVolume*          fFIBPhysical;
         G4VPhysicalVolume*          fLOCALPOLPhysical;
+        G4VPhysicalVolume*          fSTARZDCPhysical;
         G4VPhysicalVolume*          fBBCMPhysical;
         G4VPhysicalVolume*          HODOINSTALL;
         G4VPhysicalVolume*          LOCALPOLINSTALL;
+        G4VPhysicalVolume*          STARZDCINSTALL;
         G4VPhysicalVolume*          PIPEINSTALL;
         G4VPhysicalVolume*          BBCINSTALL;
         G4VPhysicalVolume*          ARM2INSTALL;
@@ -188,6 +197,9 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4RotationMatrix*           fNonRotation;
         G4RotationMatrix*           fQPhi;
         G4RotationMatrix*           fSMDRotation;
+        G4RotationMatrix*           SMDVRotation;
+        G4RotationMatrix*           SMDHRotation;
+        G4RotationMatrix*           SMDH2Rotation;
 
 
         G4int iron; 
