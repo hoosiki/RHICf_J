@@ -91,8 +91,8 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     G4double TDE_GAP_1=0;
     G4double TDE_GAP_2=0;
     G4double TDE_GAP_3=0;
-    G4int    TNOSMDH=0;
-    G4int    TNOSMDV=0;
+    G4int    TNOP_SMDH=0;
+    G4int    TNOP_SMDV=0;
     G4int    TNOP_GAP_1=0;//NOP:Number of Photons
     G4int    TNOP_GAP_2=0;
     G4int    TNOP_GAP_3=0;
@@ -131,16 +131,19 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 
 //----------------------------------------------Define HitsMaps and Map HitsMaps to DE/NOP value in each components---------------------------
 //--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
     // Deposit energy in I_PL
     G4double* kDepI_PL = (*fEvMapForI_PL)[0];
     if(!kDepI_PL) kDepI_PL = new G4double(0.0);
     TDE_I_PL = *kDepI_PL;
 
-
+    //Horizontal ZMD STRIP-------------------------------------------------------
     // Deposit energy in SMDH-vertical
-    G4double* kDepSMDH[32];
+    G4double* kDepSMDH[32];//[8]:PHENIX ZDC, [32]:STARZDC
 
-    for(G4int i=0; i<32; i++)
+    for(G4int i=0; i<32; i++)//[8]:PHENIX ZDC, [32]:STARZDC
     {
         kDepSMDH[i] = (*fEvMapForSMDH)[i+1];
         if(!kDepSMDH[i]) kDepSMDH[i] = new G4double(0.0);
@@ -148,12 +151,23 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         G4cout << i+1 <<  "SMDH: " << *kDepSMDH[i] << G4endl;
         TDE_SMDH += *kDepSMDH[i];
     }
+    // Number of photon in SMDH-vertical
+    G4double* kNOPSMDH[32];//[8]:PHENIX ZDC, [32]:STARZDC
 
+    for(G4int i=0; i<32; i++)//[8]:PHENIX ZDC, [32]:STARZDC
+    {
+        kNOPSMDH[i] = (*fNOPMapForSMDH)[i+1];
+        if(!kNOPSMDH[i]) kNOPSMDH[i] = new G4double(0.0);
 
+        G4cout << i+1 <<  "SMDH: " << *kNOPSMDH[i] << G4endl;
+        TNOP_SMDH += *kNOPSMDH[i];
+    }
+
+    //Vertical ZMD STRIP-------------------------------------------------------
     // Deposit energy in SMDV-vertical
-    G4double* kDepSMDV[21];
+    G4double* kDepSMDV[21];//[7]:PHENIX ZDC, [21]:STARZDC
 
-    for(G4int i=0; i<21; i++)
+    for(G4int i=0; i<21; i++)//[7]:PHENIX ZDC, [21]:STARZDC
     {
         kDepSMDV[i] = (*fEvMapForSMDV)[i+1];
         if(!kDepSMDV[i]) kDepSMDV[i] = new G4double(0.0);
@@ -161,7 +175,19 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         G4cout << i+1 <<  "SMDV: " << *kDepSMDV[i] << G4endl;
         TDE_SMDV += *kDepSMDV[i];
     }
+    // Number of photon in SMDV-vertical
+    G4double* kNOPSMDV[21];//[7]:PHENIX ZDC, [21]:STARZDC
 
+    for(G4int i=0; i<21; i++)//[7]:PHENIX ZDC, [21]:STARZDC
+    {
+        kNOPSMDV[i] = (*fNOPMapForSMDV)[i+1];
+        if(!kNOPSMDV[i]) kNOPSMDV[i] = new G4double(0.0);
+
+        G4cout << i+1 <<  "SMDV: " << *kNOPSMDV[i] << G4endl;
+        TNOP_SMDV += *kNOPSMDV[i];
+    }
+
+    //GAP deposit energy & number of photon-------------------------------------------------------
     // Deposit energy in GAP_1
     G4double* kDepGAP_1[27];
 
@@ -174,8 +200,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         TDE_GAP_1 += *kDepGAP_1[i];
 
     }
-
-    // Deposit number of photon generated in GAP_1
+    // Number of photon in GAP_1
     G4double* kNOPGAP_1[27];
 
     for(G4int i=0; i<27; i++)
@@ -184,8 +209,10 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         if(!kNOPGAP_1[i]) kNOPGAP_1[i] = new G4double(0.0);
 
         G4cout << i+1 <<  "GAP_1: " << *kNOPGAP_1[i] << G4endl;
+        TNOP_GAP_1 += *kNOPGAP_1[i];
 
     }
+
 
     // Deposit energy in GAP_2
     G4double* kDepGAP_2[27];
@@ -197,6 +224,19 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 
         G4cout << i+1 <<  "GAP_2: " << *kDepGAP_2[i] << G4endl;
         TDE_GAP_2 += *kDepGAP_2[i];
+
+    }
+
+    // Number of photon in GAP_2
+    G4double* kNOPGAP_2[27];
+
+    for(G4int i=0; i<27; i++)
+    {
+        kNOPGAP_2[i] = (*fNOPMapForGAP_2)[i+1];
+        if(!kNOPGAP_2[i]) kNOPGAP_2[i] = new G4double(0.0);
+
+        G4cout << i+1 <<  "GAP_2: " << *kNOPGAP_2[i] << G4endl;
+        TNOP_GAP_2 += *kNOPGAP_2[i];
 
     }
 
