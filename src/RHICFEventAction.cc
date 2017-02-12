@@ -134,6 +134,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 
 
 
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     // Deposit energy in iron plate(I_PL) START
     G4double* kDepI_PL = (*fEvMapForI_PL)[0];
     if(!kDepI_PL) kDepI_PL = new G4double(0.0);
@@ -272,9 +273,9 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     //Tunsten(W) deposit energy & number of photon START-------------------------------------------------------
 
     // Deposit energy in W_1
-    G4double* kDepW_1[26];
+    G4double* kDepW_1[27];
 
-    for(G4int i=0; i<26; i++)
+    for(G4int i=0; i<27; i++)
     {
         kDepW_1[i] = (*fEvMapForW_1)[i+1];
         if(!kDepW_1[i]) kDepW_1[i] = new G4double(0.0);
@@ -285,9 +286,9 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     }
 
     // Deposit energy in W_2
-    G4double* kDepW_2[26];
+    G4double* kDepW_2[27];
 
-    for(G4int i=0; i<26; i++)
+    for(G4int i=0; i<27; i++)
     {
         kDepW_2[i] = (*fEvMapForW_2)[i+1];
         if(!kDepW_2[i]) kDepW_2[i] = new G4double(0.0);
@@ -298,9 +299,9 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     }
 
     // Deposit energy in W_3
-    G4double* kDepW_3[26];
+    G4double* kDepW_3[27];
 
-    for(G4int i=0; i<26; i++)
+    for(G4int i=0; i<27; i++)
     {
         kDepW_3[i] = (*fEvMapForW_3)[i+1];
         if(!kDepW_3[i]) kDepW_3[i] = new G4double(0.0);

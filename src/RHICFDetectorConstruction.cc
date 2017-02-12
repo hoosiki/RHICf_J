@@ -1011,12 +1011,12 @@ G4VPhysicalVolume* RHICFDetectorConstruction::STARZDC(G4VPhysicalVolume* world_p
     SMDVRotation            = new G4RotationMatrix();
 
     // Put 'SMDV' into 'SMD'
-    for(G4int i=1; i<22; i++)
+    for(G4int i=1; i<21; i++)
     {
         // Odd number SMDVStrip
         if(i%2 == 1)
         {
-            SMDVRotation            -> rotateZ(-90*deg);
+            SMDVRotation            -> rotateZ(-45*deg);
             xpos                = 0.5*(i-11);
             new G4PVPlacement(SMDVRotation, G4ThreeVector(xpos*cm, 0.36*cm, 0.*cm), fSMDVLogical, "SMDVPhysical", fSMDLogical, true, i, checkOverlaps);
         }
@@ -1024,7 +1024,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::STARZDC(G4VPhysicalVolume* world_p
         // Even number SMDVStrip
         if(i%2 == 0)
         {
-            SMDVRotation            -> rotateZ(90*deg);
+            SMDVRotation            -> rotateZ(45*deg);
             xpos                = 0.5*i-5.5;
             new G4PVPlacement(SMDVRotation, G4ThreeVector(xpos*cm, 0.36*cm, 0.*cm), fSMDVLogical, "SMDVPhysical", fSMDLogical, true, i, checkOverlaps);
         }

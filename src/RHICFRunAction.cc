@@ -23,16 +23,38 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
     fAnalysisManager->SetVerboseLevel(1);
     fAnalysisManager->SetFileName("RHICf_J");
 
+    
+    G4String SMDHCHDE = "SMDHLeftToRight_DE";// Deposit energy
+    G4String SMDVCHDE = "SMDVTopToDown_DE";
+    G4String ZDC1CHDE = "ZDC1FrontToRear_DE";
+    G4String ZDC2CHDE = "ZDC2FrontToRear_DE";
+    G4String ZDC3CHDE = "ZDC3FrontToRear_DE";
+    G4String ZDC1WCHDE = "ZDC1WFrontToReal_DE";
+    G4String ZDC2WCHDE = "ZDC2WFrontToReal_DE";
+    G4String ZDC3WCHDE = "ZDC3WFrontToReal_DE";
+    G4String SMDHTDE   = "SMDHTotalDE";
+    G4String SMDVTDE   = "SMDVTotalDE";
+    G4String ZDCTDE    = "ZDCTotalDE";
+    G4String W_PLTDE   = "TungstenTotalDE";
+    G4String I_PLTDE   = "IronTotalDE";
+    G4String SMDHCHNOP = "LeftToRight_NOP";// Number of photon
+    G4String SMDVCHNOP = "TopToDown_NOP";
+    G4String ZDC1CHNOP = "ZDC1FrontToRear_NOP";
+    G4String ZDC2CHNOP = "ZDC2FrontToRear_NOP";
+    G4String ZDC3CHNOP = "ZDC3FrontToRear_NOP";
+
+
+
+    
     if( fEventAction )
     {
     
         fAnalysisManager->CreateNtuple("RHICf_J", "Hits");
-        fAnalysisManager->CreateNtupleDColumn("DEinZDC1");
-        fAnalysisManager->CreateNtupleDColumn("DEinZDC2");
-        fAnalysisManager->CreateNtupleDColumn("DEinZDC3");
-        fAnalysisManager->CreateNtupleDColumn("TotalDepositE");
-        fAnalysisManager->CreateNtupleDColumn("XinSMD");
-        fAnalysisManager->CreateNtupleDColumn("YinSMD");
+        fAnalysisManager->CreateNtupleDColumn("DEinZDC1");// colum id=1
+
+        for(
+
+        
         fAnalysisManager->FinishNtuple();
     }
 
