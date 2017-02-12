@@ -43,6 +43,9 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
     G4String ZDC1CHNOP = "ZDC1FrontToRear_NOP";
     G4String ZDC2CHNOP = "ZDC2FrontToRear_NOP";
     G4String ZDC3CHNOP = "ZDC3FrontToRear_NOP";
+    G4String ZDCTNOP   = "ZDCTotalNOP";
+    G4String SMDHTNOP   = "SMDHTotalNOP";
+    G4String SMDVTNOP  = "SMDVTotalNOP";
 
 
 
@@ -99,6 +102,70 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
             G4cout << "tmpstr: " << tmpstr << G4endl;
             fAnalysisManager->CreateNtupleIColumn(tmpstr);
         }
+        // Leaf for ZDC2 ID:[158-209]
+        for(G4int i=1; i<27; i++)
+        {
+
+            G4String tmpstr = ZDC2CHDE + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleDColumn(tmpstr);
+        }
+        for(G4int i=1; i<27; i++)
+        {
+
+            G4String tmpstr = ZDC2CHNOP + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleIColumn(tmpstr);
+        }
+        // Leaf for ZDC3 ID:[210-263]
+        for(G4int i=1; i<27; i++)
+        {
+
+            G4String tmpstr = ZDC3CHDE + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleDColumn(tmpstr);
+        }
+        for(G4int i=1; i<27; i++)
+        {
+
+            G4String tmpstr = ZDC3CHNOP + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleIColumn(tmpstr);
+        }
+        // Leaf for ZDC1W ID:[264-290]
+        for(G4int i=1; i<28; i++)
+        {
+
+            G4String tmpstr = ZDC1WCHDE + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleDColumn(tmpstr);
+        }
+        // Leaf for ZDC2W ID:[291-317]
+        for(G4int i=1; i<28; i++)
+        {
+
+            G4String tmpstr = ZDC2WCHDE + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleDColumn(tmpstr);
+        }
+        // Leaf for ZDC3W ID:[318-344]
+        for(G4int i=1; i<28; i++)
+        {
+
+            G4String tmpstr = ZDC3WCHDE + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleDColumn(tmpstr);
+        }
+
+        fAnalysisManager->CreateNtupleDColumn(ZDCTDE); // ID:335
+        fAnalysisManager->CreateNtupleIColumn(ZDCTNOP);// ID:336
+        fAnalysisManager->CreateNtupleDColumn(I_PLTDE);// ID:337
+        fAnalysisManager->CreateNtupleDColumn(W_PLTDE);// ID:338
+        fAnalysisManager->CreateNtupleDColumn(SMDHTDE);// ID:339
+        fAnalysisManager->CreateNtupleDColumn(SMDHTNOP);// ID:340
+        fAnalysisManager->CreateNtupleDColumn(SMDVTDE);// ID:341
+        fAnalysisManager->CreateNtupleDColumn(SMDVTNOP);// ID:342
+
         
 
         fAnalysisManager->FinishNtuple();
