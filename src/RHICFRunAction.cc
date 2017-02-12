@@ -38,8 +38,8 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
     G4String ZDCTDE    = "ZDCTotalDE";
     G4String W_PLTDE   = "TungstenTotalDE";
     G4String I_PLTDE   = "IronTotalDE";
-    G4String SMDHCHNOP = "LeftToRight_NOP";// Number of photon
-    G4String SMDVCHNOP = "TopToDown_NOP";
+    G4String SMDHCHNOP = "SMDHLeftToRight_NOP";// Number of photon
+    G4String SMDVCHNOP = "SMDVTopToDown_NOP";
     G4String ZDC1CHNOP = "ZDC1FrontToRear_NOP";
     G4String ZDC2CHNOP = "ZDC2FrontToRear_NOP";
     G4String ZDC3CHNOP = "ZDC3FrontToRear_NOP";
@@ -88,14 +88,14 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
         for(G4int i=1; i<27; i++)
         {
 
-            G4String tmpstr = SMDVCHDE + std::to_string(i);
+            G4String tmpstr = ZDC1CHDE + std::to_string(i);
             G4cout << "tmpstr: " << tmpstr << G4endl;
             fAnalysisManager->CreateNtupleDColumn(tmpstr);
         }
         for(G4int i=1; i<27; i++)
         {
 
-            G4String tmpstr = SMDVCHNOP + std::to_string(i);
+            G4String tmpstr = ZDC1CHNOP + std::to_string(i);
             G4cout << "tmpstr: " << tmpstr << G4endl;
             fAnalysisManager->CreateNtupleIColumn(tmpstr);
         }
