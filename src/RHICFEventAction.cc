@@ -134,7 +134,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 
 
 
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
     // Deposit energy in iron plate(I_PL) START
     G4double* kDepI_PL = (*fEvMapForI_PL)[0];
     if(!kDepI_PL) kDepI_PL = new G4double(0.0);
@@ -150,6 +150,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepSMDH[i] = (*fEvMapForSMDH)[i+1];
         if(!kDepSMDH[i]) kDepSMDH[i] = new G4double(0.0);
 
+        fAnalysisManager -> FillNtupleDColumn(i, *kDepSMDH[i]/MeV);
         G4cout << i+1 <<  "SMDH: " << *kDepSMDH[i] << G4endl;
         TDE_SMDH += *kDepSMDH[i];
     }
@@ -161,7 +162,8 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kNOPSMDH[i] = (*fNOPMapForSMDH)[i+1];
         if(!kNOPSMDH[i]) kNOPSMDH[i] = new G4double(0.0);
 
-        G4cout << i+1 <<  "SMDH: " << *kNOPSMDH[i] << G4endl;
+        fAnalysisManager -> FillNtupleIColumn(32+i, *kNOPSMDH[i]);
+        //Junsang****G4cout << i+1 <<  "SMDH: " << *kNOPSMDH[i] << G4endl;
         TNOP_SMDH += *kNOPSMDH[i];
     }
 
@@ -175,6 +177,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepSMDV[i] = (*fEvMapForSMDV)[i+1];
         if(!kDepSMDV[i]) kDepSMDV[i] = new G4double(0.0);
 
+        fAnalysisManager -> FillNtupleDColumn(64+i, *kDepSMDV[i]/MeV);
         G4cout << i+1 <<  "SMDV: " << *kDepSMDV[i] << G4endl;
         TDE_SMDV += *kDepSMDV[i];
     }
@@ -186,7 +189,8 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kNOPSMDV[i] = (*fNOPMapForSMDV)[i+1];
         if(!kNOPSMDV[i]) kNOPSMDV[i] = new G4double(0.0);
 
-        G4cout << i+1 <<  "SMDV: " << *kNOPSMDV[i] << G4endl;
+        fAnalysisManager -> FillNtupleIColumn(85+i, *kNOPSMDV[i]);
+        //Junsang****G4cout << i+1 <<  "SMDV: " << *kNOPSMDV[i] << G4endl;
         TNOP_SMDV += *kNOPSMDV[i];
     }
 
@@ -200,6 +204,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepGAP_1[i] = (*fEvMapForGAP_1)[i+1];
         if(!kDepGAP_1[i]) kDepGAP_1[i] = new G4double(0.0);
 
+        fAnalysisManager -> FillNtupleDColumn(106+i, *kDepGAP_1[i]/MeV);
         G4cout << i+1 <<  "GAP_1: " << *kDepGAP_1[i] << G4endl;
         TDE_GAP_1 += *kDepGAP_1[i];
 
@@ -212,6 +217,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kNOPGAP_1[i] = (*fNOPMapForGAP_1)[i+1];
         if(!kNOPGAP_1[i]) kNOPGAP_1[i] = new G4double(0.0);
 
+        fAnalysisManager -> FillNtupleIColumn(132+i, *kNOPGAP_1[i]);
         G4cout << i+1 <<  "GAP_1: " << *kNOPGAP_1[i] << G4endl;
         TNOP_GAP_1 += *kNOPGAP_1[i];
 
@@ -386,6 +392,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     //Junsang****cout << "7: " << *kDepSMDH7 << endl;
     //Junsang****cout << "8: " << *kDepSMDH8 << endl;
 
+    fAnalysisManager -> AddNtupleRow();
 
 }
 

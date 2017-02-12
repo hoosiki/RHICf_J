@@ -8,6 +8,7 @@
 #include "g4root.hh"
 #include <ctime>
 #include <unistd.h>
+#include <string>
 ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -52,9 +53,54 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
         fAnalysisManager->CreateNtuple("RHICf_J", "Hits");
         fAnalysisManager->CreateNtupleDColumn("DEinZDC1");// colum id=1
 
-        for(
 
+        // Leaf for SMDH ID:[0-63]
+        for(G4int i=1; i<33; i++)
+        {
+
+            G4String tmpstr = SMDHCHDE + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleDColumn(tmpstr);
+        }
+        for(G4int i=1; i<33; i++)
+        {
+
+            G4String tmpstr = SMDHCHNOP + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleIColumn(tmpstr);
+        }
+        // Leaf for SMDV ID:[64-105]
+        for(G4int i=1; i<22; i++)
+        {
+
+            G4String tmpstr = SMDVCHDE + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleDColumn(tmpstr);
+        }
+        for(G4int i=1; i<22; i++)
+        {
+
+            G4String tmpstr = SMDVCHNOP + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleIColumn(tmpstr);
+        }
+        // Leaf for ZDC1 ID:[106-157]
+        for(G4int i=1; i<27; i++)
+        {
+
+            G4String tmpstr = SMDVCHDE + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleDColumn(tmpstr);
+        }
+        for(G4int i=1; i<27; i++)
+        {
+
+            G4String tmpstr = SMDVCHNOP + std::to_string(i);
+            G4cout << "tmpstr: " << tmpstr << G4endl;
+            fAnalysisManager->CreateNtupleIColumn(tmpstr);
+        }
         
+
         fAnalysisManager->FinishNtuple();
     }
 
