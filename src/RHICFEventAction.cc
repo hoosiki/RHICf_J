@@ -331,14 +331,16 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     TDE_ZDC = TDE_W_1+ TDE_W_2+ TDE_W_3+ TDE_SMDH+ TDE_SMDV+ TDE_I_PL+ TDE_GAP_1+ TDE_GAP_2+ TDE_GAP_3;
     TNOP_ZDC = TNOP_GAP_1 + TNOP_GAP_2 + TNOP_GAP_3;
 
-    fAnalysisManager -> FillNtupleDColumn(343, TDE_ZDC/GeV);
-    fAnalysisManager -> FillNtupleIColumn(344, TNOP_ZDC);
-    fAnalysisManager -> FillNtupleDColumn(345, TDE_I_PL/GeV);
-    fAnalysisManager -> FillNtupleDColumn(346, TDE_W/GeV);
-    fAnalysisManager -> FillNtupleDColumn(347, TDE_SMDH/MeV);
-    fAnalysisManager -> FillNtupleIColumn(348, TNOP_SMDH);
-    fAnalysisManager -> FillNtupleDColumn(349, TDE_SMDV/MeV);
-    fAnalysisManager -> FillNtupleIColumn(350, TNOP_SMDV);
+    //Junsang****fAnalysisManager -> FillNtupleDColumn(343, TDE_ZDC/GeV);
+    //Junsang****fAnalysisManager -> FillNtupleIColumn(344, TNOP_ZDC);
+    //Junsang****fAnalysisManager -> FillNtupleDColumn(345, TDE_I_PL/GeV);
+    //Junsang****fAnalysisManager -> FillNtupleDColumn(346, TDE_W/GeV);
+    //Junsang****fAnalysisManager -> FillNtupleDColumn(347, TDE_SMDH/MeV);
+    //Junsang****fAnalysisManager -> FillNtupleIColumn(348, TNOP_SMDH);
+    //Junsang****fAnalysisManager -> FillNtupleDColumn(349, TDE_SMDV/MeV);
+    //Junsang****fAnalysisManager -> FillNtupleIColumn(350, TNOP_SMDV);
+
+
     //Junsang****G4cout << "TDE_ZDC: " << TDE_ZDC/GeV << "GeV" << G4endl;
     //Junsang****G4cout << "TDE_W_1: " << TDE_W_1/GeV << "GeV" << G4endl;
     //Junsang****G4cout << "TDE_W_2: " << TDE_W_2/GeV << "GeV" << G4endl;

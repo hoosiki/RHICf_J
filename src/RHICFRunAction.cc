@@ -157,13 +157,13 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
             fAnalysisManager->CreateNtupleDColumn(tmpstr);
         }
 
-        fAnalysisManager->CreateNtupleDColumn(ZDCTDE/GeV); // ID:343
+        fAnalysisManager->CreateNtupleDColumn(ZDCTDE); // ID:343
         fAnalysisManager->CreateNtupleIColumn(ZDCTNOP);// ID:344
-        fAnalysisManager->CreateNtupleDColumn(I_PLTDE/GeV);// ID:345
-        fAnalysisManager->CreateNtupleDColumn(W_PLTDE/GeV);// ID:346
-        fAnalysisManager->CreateNtupleDColumn(SMDHTDE/MeV);// ID:347
+        fAnalysisManager->CreateNtupleDColumn(I_PLTDE);// ID:345
+        fAnalysisManager->CreateNtupleDColumn(W_PLTDE);// ID:346
+        fAnalysisManager->CreateNtupleDColumn(SMDHTDE);// ID:347
         fAnalysisManager->CreateNtupleIColumn(SMDHTNOP);// ID:348
-        fAnalysisManager->CreateNtupleDColumn(SMDVTDE/MeV);// ID:349
+        fAnalysisManager->CreateNtupleDColumn(SMDVTDE);// ID:349
         fAnalysisManager->CreateNtupleIColumn(SMDVTNOP);// ID:350
 
         
