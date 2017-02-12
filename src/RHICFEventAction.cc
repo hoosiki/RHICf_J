@@ -152,7 +152,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         if(!kDepSMDH[i]) kDepSMDH[i] = new G4double(0.0);
 
         fAnalysisManager -> FillNtupleDColumn(i, (G4double)*kDepSMDH[i]/MeV);
-        G4cout << i+1 <<  "SMDH: " << *kDepSMDH[i] << G4endl;
+        //Junsang****G4cout << i+1 <<  "SMDH: " << *kDepSMDH[i] << G4endl;
         TDE_SMDH += *kDepSMDH[i];
     }
     // Number of photon in SMDH-vertical
@@ -179,7 +179,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         if(!kDepSMDV[i]) kDepSMDV[i] = new G4double(0.0);
 
         fAnalysisManager -> FillNtupleDColumn(64+i, (G4double)*kDepSMDV[i]/MeV);
-        G4cout << i+1 <<  "SMDV: " << *kDepSMDV[i] << G4endl;
+        //Junsang****G4cout << i+1 <<  "SMDV: " << *kDepSMDV[i] << G4endl;
         TDE_SMDV += *kDepSMDV[i];
     }
     // Number of photon in SMDV-vertical
@@ -341,22 +341,22 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     fAnalysisManager -> FillNtupleIColumn(350, (G4int)TNOP_SMDV);
 
 
-    G4cout << "TDE_ZDC: " << TDE_ZDC/GeV << "GeV" << G4endl;
-    G4cout << "TDE_W_1: " << TDE_W_1/GeV << "GeV" << G4endl;
-    G4cout << "TDE_W_2: " << TDE_W_2/GeV << "GeV" << G4endl;
-    G4cout << "TDE_W_3: " << TDE_W_3/GeV << "GeV" << G4endl;
-    G4cout << "TDE_W: "   << TDE_W/GeV << "GeV" << G4endl;
-    G4cout << "TDE_SMDH: " << TDE_SMDH/MeV << "MeV" << G4endl;
-    G4cout << "TNOP_SMDH: " << TNOP_SMDH << G4endl;
-    G4cout << "TDE_SMDV: " << TDE_SMDV/MeV << "MeV" << G4endl;
-    G4cout << "TNOP_SMDV: " << TNOP_SMDV << G4endl;
-    G4cout << "TDE_I_PL: " << TDE_I_PL << G4endl;
-    G4cout << "TDE_GAP_1: " << TDE_GAP_1/MeV << "MeV" << G4endl;
-    G4cout << "TNOP_GAP_1: " << TNOP_GAP_1 << G4endl;
-    G4cout << "TDE_GAP_2: " << TDE_GAP_2/MeV << "MeV" << G4endl;
-    G4cout << "TNOP_GAP_2: " << TNOP_GAP_2 << G4endl;
-    G4cout << "TDE_GAP_3: " << TDE_GAP_3/MeV << "MeV" << G4endl;
-    G4cout << "TNOP_GAP_3: " << TNOP_GAP_3 << G4endl;
+    //Junsang****G4cout << "TDE_ZDC: " << TDE_ZDC/GeV << "GeV" << G4endl;
+    //Junsang****G4cout << "TDE_W_1: " << TDE_W_1/GeV << "GeV" << G4endl;
+    //Junsang****G4cout << "TDE_W_2: " << TDE_W_2/GeV << "GeV" << G4endl;
+    //Junsang****G4cout << "TDE_W_3: " << TDE_W_3/GeV << "GeV" << G4endl;
+    //Junsang****G4cout << "TDE_W: "   << TDE_W/GeV << "GeV" << G4endl;
+    //Junsang****G4cout << "TDE_SMDH: " << TDE_SMDH/MeV << "MeV" << G4endl;
+    //Junsang****G4cout << "TNOP_SMDH: " << TNOP_SMDH << G4endl;
+    //Junsang****G4cout << "TDE_SMDV: " << TDE_SMDV/MeV << "MeV" << G4endl;
+    //Junsang****G4cout << "TNOP_SMDV: " << TNOP_SMDV << G4endl;
+    //Junsang****G4cout << "TDE_I_PL: " << TDE_I_PL << G4endl;
+    //Junsang****G4cout << "TDE_GAP_1: " << TDE_GAP_1/MeV << "MeV" << G4endl;
+    //Junsang****G4cout << "TNOP_GAP_1: " << TNOP_GAP_1 << G4endl;
+    //Junsang****G4cout << "TDE_GAP_2: " << TDE_GAP_2/MeV << "MeV" << G4endl;
+    //Junsang****G4cout << "TNOP_GAP_2: " << TNOP_GAP_2 << G4endl;
+    //Junsang****G4cout << "TDE_GAP_3: " << TDE_GAP_3/MeV << "MeV" << G4endl;
+    //Junsang****G4cout << "TNOP_GAP_3: " << TNOP_GAP_3 << G4endl;
               
 
 
