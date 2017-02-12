@@ -54,7 +54,6 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
     {
     
         fAnalysisManager->CreateNtuple("RHICf_J", "Hits");
-        fAnalysisManager->CreateNtupleDColumn("DEinZDC1");// colum id=1
 
 
         // Leaf for SMDH ID:[0-63]

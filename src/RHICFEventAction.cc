@@ -151,7 +151,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepSMDH[i] = (*fEvMapForSMDH)[i+1];
         if(!kDepSMDH[i]) kDepSMDH[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleDColumn(i, *kDepSMDH[i]/MeV);
+        fAnalysisManager -> FillNtupleDColumn(i, (G4double)*kDepSMDH[i]/MeV);
         G4cout << i+1 <<  "SMDH: " << *kDepSMDH[i] << G4endl;
         TDE_SMDH += *kDepSMDH[i];
     }
@@ -163,7 +163,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kNOPSMDH[i] = (*fNOPMapForSMDH)[i+1];
         if(!kNOPSMDH[i]) kNOPSMDH[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleIColumn(32+i, *kNOPSMDH[i]);
+        fAnalysisManager -> FillNtupleIColumn(32+i, (G4int)*kNOPSMDH[i]);
         //Junsang****G4cout << i+1 <<  "SMDH: " << *kNOPSMDH[i] << G4endl;
         TNOP_SMDH += *kNOPSMDH[i];
     }
@@ -178,7 +178,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepSMDV[i] = (*fEvMapForSMDV)[i+1];
         if(!kDepSMDV[i]) kDepSMDV[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleDColumn(64+i, *kDepSMDV[i]/MeV);
+        fAnalysisManager -> FillNtupleDColumn(64+i, (G4double)*kDepSMDV[i]/MeV);
         G4cout << i+1 <<  "SMDV: " << *kDepSMDV[i] << G4endl;
         TDE_SMDV += *kDepSMDV[i];
     }
@@ -190,7 +190,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kNOPSMDV[i] = (*fNOPMapForSMDV)[i+1];
         if(!kNOPSMDV[i]) kNOPSMDV[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleIColumn(85+i, *kNOPSMDV[i]);
+        fAnalysisManager -> FillNtupleIColumn(85+i, (G4int)*kNOPSMDV[i]);
         //Junsang****G4cout << i+1 <<  "SMDV: " << *kNOPSMDV[i] << G4endl;
         TNOP_SMDV += *kNOPSMDV[i];
     }
@@ -205,7 +205,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepGAP_1[i] = (*fEvMapForGAP_1)[i+1];
         if(!kDepGAP_1[i]) kDepGAP_1[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleDColumn(106+i, *kDepGAP_1[i]/MeV);
+        fAnalysisManager -> FillNtupleDColumn(106+i, (G4double)*kDepGAP_1[i]/MeV);
         //Junsang****G4cout << i+1 <<  "GAP_1: " << *kDepGAP_1[i] << G4endl;
         TDE_GAP_1 += *kDepGAP_1[i];
 
@@ -218,7 +218,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kNOPGAP_1[i] = (*fNOPMapForGAP_1)[i+1];
         if(!kNOPGAP_1[i]) kNOPGAP_1[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleIColumn(132+i, *kNOPGAP_1[i]);
+        fAnalysisManager -> FillNtupleIColumn(132+i, (G4int)*kNOPGAP_1[i]);
         //Junsang****G4cout << i+1 <<  "GAP_1: " << *kNOPGAP_1[i] << G4endl;
         TNOP_GAP_1 += *kNOPGAP_1[i];
 
@@ -233,7 +233,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepGAP_2[i] = (*fEvMapForGAP_2)[i+1];
         if(!kDepGAP_2[i]) kDepGAP_2[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleDColumn(158+i, *kDepGAP_2[i]/MeV);
+        fAnalysisManager -> FillNtupleDColumn(158+i, (G4double)*kDepGAP_2[i]/MeV);
         //Junsang****G4cout << i+1 <<  "GAP_2: " << *kDepGAP_2[i] << G4endl;
         TDE_GAP_2 += *kDepGAP_2[i];
 
@@ -247,7 +247,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kNOPGAP_2[i] = (*fNOPMapForGAP_2)[i+1];
         if(!kNOPGAP_2[i]) kNOPGAP_2[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleIColumn(184+i, *kNOPGAP_2[i]);
+        fAnalysisManager -> FillNtupleIColumn(184+i, (G4int)*kNOPGAP_2[i]);
         //Junsang****G4cout << i+1 <<  "GAP_2: " << *kNOPGAP_2[i] << G4endl;
         TNOP_GAP_2 += *kNOPGAP_2[i];
 
@@ -261,7 +261,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepGAP_3[i] = (*fEvMapForGAP_3)[i+1];
         if(!kDepGAP_3[i]) kDepGAP_3[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleDColumn(210+i, *kDepGAP_3[i]/MeV);
+        fAnalysisManager -> FillNtupleDColumn(210+i, (G4double)*kDepGAP_3[i]/MeV);
         //Junsang****G4cout << i+1 <<  "GAP_3: " << *kDepGAP_3[i] << G4endl;
         TDE_GAP_3 += *kDepGAP_3[i];
 
@@ -275,7 +275,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kNOPGAP_3[i] = (*fNOPMapForGAP_3)[i+1];
         if(!kNOPGAP_3[i]) kNOPGAP_3[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleIColumn(236+i, *kNOPGAP_3[i]);
+        fAnalysisManager -> FillNtupleIColumn(236+i, (G4int)*kNOPGAP_3[i]);
         //Junsang****G4cout << i+1 <<  "GAP_3: " << *kNOPGAP_3[i] << G4endl;
         TNOP_GAP_3 += *kNOPGAP_3[i];
 
@@ -291,7 +291,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepW_1[i] = (*fEvMapForW_1)[i+1];
         if(!kDepW_1[i]) kDepW_1[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleDColumn(262+i, *kDepW_1[i]/GeV);
+        fAnalysisManager -> FillNtupleDColumn(262+i, (G4double)*kDepW_1[i]/GeV);
         //Junsang****G4cout << i+1 <<  "W_1: " << *kDepW_1[i] << G4endl;
         TDE_W_1 += *kDepW_1[i];
 
@@ -305,7 +305,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepW_2[i] = (*fEvMapForW_2)[i+1];
         if(!kDepW_2[i]) kDepW_2[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleDColumn(289+i, *kDepW_2[i]/GeV);
+        fAnalysisManager -> FillNtupleDColumn(289+i, (G4double)*kDepW_2[i]/GeV);
         //Junsang****G4cout << i+1 <<  "W_2: " << *kDepW_2[i] << G4endl;
         TDE_W_2 += *kDepW_2[i];
 
@@ -319,7 +319,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
         kDepW_3[i] = (*fEvMapForW_3)[i+1];
         if(!kDepW_3[i]) kDepW_3[i] = new G4double(0.0);
 
-        fAnalysisManager -> FillNtupleDColumn(316+i, *kDepW_3[i]/GeV);
+        fAnalysisManager -> FillNtupleDColumn(316+i, (G4double)*kDepW_3[i]/GeV);
         //Junsang****G4cout << i+1 <<  "W_3: " << *kDepW_3[i] << G4endl;
         TDE_W_3 += *kDepW_3[i];
 
@@ -331,32 +331,32 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     TDE_ZDC = TDE_W_1+ TDE_W_2+ TDE_W_3+ TDE_SMDH+ TDE_SMDV+ TDE_I_PL+ TDE_GAP_1+ TDE_GAP_2+ TDE_GAP_3;
     TNOP_ZDC = TNOP_GAP_1 + TNOP_GAP_2 + TNOP_GAP_3;
 
-    //Junsang****fAnalysisManager -> FillNtupleDColumn(343, TDE_ZDC/GeV);
-    //Junsang****fAnalysisManager -> FillNtupleIColumn(344, TNOP_ZDC);
-    //Junsang****fAnalysisManager -> FillNtupleDColumn(345, TDE_I_PL/GeV);
-    //Junsang****fAnalysisManager -> FillNtupleDColumn(346, TDE_W/GeV);
-    //Junsang****fAnalysisManager -> FillNtupleDColumn(347, TDE_SMDH/MeV);
-    //Junsang****fAnalysisManager -> FillNtupleIColumn(348, TNOP_SMDH);
-    //Junsang****fAnalysisManager -> FillNtupleDColumn(349, TDE_SMDV/MeV);
-    //Junsang****fAnalysisManager -> FillNtupleIColumn(350, TNOP_SMDV);
+    fAnalysisManager -> FillNtupleDColumn(343, (G4double)TDE_ZDC/GeV);
+    fAnalysisManager -> FillNtupleIColumn(344, (G4int)TNOP_ZDC);
+    fAnalysisManager -> FillNtupleDColumn(345, (G4double)TDE_I_PL/GeV);
+    fAnalysisManager -> FillNtupleDColumn(346, (G4double)TDE_W/GeV);
+    fAnalysisManager -> FillNtupleDColumn(347, (G4double)TDE_SMDH/MeV);
+    fAnalysisManager -> FillNtupleIColumn(348, (G4int)TNOP_SMDH);
+    fAnalysisManager -> FillNtupleDColumn(349, (G4double)TDE_SMDV/MeV);
+    fAnalysisManager -> FillNtupleIColumn(350, (G4int)TNOP_SMDV);
 
 
-    //Junsang****G4cout << "TDE_ZDC: " << TDE_ZDC/GeV << "GeV" << G4endl;
-    //Junsang****G4cout << "TDE_W_1: " << TDE_W_1/GeV << "GeV" << G4endl;
-    //Junsang****G4cout << "TDE_W_2: " << TDE_W_2/GeV << "GeV" << G4endl;
-    //Junsang****G4cout << "TDE_W_3: " << TDE_W_3/GeV << "GeV" << G4endl;
-    //Junsang****G4cout << "TDE_W: "   << TDE_W/GeV << "GeV" << G4endl;
-    //Junsang****G4cout << "TDE_SMDH: " << TDE_SMDH/MeV << "MeV" << G4endl;
-    //Junsang****G4cout << "TNOP_SMDH: " << TNOP_SMDH << G4endl;
-    //Junsang****G4cout << "TDE_SMDV: " << TDE_SMDV/MeV << "MeV" << G4endl;
-    //Junsang****G4cout << "TNOP_SMDV: " << TNOP_SMDV << G4endl;
-    //Junsang****G4cout << "TDE_I_PL: " << TDE_I_PL << G4endl;
-    //Junsang****G4cout << "TDE_GAP_1: " << TDE_GAP_1/MeV << "MeV" << G4endl;
-    //Junsang****G4cout << "TNOP_GAP_1: " << TNOP_GAP_1 << G4endl;
-    //Junsang****G4cout << "TDE_GAP_2: " << TDE_GAP_2/MeV << "MeV" << G4endl;
-    //Junsang****G4cout << "TNOP_GAP_2: " << TNOP_GAP_2 << G4endl;
-    //Junsang****G4cout << "TDE_GAP_3: " << TDE_GAP_3/MeV << "MeV" << G4endl;
-    //Junsang****G4cout << "TNOP_GAP_3: " << TNOP_GAP_3 << G4endl;
+    G4cout << "TDE_ZDC: " << TDE_ZDC/GeV << "GeV" << G4endl;
+    G4cout << "TDE_W_1: " << TDE_W_1/GeV << "GeV" << G4endl;
+    G4cout << "TDE_W_2: " << TDE_W_2/GeV << "GeV" << G4endl;
+    G4cout << "TDE_W_3: " << TDE_W_3/GeV << "GeV" << G4endl;
+    G4cout << "TDE_W: "   << TDE_W/GeV << "GeV" << G4endl;
+    G4cout << "TDE_SMDH: " << TDE_SMDH/MeV << "MeV" << G4endl;
+    G4cout << "TNOP_SMDH: " << TNOP_SMDH << G4endl;
+    G4cout << "TDE_SMDV: " << TDE_SMDV/MeV << "MeV" << G4endl;
+    G4cout << "TNOP_SMDV: " << TNOP_SMDV << G4endl;
+    G4cout << "TDE_I_PL: " << TDE_I_PL << G4endl;
+    G4cout << "TDE_GAP_1: " << TDE_GAP_1/MeV << "MeV" << G4endl;
+    G4cout << "TNOP_GAP_1: " << TNOP_GAP_1 << G4endl;
+    G4cout << "TDE_GAP_2: " << TDE_GAP_2/MeV << "MeV" << G4endl;
+    G4cout << "TNOP_GAP_2: " << TNOP_GAP_2 << G4endl;
+    G4cout << "TDE_GAP_3: " << TDE_GAP_3/MeV << "MeV" << G4endl;
+    G4cout << "TNOP_GAP_3: " << TNOP_GAP_3 << G4endl;
               
 
 
