@@ -117,7 +117,7 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
             G4cout << "tmpstr: " << tmpstr << G4endl;
             fAnalysisManager->CreateNtupleIColumn(tmpstr);
         }
-        // Leaf for ZDC3 ID:[210-263]
+        // Leaf for ZDC3 ID:[210-261]
         for(G4int i=1; i<27; i++)
         {
 
@@ -132,7 +132,7 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
             G4cout << "tmpstr: " << tmpstr << G4endl;
             fAnalysisManager->CreateNtupleIColumn(tmpstr);
         }
-        // Leaf for ZDC1W ID:[264-290]
+        // Leaf for ZDC1W ID:[262-288]
         for(G4int i=1; i<28; i++)
         {
 
@@ -140,7 +140,7 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
             G4cout << "tmpstr: " << tmpstr << G4endl;
             fAnalysisManager->CreateNtupleDColumn(tmpstr);
         }
-        // Leaf for ZDC2W ID:[291-317]
+        // Leaf for ZDC2W ID:[289-315]
         for(G4int i=1; i<28; i++)
         {
 
@@ -148,7 +148,7 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
             G4cout << "tmpstr: " << tmpstr << G4endl;
             fAnalysisManager->CreateNtupleDColumn(tmpstr);
         }
-        // Leaf for ZDC3W ID:[318-344]
+        // Leaf for ZDC3W ID:[316-342]
         for(G4int i=1; i<28; i++)
         {
 
@@ -157,14 +157,14 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
             fAnalysisManager->CreateNtupleDColumn(tmpstr);
         }
 
-        fAnalysisManager->CreateNtupleDColumn(ZDCTDE); // ID:335
-        fAnalysisManager->CreateNtupleIColumn(ZDCTNOP);// ID:336
-        fAnalysisManager->CreateNtupleDColumn(I_PLTDE);// ID:337
-        fAnalysisManager->CreateNtupleDColumn(W_PLTDE);// ID:338
-        fAnalysisManager->CreateNtupleDColumn(SMDHTDE);// ID:339
-        fAnalysisManager->CreateNtupleDColumn(SMDHTNOP);// ID:340
-        fAnalysisManager->CreateNtupleDColumn(SMDVTDE);// ID:341
-        fAnalysisManager->CreateNtupleDColumn(SMDVTNOP);// ID:342
+        fAnalysisManager->CreateNtupleDColumn(ZDCTDE); // ID:343
+        fAnalysisManager->CreateNtupleIColumn(ZDCTNOP);// ID:344
+        fAnalysisManager->CreateNtupleDColumn(I_PLTDE);// ID:345
+        fAnalysisManager->CreateNtupleDColumn(W_PLTDE);// ID:346
+        fAnalysisManager->CreateNtupleDColumn(SMDHTDE);// ID:347
+        fAnalysisManager->CreateNtupleDColumn(SMDHTNOP);// ID:348
+        fAnalysisManager->CreateNtupleDColumn(SMDVTDE);// ID:349
+        fAnalysisManager->CreateNtupleDColumn(SMDVTNOP);// ID:350
 
         
 
