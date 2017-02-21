@@ -41,6 +41,7 @@ class RHICFMaterials
     G4Material*         fQuartz;
     G4Material*         fGSO;
     G4Material*         fGten;
+    G4Material*         fG10;
     G4Material*         fAcrylic;
 
 

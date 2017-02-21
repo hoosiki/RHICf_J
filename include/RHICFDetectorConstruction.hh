@@ -27,6 +27,15 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         RHICFDetectorConstruction();
         virtual ~RHICFDetectorConstruction();
         virtual G4VPhysicalVolume* Construct();
+        G4bool GetSDforWInZDC(){ return SDforWInZDC; };
+        G4bool GetSDforI_PL(){ return SDforI_PL; };
+        G4bool GetSDforPMMA(){ return SDforPMMA; };
+        G4bool GetSDforSMD(){ return SDforSMD; };    
+        G4bool GetSDforWInARM1(){ return SDforWInARM1; };
+        G4bool GetSDforWHolder(){ return SDforWHolder; };
+        G4bool GetSDforGSOBar(){ return SDforGSOBar; };
+        G4bool GetSDforGSOPlate(){ return SDforGSOPlate; };
+
 
         virtual void ConstructSDandField();
 
@@ -45,7 +54,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          LOCALPOL(G4VPhysicalVolume*, G4ThreeVector,  G4RotationMatrix*);
         G4VPhysicalVolume*          BBC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
         G4VPhysicalVolume*          PIPE();
-        //Junsang****G4VPhysicalVolume*          ARM1(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
+        G4VPhysicalVolume*          ARM1(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
         G4VPhysicalVolume*          STARZDC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
                                     
         static G4ThreadLocal        MagneticField* fMagneticField;
@@ -74,9 +83,22 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VSolid*                   fSMDVSolid;
         G4VSolid*                   fSMDVStripSolid;
         G4VSolid*                   fSMDHStripSolid;
+        G4VSolid*                   fARM1Solid;//SolidVolumes for ARM1
+        G4VSolid*                   fWHolderSolid1;
+        G4VSolid*                   fWHolderSolid2;
+        G4VSolid*                   fNegativeSmallWSolid;
+        G4VSolid*                   fNegativeLargeWSolid;
+        G4VSolid*                   fNegativeTopRoundSolid;
+        G4VSolid*                   fNegativeMiddleRoundSolid;
+        G4VSolid*                   fNegativeBottomRoundSolid;
+        G4VSolid*                   fNegativeHoleSolid;
+        G4VSolid*                   fLargeW_PLSolid;
+        G4VSolid*                   fSmallW_PLSolid;
+        G4VSolid*                   fGSO_PLHolderSolid;     
 
 
-        G4LogicalVolume*            fSMDLogical;
+
+        G4LogicalVolume*            fSMDLogical;//Logical volumes for ZDC
         G4LogicalVolume*            fZDCLogical;
         G4LogicalVolume*            fLOCALPOLLogical;
         G4LogicalVolume*            fSTARZDCLogical;
@@ -90,12 +112,10 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            fGAPF2Logical;
         // SMDV
         G4LogicalVolume*            fSMDVLogical;
-        G4LogicalVolume*            fFIBRLogical;
         G4LogicalVolume*            fMagneticLogical;
         G4LogicalVolume*            fW_PL_1Logical;
         G4LogicalVolume*            fW_PL_2Logical;
         G4LogicalVolume*            fW_PL_3Logical;
-        G4LogicalVolume*            fFIBLogical;
         G4LogicalVolume*            fBBCRLogical;
         G4LogicalVolume*            fBBCPLogical;
         G4LogicalVolume*            fBlockerLogical;
@@ -104,7 +124,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            fALPLLogical;
         // SMDH
         G4LogicalVolume*            fSMDHLogical;
-        G4LogicalVolume*            RB14Logical;
+        G4LogicalVolume*            RB14Logical;//Logical volumes for pipe
         G4LogicalVolume*            FLS4Logical;
         G4LogicalVolume*            CM11Logical;
         G4LogicalVolume*            CM12Logical;
@@ -145,7 +165,13 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            SM81Logical;
         G4LogicalVolume*            SP82Logical;
         G4LogicalVolume*            SP81Logical;
-
+        G4LogicalVolume*            fARM1Logical;//Logical volumes for ARM1
+        G4LogicalVolume*            fWHolderLogical1;
+        G4LogicalVolume*            fNegativeLargeWLogical;
+        G4LogicalVolume*            fNegativeSmallWLogical;
+        G4LogicalVolume*            fLargeW_PLLogical;
+        G4LogicalVolume*            fSmallW_PLLogical;
+        
         G4VPhysicalVolume*          fBlockerPhysical;
         G4VPhysicalVolume*          fFIBRPhysical;
         G4VPhysicalVolume*          fWorldPhysical;
@@ -169,7 +195,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          STARZDCINSTALL;
         G4VPhysicalVolume*          PIPEINSTALL;
         G4VPhysicalVolume*          BBCINSTALL;
-        G4VPhysicalVolume*          ARM2INSTALL;
+        G4VPhysicalVolume*          ARM1INSTALL;
         G4VPhysicalVolume*          fBBCCPhysical;
         G4VPhysicalVolume*          fBBCBPhysical;
         G4VPhysicalVolume*          fBBCFPhysical;
@@ -178,6 +204,8 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          fBBCHPhysical;
         G4VPhysicalVolume*          fBBCQPhysical;
         G4VPhysicalVolume*          fBBCAPhysical;
+        G4VPhysicalVolume*          fARM1Physical;
+        G4VPhysicalVolume*          fWHolderPhysical;
 
         G4MaterialPropertiesTable* fBlack;
 
@@ -200,6 +228,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4RotationMatrix*           SMDVRotation;
         G4RotationMatrix*           SMDHRotation;
         G4RotationMatrix*           SMDH2Rotation;
+        G4RotationMatrix*           fRotationZ45;
 
 
         G4int iron; 
@@ -260,37 +289,34 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
 
         G4bool                      checkOverlaps;
 
+        // bool variables for setting Sensitive detector
+        G4bool                      SDforWInZDC;
+        G4bool                      SDforI_PL;
+        G4bool                      SDforPMMA;    
+        G4bool                      SDforSMD;     
+        G4bool                      SDforWInARM1; 
+        G4bool                      SDforWHolder; 
+        G4bool                      SDforGSOBar;  
+        G4bool                      SDforGSOPlate;
+
 
         G4double                    Nlay,Nmod;
 
 
-        // Parameter for ARM2
+
+
+
+
+
+
+
+        // Parameter for ARM1
         //
 
-        G4int                       lcur_num;
-        G4int                       wcur_num;
-        G4int                       noflayer;
-        G4int                       nofssdset;
-        G4double                    TL;
-        G4double                    TS;
-        G4double                    SSDX;
-        G4double                    SSDY;
-        G4double                    gsoThickness;
-        G4double                    acrylThickness;
-        G4double                    ssdsiThickness;
-        G4double                    ssdalThickness;
-        G4double                    ssdacrylThickness;
-        G4double                    firstThickness;
-        G4double                    Arm2SizeX;
-        G4double                    Arm2SizeY;
-        G4double                    firstSizeY;
-        G4double                    gapThickness;
-        G4double                    layerThickness;
-        G4double                    ssdThickness;
-        G4double                    ssdxyThickness;
-        G4double                    Arm2Thickness;
-        G4double                    place;
 
+        G4double                    kARM1par[3];
+        G4double                    kNegativeLargeWpar[3];
+        G4double                    kNegativeSmallWpar[3];
 
 
 
