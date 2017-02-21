@@ -158,6 +158,23 @@ void RHICFMaterials::CreateMaterials()
   natoms.clear();
 
   //--------------------------------------------------
+  // G10
+  //--------------------------------------------------
+
+  elements.push_back("C");      natoms.push_back(3);
+  elements.push_back("H");      natoms.push_back(3);
+  elements.push_back("O");      natoms.push_back(2);
+  elements.push_back("Si");     natoms.push_back(1);
+
+  density = 1.70*g/cm3;
+
+  fG10 = fNistMan->
+          ConstructNewMaterial("G10", elements, natoms, density);
+
+  elements.clear();
+  natoms.clear();
+
+  //--------------------------------------------------
   // Aacrylic
   //--------------------------------------------------
 
@@ -259,6 +276,21 @@ void RHICFMaterials::CreateMaterials()
   elements.push_back("N");     natoms.push_back(1);
   
   density = 2.64*g/cm3;
+
+  fQuartz = fNistMan->
+          ConstructNewMaterial("Quartz", elements, natoms, density);
+
+  elements.clear();
+  natoms.clear();
+
+  //--------------------------------------------------
+  // QuartzARM1 
+  //--------------------------------------------------
+
+  elements.push_back("Si");     natoms.push_back(1);
+  elements.push_back("O");     natoms.push_back(2);
+  
+  density = 2.2*g/cm3;
 
   fQuartz = fNistMan->
           ConstructNewMaterial("Quartz", elements, natoms, density);

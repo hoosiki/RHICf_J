@@ -11,6 +11,7 @@
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 #include "G4LogicalVolume.hh"
+#include "G4SubtractionSolid.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -60,6 +61,9 @@ RHICFDetectorConstruction::RHICFDetectorConstruction ( ):G4VUserDetectorConstruc
 
     DefineDimension();
 }
+
+
+
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,6 +126,8 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     fQPhi                   -> rotateX(twopi/8);
     GAPFRotation            = new G4RotationMatrix();
     GAPFRotation            -> rotateX(27*twopi/72);
+    fRotationZ45            = new G4RotationMatrix();
+    fRotationZ45            -> rotateZ(45*deg);
 
 
 
@@ -159,11 +165,13 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     //G4ThreeVector a         = G4ThreeVector(towposX[1]-4.5*mm,-towposY[1]-12.5*mm+72.5*mm,0);
 
     //G4ThreeVector b         = G4ThreeVector(0,-4.05/sqrt(2.)*mm,-1860*cm);
-    G4ThreeVector b         = G4ThreeVector(0,-4.05/sqrt(2.)*mm,-62*cm);
+    G4ThreeVector b         = G4ThreeVector(40*cm,-4.05/sqrt(2.)*mm,-200*cm);
 
     //HODO                    = HODOSCOPE(fWorldPhysical,INVERSERotation);
     //Junsang****LOCALPOLINSTALL         = LOCALPOL(fWorldPhysical, b, fNonRotation);
     STARZDCINSTALL         = STARZDC(fWorldPhysical, b, fNonRotation);
+    
+    ARM1INSTALL              = ARM1(fWorldPhysical, G4ThreeVector(), fNonRotation);
 
     //BBCINSTALL              = BBC(fWorldPhysical, a, fNonRotation);
 
@@ -179,6 +187,22 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
 void RHICFDetectorConstruction::DefineDimension()
     ///////////////////////////////////////////////////////////////////////////////
 {
+
+    
+
+    SDforWInZDC         = true;
+    SDforI_PL           = true;
+    SDforPMMA           = true;
+    SDforSMD            = true;
+    SDforWInARM1        = true;
+    SDforWHolder        = true;
+    SDforGSOBar         = true;
+    SDforGSOPlate       = true;
+
+
+    
+
+
     smdHeight           = smdPar[2];
     sin                 = std::sqrt(2.0)/2.0;
     cos                 = std::sqrt(2.0)/2.0;
@@ -369,8 +393,18 @@ void RHICFDetectorConstruction::DefineDimension()
 
     kMaxPMT             = 100;
 
+    // Parameters for ARM1
+    kARM1par[0] = 4.5;
+    kARM1par[1] = 12.65;
+    kARM1par[2] = 14;
 
+    kNegativeLargeWpar[0] = 4.01/2;
+    kNegativeLargeWpar[1] = 4.01/2;
+    kNegativeLargeWpar[2] = 7.2/2;
 
+    kNegativeSmallWpar[0] = 2.01/2;
+    kNegativeSmallWpar[1] = 2.01/2;
+    kNegativeSmallWpar[2] = 7.2/2;
 
 
 
@@ -593,11 +627,9 @@ G4VPhysicalVolume* RHICFDetectorConstruction::LOCALPOL(G4VPhysicalVolume* world_
     fGAPF_2Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("PMMA"), "GAPF_2Logical");
     fGAPF_3Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("PMMA"), "GAPF_3Logical");
     fI_PLLogical            = new G4LogicalVolume(fI_PLSolid, FindMaterial("G4_Fe"), "I_PLLogical");
-    fFIBLogical             = new G4LogicalVolume(fFIBSolid, FindMaterial("PMMA"), "FIBLogical");
     fW_PL_1Logical          = new G4LogicalVolume(fW_PLSolid, FindMaterial("G4_W"), "W_PL_1Logical");
     fW_PL_2Logical          = new G4LogicalVolume(fW_PLSolid, FindMaterial("G4_W"), "W_PL_2Logical");
     fW_PL_3Logical          = new G4LogicalVolume(fW_PLSolid, FindMaterial("G4_W"), "W_PL_3Logical");
-    fFIBRLogical            = new G4LogicalVolume(fFIBRSolid, FindMaterial("PMMA"), "FIBRLogical");
     fSMDLogical             = new G4LogicalVolume(fSMDSolid, FindMaterial("G4_AIR"), "fSMDLogical");
     // Horizontal smd bar
     fSMDHLogical            = new G4LogicalVolume(fSMDHSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDHLogical");
@@ -867,11 +899,9 @@ G4VPhysicalVolume* RHICFDetectorConstruction::STARZDC(G4VPhysicalVolume* world_p
     fGAPF_2Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("PMMA"), "GAPF_2Logical");
     fGAPF_3Logical          = new G4LogicalVolume(fGAPFSolid, FindMaterial("PMMA"), "GAPF_3Logical");
     fI_PLLogical            = new G4LogicalVolume(fI_PLSolid, FindMaterial("G4_Fe"), "I_PLLogical");
-    fFIBLogical             = new G4LogicalVolume(fFIBSolid, FindMaterial("PMMA"), "FIBLogical");
     fW_PL_1Logical          = new G4LogicalVolume(fW_PLSolid, FindMaterial("G4_W"), "W_PL_1Logical");
     fW_PL_2Logical          = new G4LogicalVolume(fW_PLSolid, FindMaterial("G4_W"), "W_PL_2Logical");
     fW_PL_3Logical          = new G4LogicalVolume(fW_PLSolid, FindMaterial("G4_W"), "W_PL_3Logical");
-    fFIBRLogical            = new G4LogicalVolume(fFIBRSolid, FindMaterial("PMMA"), "FIBRLogical");
     fSMDLogical             = new G4LogicalVolume(fSMDSolid, FindMaterial("G4_AIR"), "fSMDLogical");
     // Horizontal smd bar
     fSMDHLogical            = new G4LogicalVolume(fSMDHStripSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SMDHLogical");
@@ -1933,6 +1963,181 @@ G4VPhysicalVolume* RHICFDetectorConstruction::PIPE()
     return MagneticPhysical;
 
 
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys, G4ThreeVector vector, G4RotationMatrix* mat)
+///////////////////////////////////////////////////////////////////////////////
+{
+
+
+    fARM1Solid          = new G4Box("ARM1Solid", kARM1par[0]*cm, kARM1par[1]*cm, kARM1par[2]*cm); 
+    fARM1Logical        = new G4LogicalVolume(fARM1Solid, FindMaterial("G4_Galactic"), "ARM1Logical");
+    fARM1Physical       = new G4PVPlacement(mat, vector, "ARM1Physical", fARM1Logical, world_phys, false, 0, checkOverlaps);
+
+
+
+    // Define 'Tunsten Plate Holder1'- First type of tungsten plate holder
+    std::vector<G4TwoVector> VectorForEdge1;
+    G4TwoVector EdgeOnWHolder = {10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {30.1/2*sqrt(2)*mm,-(30.1*sqrt(2)+5)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {4.6*mm,-(50.1/2*sqrt(2)-4.6)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {50.1/2*sqrt(2)*mm,0*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {8*mm,(50.1/2*sqrt(2)-8)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {8*mm,((50.1/2+9)*sqrt(2)-8)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {0*mm,(50.1/2+9)*sqrt(2)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-8*mm,((50.1/2+9)*sqrt(2)-8)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-8*mm,(50.1/2*sqrt(2)-8)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-50.1/2*sqrt(2)*mm,0*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-4.6*mm,-(50.1/2*sqrt(2)-4.6)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-30.1/2*sqrt(2)*mm,-(30.1*sqrt(2)+5)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+    VectorForEdge1.push_back(EdgeOnWHolder);
+    G4ExtrudedSolid::ZSection Bottom(-7.1/2*mm,{0,0},1);
+    G4ExtrudedSolid::ZSection Top(7.1/2*mm,{0,0},1);
+    std::vector<G4ExtrudedSolid::ZSection> Hzsections;
+    Hzsections.push_back(Bottom);
+    Hzsections.push_back(Top);
+    fWHolderSolid1          = new G4ExtrudedSolid("ProtoSolid1", VectorForEdge1, Hzsections);
+
+    fNegativeLargeWSolid     = new G4Box("NegativeLargeW", kNegativeLargeWpar[0]*cm, kNegativeLargeWpar[1]*cm, kNegativeLargeWpar[2]*cm);
+    fNegativeSmallWSolid     = new G4Box("NegativeSmallW", kNegativeSmallWpar[0]*cm, kNegativeSmallWpar[1]*cm, kNegativeSmallWpar[2]*cm);
+    fNegativeTopRoundSolid   = new G4Tubs("NegativeTopRoundSolid", 0*cm, 0.45*cm, 0.72*cm, 0*deg, 360*deg);
+    fNegativeMiddleRoundSolid   = new G4Tubs("NegativeMiddleRoundSolid", 0.3*cm, 0.45*cm, 0.72*cm, 0*deg, 360*deg);
+    fNegativeBottomRoundSolid   = new G4Tubs("NegativeBottomRoundSolid", 1*cm, 1.5*cm, 0.71*cm, 0*deg, 360*deg);
+    fNegativeHoleSolid    = new G4Tubs("NegativeHole", 0*cm, 0.4*cm, 0.72*cm, 0*deg, 360*deg);
+    fWHolderSolid1            = new G4SubtractionSolid( "-LargeWSolid", fWHolderSolid1, fNegativeLargeWSolid, fRotationZ45, G4ThreeVector());
+    fWHolderSolid1            = new G4SubtractionSolid( "-SmallWSolid", fWHolderSolid1, fNegativeSmallWSolid, fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, 0*mm));
+    fWHolderSolid1            = new G4SubtractionSolid( "-TopHoleSolid", fWHolderSolid1, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, ((50.1/2+9)*sqrt(2)-8-2.65)*mm, 0*mm));
+    fWHolderSolid1            = new G4SubtractionSolid( "WHolderSolid1", fWHolderSolid1, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, (-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+10)*mm, 0*mm));
+
+
+    //Tungsten Plate
+    fLargeW_PLSolid         = new G4Box("LargeW_PLSolid", 2*cm, 2*cm, 0.305*cm);
+    fSmallW_PLSolid         = new G4Box("SmallW_PLSolid", 1*cm, 1*cm, 0.305*cm);
+
+    // Define 'Tunsten Plate Holder2'- Second type of tungsten plate holder
+    std::vector<G4TwoVector> VectorForEdge2;
+    EdgeOnWHolder = {10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {10*mm,(-(31.05*sqrt(2)+5)-(30.1/2*sqrt(2))+10)*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {30.1/2*sqrt(2)*mm,-(31.05*sqrt(2)+5)*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {3.22*mm,-30.42*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {48.19/2*sqrt(2)*mm,0*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {8*mm,(48.19/2*sqrt(2)-8)*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {8*mm,((48.19/2+9)*sqrt(2)-8)*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {0*mm,(48.19/2+9)*sqrt(2)*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-8*mm,((48.19/2+9)*sqrt(2)-8)*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-8*mm,(48.19/2*sqrt(2)-8)*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-48.19/2*sqrt(2)*mm,0*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-3.22*mm,-30.42*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-30.1/2*sqrt(2)*mm,-(31.05*sqrt(2)+5)*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-10*mm,(-(31.05*sqrt(2)+5)-(30.1/2*sqrt(2))+10)*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    EdgeOnWHolder = {-10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+    VectorForEdge2.push_back(EdgeOnWHolder);
+    G4ExtrudedSolid::ZSection Bottom2(-7.1/2*mm,{0,0},1);
+    G4ExtrudedSolid::ZSection Top2(7.1/2*mm,{0,0},1);
+    fWHolderSolid2              = new G4ExtrudedSolid("ProtoSolid2", VectorForEdge2, Hzsections);
+    fWHolderSolid2              = new G4SubtractionSolid( "-SmallWSolid", fWHolderSolid2, fNegativeSmallWSolid, fRotationZ45, G4ThreeVector(0*mm, -(31.05*sqrt(2)+5)*mm, 0*mm));
+    fWHolderSolid2   = new G4SubtractionSolid( "-LargeWSolid", fWHolderSolid2, fNegativeLargeWSolid, fRotationZ45, G4ThreeVector());
+    fWHolderSolid2              = new G4SubtractionSolid( "-TopHoleSolid2", fWHolderSolid2, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, ((50.1/2+9)*sqrt(2)-8-2.65)*mm, 0*mm));
+    fWHolderSolid2              = new G4SubtractionSolid( "WHolderSolid2", fWHolderSolid2, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, (-(31.05*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+10)*mm, 0*mm));
+
+
+
+    // Define 'GSO Plate Holder1'
+    std::vector<G4TwoVector> VectorForEdge3;
+    G4TwoVector EdgeOnGSOHolder = {10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {30.1/2*sqrt(2)*mm,-(30.1*sqrt(2)+5)*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {4.6*mm,-(50.1/2*sqrt(2)-4.6)*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {50.1/2*sqrt(2)*mm,0*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {8*mm,(50.1/2*sqrt(2)-8)*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {8*mm,((50.1/2+9)*sqrt(2)-8)*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {0*mm,(50.1/2+9)*sqrt(2)*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {-30.9*mm,35.15*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {-30.9*mm,-3.59*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {-17.2*mm,-18.6*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {-27.06*mm,-28.7*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {-27.06*mm,-41.8*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {-10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    EdgeOnGSOHolder = {-10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+    VectorForEdge3.push_back(EdgeOnGSOHolder);
+    G4ExtrudedSolid::ZSection BottomGSO(-3.2/2*mm,{0,0},1);
+    G4ExtrudedSolid::ZSection TopGSO(3.2/2*mm,{0,0},1);
+    std::vector<G4ExtrudedSolid::ZSection> HzsectionsGSO;
+    HzsectionsGSO.push_back(BottomGSO);
+    HzsectionsGSO.push_back(TopGSO);
+    fGSO_PLHolderSolid          = new G4ExtrudedSolid("GSO_PLHolderProto", VectorForEdge3, HzsectionsGSO);
+
+
+
+
+
+
+    fLargeW_PLLogical         = new G4LogicalVolume(fLargeW_PLSolid, FindMaterial("G4_W"), "LargeW_PLLogical");
+    fSmallW_PLLogical         = new G4LogicalVolume(fSmallW_PLSolid, FindMaterial("G4_W"), "SmallW_PLLogical");
+    
+    //Junsang****fWHolderLogical            = new G4LogicalVolume(fSubtactLargeWSolidL1, FindMaterial("G10"), "WHolderLogical");
+    fWHolderLogical1            = new G4LogicalVolume(fGSO_PLHolderSolid, FindMaterial("G10"), "WHolderLogical");
+    fWHolderPhysical           = new G4PVPlacement(fNonRotation, G4ThreeVector(), fWHolderLogical1, "WHolderPhysical", fARM1Logical, false, 0, checkOverlaps);
+    
+    visAttributes           = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+    visAttributes           -> SetVisibility(false);
+    fARM1Logical        -> SetVisAttributes(visAttributes);
+
+    fVisAttributes.push_back(visAttributes);
+
+    visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.8888, 0.0));
+    visAttributes           -> SetVisibility(false);
+
+    
+
+    return fARM1Physical;
 }
 
 

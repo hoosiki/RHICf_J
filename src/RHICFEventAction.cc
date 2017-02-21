@@ -1,6 +1,7 @@
 // Edited by Junsang Park. 2014.12.10
 #include "RHICFEventAction.hh"
 #include "RHICFRunAction.hh"
+#include "RHICFDetectorConstruction.hh"
 #include "B5PrimaryGeneratorAction.hh"
 ///////////////////////////////////////////////////////////////////////////////
 #include "G4Event.hh"
@@ -48,12 +49,18 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
 {
 
 
+    RHICFDetectorConstruction* fConstruction = new RHICFDetectorConstruction();
+
+    G4cout << "SDforWInZDC: " << fConstruction->GetSDforWInZDC() << G4endl;
+
 
 
     if(NbSMDH == -1)
     {
 
         G4SDManager* fSDManager = G4SDManager::GetSDMpointer();
+
+
         NbW_1          = fSDManager -> GetCollectionID("W_PL_1Logical/DE");//Collection ID for deposit energy
         NbW_2          = fSDManager -> GetCollectionID("W_PL_2Logical/DE");
         NbW_3          = fSDManager -> GetCollectionID("W_PL_3Logical/DE");
