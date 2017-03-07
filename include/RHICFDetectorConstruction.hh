@@ -84,8 +84,8 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VSolid*                   fSMDVStripSolid;
         G4VSolid*                   fSMDHStripSolid;
         G4VSolid*                   fARM1Solid;//SolidVolumes for ARM1
-        G4VSolid*                   fWHolderSolid1;
-        G4VSolid*                   fWHolderSolid2;
+        G4VSolid*                   fWHolder_1Solid;
+        G4VSolid*                   fWHolder_2Solid;
         G4VSolid*                   fNegativeSmallWSolid;
         G4VSolid*                   fNegativeLargeWSolid;
         G4VSolid*                   fNegativeTopRoundSolid;
@@ -95,6 +95,21 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VSolid*                   fLargeW_PLSolid;
         G4VSolid*                   fSmallW_PLSolid;
         G4VSolid*                   fGSO_PLHolderSolid;     
+        G4VSolid*                   fNegativeGuideLargeSolid;
+        G4VSolid*                   fNegativeGuideSmallSolid;
+        G4VSolid*                   fLargeGSO_PLSolid;
+        G4VSolid*                   fSmallGSO_PLSolid;
+        G4VSolid*                   fGSOBarHolderSolid;
+        G4VSolid*                   fNegativeGSOBarLargeRightSolid;
+        G4VSolid*                   fNegativeGSOBarLargeLeftSolid;
+        G4VSolid*                   fNegativeGSOBarSmallRightSolid;
+        G4VSolid*                   fNegativeGSOBarSmallLeftSolid;
+        G4VSolid*                   fLightGuideLargeSolid;
+        G4VSolid*                   fLightGuideSmallSolid;
+        G4VSolid*                   fGSOSmallBarSolid;
+        G4VSolid*                   fGSOLargeBarSolid;
+        G4VSolid*                   fGSOSmallBarBeltSolid;
+        G4VSolid*                   fGSOLargeBarBeltSolid;
 
 
 
@@ -166,12 +181,41 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            SP82Logical;
         G4LogicalVolume*            SP81Logical;
         G4LogicalVolume*            fARM1Logical;//Logical volumes for ARM1
-        G4LogicalVolume*            fWHolderLogical1;
+        G4LogicalVolume*            fWHolder_1Logical;
+        G4LogicalVolume*            fWHolder_2Logical;
         G4LogicalVolume*            fNegativeLargeWLogical;
         G4LogicalVolume*            fNegativeSmallWLogical;
         G4LogicalVolume*            fLargeW_PLLogical;
         G4LogicalVolume*            fSmallW_PLLogical;
-        
+        G4LogicalVolume*            fLargeGSO_PLLogcail;
+        G4LogicalVolume*            fSmallGSO_PLLogcail;
+        G4LogicalVolume*            fGSORightSmallBarBelt_1Logical;
+        G4LogicalVolume*            fGSORightSmallBarBelt_2Logical;
+        G4LogicalVolume*            fGSORightSmallBarBelt_3Logical;
+        G4LogicalVolume*            fGSORightSmallBarBelt_4Logical;
+        G4LogicalVolume*            fGSORightLargeBarBelt_1Logical;
+        G4LogicalVolume*            fGSORightLargeBarBelt_2Logical;
+        G4LogicalVolume*            fGSORightLargeBarBelt_3Logical;
+        G4LogicalVolume*            fGSORightLargeBarBelt_4Logical;
+        G4LogicalVolume*            fGSOLeftSmallBarBelt_1Logical;
+        G4LogicalVolume*            fGSOLeftSmallBarBelt_2Logical;
+        G4LogicalVolume*            fGSOLeftSmallBarBelt_3Logical;
+        G4LogicalVolume*            fGSOLeftSmallBarBelt_4Logical;
+        G4LogicalVolume*            fGSOLeftLargeBarBelt_1Logical;
+        G4LogicalVolume*            fGSOLeftLargeBarBelt_2Logical;
+        G4LogicalVolume*            fGSOLeftLargeBarBelt_3Logical;
+        G4LogicalVolume*            fGSOLeftLargeBarBelt_4Logical;
+        G4LogicalVolume*            fGSORightSmallBarLogical;
+        G4LogicalVolume*            fGSOLeftSmallBarLogical;
+        G4LogicalVolume*            fGSORightLargeBarLogical;
+        G4LogicalVolume*            fGSOLeftLargeBarLogical;
+        G4LogicalVolume*            fGSOLeftSmallBarBeltLogical;
+        G4LogicalVolume*            fGSO_PLHolderLogical;
+        G4LogicalVolume*            fGSOBarHolderLogical;
+        G4LogicalVolume*            fLightGuideLargeLogical;
+        G4LogicalVolume*            fLightGuideSmallLogical;
+
+
         G4VPhysicalVolume*          fBlockerPhysical;
         G4VPhysicalVolume*          fFIBRPhysical;
         G4VPhysicalVolume*          fWorldPhysical;
@@ -229,6 +273,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4RotationMatrix*           SMDHRotation;
         G4RotationMatrix*           SMDH2Rotation;
         G4RotationMatrix*           fRotationZ45;
+        G4RotationMatrix*           fRotationZ90;
 
 
         G4int iron; 
@@ -239,6 +284,8 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4double                    pipeInr, pipeOutr, pipeLength;
         G4double                    Lmod;
         G4double                    ivolu, judgeNS;
+        G4double                    basez;
+        G4double                    dz;
 
 
         G4double                    par[5];

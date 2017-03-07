@@ -90,44 +90,43 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
         -> Clean();
     G4SolidStore::GetInstance()             
         -> Clean();
-    // Option to switch on/off checking of volumes overlaps
-    // 
-    //
-    checkOverlaps           = false;
+/*-*/// Option to switch on/off checking of volumes overlaps
+/*-*/checkOverlaps           = false;
 
-    // geometries --------------------------------------------------------------
-    // Define World Volume
-    fWorldSolid             = new G4Box("WorldSolid", 10*worX*cm, 10*worY*cm, 10*worZ*cm);
-    fWorldLogical           = new G4LogicalVolume(fWorldSolid, FindMaterial("G4_AIR"), "WorldLogical");
-    fWorldPhysical          = new G4PVPlacement(0, G4ThreeVector(), fWorldLogical, "WorldPhysical", 0, false, checkOverlaps);
-
-    visAttributes           = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
-    visAttributes           -> SetVisibility(false);
-    fWorldLogical           -> SetVisAttributes(visAttributes);
-    fVisAttributes.push_back(visAttributes);
+/*-*/// geometries --------------------------------------------------------------
+/*-*/// Define World Volume
+/*-*/fWorldSolid             = new G4Box("WorldSolid", 10*worX*cm, 10*worY*cm, 10*worZ*cm);
+/*-*/fWorldLogical           = new G4LogicalVolume(fWorldSolid, FindMaterial("G4_AIR"), "WorldLogical");
+/*-*/fWorldPhysical          = new G4PVPlacement(0, G4ThreeVector(), fWorldLogical, "WorldPhysical", 0, false, checkOverlaps);
+/*-*/// Setting for color of world volume
+/*-*/visAttributes           = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+/*-*/visAttributes           -> SetVisibility(false);
+/*-*/fWorldLogical           -> SetVisAttributes(visAttributes);
+/*-*/fVisAttributes.push_back(visAttributes);
 
 
 
-    // Define Rotation matrix
-    //
-    HODORotation            = new G4RotationMatrix();
-    HODORotation            -> rotateZ(90*deg);
-    INVERSERotation         = new G4RotationMatrix();
-    INVERSERotation         -> rotateY(180*deg);
-    MagRotation             = new G4RotationMatrix();
-    MagRotation             -> rotateX(90.*deg);
-    PipeRotation1           = new G4RotationMatrix();
-    PipeRotation1           -> rotateY(1.074*deg);
-    PipeRotation2           = new G4RotationMatrix();
-    PipeRotation2           -> rotateY(-1.074*deg);
-    fNonRotation            = new G4RotationMatrix();
-    fNonRotation            -> rotateX(twopi);
-    fQPhi                   = new G4RotationMatrix();
-    fQPhi                   -> rotateX(twopi/8);
-    GAPFRotation            = new G4RotationMatrix();
-    GAPFRotation            -> rotateX(27*twopi/72);
-    fRotationZ45            = new G4RotationMatrix();
-    fRotationZ45            -> rotateZ(45*deg);
+/*-*/// Define Rotation matrix
+/*-*/HODORotation            = new G4RotationMatrix();
+/*-*/HODORotation            -> rotateZ(90*deg);
+/*-*/INVERSERotation         = new G4RotationMatrix();
+/*-*/INVERSERotation         -> rotateY(180*deg);
+/*-*/MagRotation             = new G4RotationMatrix();
+/*-*/MagRotation             -> rotateX(90.*deg);
+/*-*/PipeRotation1           = new G4RotationMatrix();
+/*-*/PipeRotation1           -> rotateY(1.074*deg);
+/*-*/PipeRotation2           = new G4RotationMatrix();
+/*-*/PipeRotation2           -> rotateY(-1.074*deg);
+/*-*/fNonRotation            = new G4RotationMatrix();
+/*-*/fNonRotation            -> rotateX(twopi);
+/*-*/fQPhi                   = new G4RotationMatrix();
+/*-*/fQPhi                   -> rotateX(twopi/8);
+/*-*/GAPFRotation            = new G4RotationMatrix();
+/*-*/GAPFRotation            -> rotateX(27*twopi/72);
+/*-*/fRotationZ45            = new G4RotationMatrix();
+/*-*/fRotationZ45            -> rotateZ(-45*deg);
+/*-*/fRotationZ90            = new G4RotationMatrix();
+/*-*/fRotationZ90            -> rotateZ(90*deg);
 
 
 
@@ -169,7 +168,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
 
     //HODO                    = HODOSCOPE(fWorldPhysical,INVERSERotation);
     //Junsang****LOCALPOLINSTALL         = LOCALPOL(fWorldPhysical, b, fNonRotation);
-    STARZDCINSTALL         = STARZDC(fWorldPhysical, b, fNonRotation);
+    //Junsang****STARZDCINSTALL         = STARZDC(fWorldPhysical, b, fNonRotation);
     
     ARM1INSTALL              = ARM1(fWorldPhysical, G4ThreeVector(), fNonRotation);
 
@@ -189,223 +188,171 @@ void RHICFDetectorConstruction::DefineDimension()
 {
 
     
-
-    SDforWInZDC         = true;
-    SDforI_PL           = true;
-    SDforPMMA           = true;
-    SDforSMD            = true;
-    SDforWInARM1        = true;
-    SDforWHolder        = true;
-    SDforGSOBar         = true;
-    SDforGSOPlate       = true;
-
+/*-*/// Setting for sensitive detectors
+/*-*/SDforWInZDC         = true;
+/*-*/SDforI_PL           = true;
+/*-*/SDforPMMA           = true;
+/*-*/SDforSMD            = true;
+/*-*/SDforWInARM1        = true;
+/*-*/SDforWHolder        = true;
+/*-*/SDforGSOBar         = true;
+/*-*/SDforGSOPlate       = true;
 
     
 
+/*-*/// Define parameters for geometry
+/*-*/smdHeight           = smdPar[2];
+/*-*/sin                 = std::sqrt(2.0)/2.0;
+/*-*/cos                 = std::sqrt(2.0)/2.0;
+/*-*/tan                 = 1.0;
+/*-*/Nlay                = 26;
+/*-*/iplPar[0]           = 5.0;
+/*-*/iplPar[1]           = 0.025;
+/*-*/iplPar[2]           = 20.0;
+/*-*/wplPar[0]           = 5.0;
+/*-*/wplPar[1]           = 0.213;
+/*-*/wplPar[2]           = 9.35;
+/*-*/gapper[0]           = 5.0;
+/*-*/gapper[1]           = 0.09;
+/*-*/gapper[2]           = 20.0;
+/*-*/fcpPar[0]           = 5.080;
+/*-*/fcpPar[1]           = 12.065;
+/*-*/fcpPar[2]           = 0.3175;
+/*-*/rcPar[0]            = 4.445;
+/*-*/rcPar[1]            = 10.795;
+/*-*/rcPar[2]            = 0.6350;
+/*-*/wcntPar[0]          = 6.0;
+/*-*/wcntPar[1]          = 25.0;
+/*-*/wcntPar[2]          = 70.0;
+/*-*/fibPar[0]           = 0.0;
+/*-*/fibPar[1]           = 0.025;
+/*-*/fibPar[2]           = 20.0;
+/*-*/hodoPar[0]          = 40.0;
+/*-*/hodoPar[1]          = 40.0;
+/*-*/hodoPar[2]          = 1.0;
+/*-*/scinPar[0]          = 4.075;
+/*-*/scinPar[1]          = 40.0;
+/*-*/scinPar[2]          = 0.5;
+/*-*/smdPar[0]           = 5.5;
+/*-*/smdPar[1]           = 0.81;
+/*-*/smdPar[2]           = 9.5;
+/*-*/smdhPar[0]          = 5.25;
+/*-*/smdhPar[1]          = 0.4;
+/*-*/smdhPar[2]          = 1.0;
+/*-*/smdvPar[0]          = 0.75;
+/*-*/smdvPar[1]          = 0.4;
+/*-*/smdvPar[2]          = 8.0;
+/*-*/alPar[0]            = 12.0;
+/*-*/alPar[1]            = 3.0;
+/*-*/alPar[2]            = 40.0;
+/*-*/fePar[0]            = 5.0;
+/*-*/fePar[1]            = 1.0;
+/*-*/fePar[2]            = 40.0;
+/*-*/Lmod                = (2.0*iplPar[1] + (Nlay + 1)*wplPar[1] + Nlay*gapper[1])/sin;
+/*-*/worX                = 50*cm;
+/*-*/worY                = 50*cm;
+/*-*/worZ                = 50*cm;
+/*-*/pipeOutr            = 5*cm;
+/*-*/pipeInr             = 4.5*cm;
+/*-*/pipeLength          = 20*cm;
+/*-*/Nmod                = 3;
+/*-*/zdcPar[0]           = 5.0;
+/*-*/zdcPar[1]           = (gapper[2]*cos + gapper[1]*sin);
+/*-*/zdcPar[2]           = (zdcPar[1]/tan + Lmod);
+/*-*/zdcPar1             = zdcPar[1]*1.2;      
+/*-*/zdcPar2             = zdcPar[2]*1.1;
+/*-*/// Parameters for BBC
+/*-*/kBBAbsorb[0]        = 5.5;
+/*-*/kBBAbsorb[1]        = 14.5;
+/*-*/kBBAbsorb[2]        = 0.01;
+/*-*/kBBAttach[0]        = 0.0;
+/*-*/kBBAttach[1]        = 360;
+/*-*/kBBAttach[2]        = 6.0;
+/*-*/kBBAttach[3]        = 2.0;
+/*-*/kBBAttach[4]        = -0.5;
+/*-*/kBBAttach[5]        = 0.2;
+/*-*/kBBAttach[6]        = 1.4;
+/*-*/kBBAttach[7]        = 0.5;
+/*-*/kBBAttach[8]        = 0.2;
+/*-*/kBBAttach[9]        = 1.4;
+/*-*/kBBBackBD[0]        = 5.5;
+/*-*/kBBBackBD[1]        = 15.0;
+/*-*/kBBBackBD[2]        = 0.5;
+/*-*/kBBBreede[0]        = 0.0;
+/*-*/kBBBreede[1]        = 1.2;
+/*-*/kBBBreede[2]        = 1.95;
+/*-*/kBBCovert           = 0.2;
+/*-*/kBBFrontb[0]        = 5.5;
+/*-*/kBBFrontb[1]        = 15.0;
+/*-*/kBBFrontb[2]        = 0.5;
+/*-*/kBBPMTSiz[0]        = 1.09;
+/*-*/kBBPMTSiz[1]        = 1.29;
+/*-*/kBBPMTSiz[2]        = 2.2;
+/*-*/kBBQuartz[0]        = 0.0;
+/*-*/kBBQuartz[1]        = 360;
+/*-*/kBBQuartz[2]        = 6.0;
+/*-*/kBBQuartz[3]        = 2.0;
+/*-*/kBBQuartz[4]        = -1.5;
+/*-*/kBBQuartz[5]        = 0.0;
+/*-*/kBBQuartz[6]        = 1.27;
+/*-*/kBBQuartz[7]        = 1.5;
+/*-*/kBBQuartz[8]        = 0.0;
+/*-*/kBBQuartz[9]        = 1.27;
+/*-*/kBBShithi           = 0.1;
+/*-*/kBBSpacin           = 0.3;
+/*-*/kBBStruct[0]        = 5.0;
+/*-*/kBBStruct[1]        = 5.5;
+/*-*/kBBStruct[2]        = 12.5;
+/*-*/kBBZPosit[0]        = 144.35;
+/*-*/kBBZPosit[1]        = -144.35;
+/*-*/kBBDetect[0]        = kBBQuartz[0];
+/*-*/kBBDetect[1]        = kBBQuartz[1];
+/*-*/kBBDetect[2]        = kBBQuartz[2];
+/*-*/kBBDetect[3]        = kBBQuartz[3];
+/*-*/kBBDetect[4]        = kBBAttach[4]+kBBQuartz[4]-kBBPMTSiz[2]-kBBBreede[2];
+/*-*/kBBDetect[5]        = kBBQuartz[5];
+/*-*/kBBDetect[6]        = kBBAttach[6];
+/*-*/kBBDetect[7]        = kBBAttach[7]+kBBQuartz[7]+kBBPMTSiz[2]+kBBBreede[2];
+/*-*/kBBDetect[8]        = kBBQuartz[8];
+/*-*/kBBDetect[9]        = kBBAttach[9];
+/*-*/kBBBCover[0]        = kBBFrontb[1];
+/*-*/kBBBCover[1]        = kBBBCover[0]+kBBCovert;
+/*-*/kBBBCover[2]        = kBBStruct[2];
+/*-*/kBBMother[0]        = kBBStruct[0]; 
+/*-*/kBBMother[1]        = kBBBCover[1];
+/*-*/kBBMother[2]        = kBBStruct[2];
+/*-*/kBBShield[0]        = kBBQuartz[0];
+/*-*/kBBShield[1]        = kBBQuartz[1];
+/*-*/kBBShield[2]        = kBBQuartz[2];
+/*-*/kBBShield[3]        = kBBQuartz[3];
+/*-*/kBBShield[4]        = kBBQuartz[4]-kBBPMTSiz[2]-kBBBreede[2];
+/*-*/kBBShield[5]        = kBBAttach[6]-kBBShithi;
+/*-*/kBBShield[6]        = kBBAttach[6];
+/*-*/kBBShield[7]        = kBBQuartz[7]+kBBPMTSiz[2]+kBBBreede[2];
+/*-*/kBBShield[8]        = kBBAttach[9]-kBBShithi;
+/*-*/kBBShield[9]        = kBBAttach[9];
+/*-*/kYSTP               = kBBQuartz[6]+kBBSpacin*0.5;
+/*-*/kXSTP               = kYSTP*std::sqrt(3.0);
+/*-*/kMrow               = (int)(kBBFrontb[1]/kYSTP)+1;
+/*-*/kMcol               = (int)(kBBFrontb[1]/kXSTP)+1;
+/*-*/kRmax               = kBBFrontb[1]-kBBDetect[6]*2./sqrt(3);
+/*-*/kRmin               = kBBFrontb[0]-kBBDetect[6]*2./sqrt(3);
+/*-*/kRRMA               = kRmax*kRmax;
+/*-*/kRRMI               = kRmin*kRmin;
+/*-*/kMaxPMT             = 100;
+/*-*/// Parameters for ARM1
+/*-*/kARM1par[0] = 4.5;
+/*-*/kARM1par[1] = 12.65;
+/*-*/kARM1par[2] = 14;
+/*-*/kNegativeLargeWpar[0] = 4.01/2;
+/*-*/kNegativeLargeWpar[1] = 4.01/2;
+/*-*/kNegativeLargeWpar[2] = 7.2/2;
+/*-*/kNegativeSmallWpar[0] = 2.01/2;
+/*-*/kNegativeSmallWpar[1] = 2.01/2;
+/*-*/kNegativeSmallWpar[2] = 7.2/2;
 
-    smdHeight           = smdPar[2];
-    sin                 = std::sqrt(2.0)/2.0;
-    cos                 = std::sqrt(2.0)/2.0;
-    tan                 = 1.0;
-    Nlay                = 26;
-    //Nlay                = 1;
-
-    iplPar[0]           = 5.0;
-    iplPar[1]           = 0.025;
-    iplPar[2]           = 20.0;
-
-    wplPar[0]           = 5.0;
-    wplPar[1]           = 0.213;
-    wplPar[2]           = 9.35;
-
-    gapper[0]           = 5.0;
-    gapper[1]           = 0.09;
-    gapper[2]           = 20.0;
-
-    fcpPar[0]           = 5.080;
-    fcpPar[1]           = 12.065;
-    fcpPar[2]           = 0.3175;
-
-    rcPar[0]            = 4.445;
-    rcPar[1]            = 10.795;
-    rcPar[2]            = 0.6350;
-
-    wcntPar[0]          = 6.0;
-    wcntPar[1]          = 25.0;
-    wcntPar[2]          = 70.0;
-
-    fibPar[0]           = 0.0;
-    fibPar[1]           = 0.025;
-    fibPar[2]           = 20.0;
-
-    hodoPar[0]          = 40.0;
-    hodoPar[1]          = 40.0;
-    hodoPar[2]          = 1.0;
-
-    scinPar[0]          = 4.075;
-    scinPar[1]          = 40.0;
-    scinPar[2]          = 0.5;
-
-    smdPar[0]           = 5.5;
-    smdPar[1]           = 0.81;
-    smdPar[2]           = 9.5;
-
-    smdhPar[0]          = 5.25;
-    smdhPar[1]          = 0.4;
-    smdhPar[2]          = 1.0;
-
-    smdvPar[0]          = 0.75;
-    smdvPar[1]          = 0.4;
-    smdvPar[2]          = 8.0;
-
-    alPar[0]            = 12.0;
-    alPar[1]            = 3.0;
-    alPar[2]            = 40.0;
-
-    fePar[0]            = 5.0;
-    fePar[1]            = 1.0;
-    fePar[2]            = 40.0;
-
-
-
-
-
-
-
-
-
-
-
-    Lmod                = (2.0*iplPar[1] + (Nlay + 1)*wplPar[1] + Nlay*gapper[1])/sin;
-
-    worX                = 50*cm;
-    worY                = 50*cm;
-    worZ                = 50*cm;
-
-
-    pipeOutr            = 5*cm;
-    pipeInr             = 4.5*cm;
-    pipeLength          = 20*cm;
-    Nmod                = 3;
-    zdcPar[0]           = 5.0;
-    zdcPar[1]           = (gapper[2]*cos + gapper[1]*sin);
-    zdcPar[2]           = (zdcPar[1]/tan + Lmod);
-    zdcPar1             = zdcPar[1]*1.2;      
-    zdcPar2             = zdcPar[2]*1.1;
-
-    // Parameters for BBC
-
-    kBBAbsorb[0]        = 5.5;
-    kBBAbsorb[1]        = 14.5;
-    kBBAbsorb[2]        = 0.01;
-
-    kBBAttach[0]        = 0.0;
-    kBBAttach[1]        = 360;
-    kBBAttach[2]        = 6.0;
-    kBBAttach[3]        = 2.0;
-    kBBAttach[4]        = -0.5;
-    kBBAttach[5]        = 0.2;
-    kBBAttach[6]        = 1.4;
-    kBBAttach[7]        = 0.5;
-    kBBAttach[8]        = 0.2;
-    kBBAttach[9]        = 1.4;
-
-    kBBBackBD[0]        = 5.5;
-    kBBBackBD[1]        = 15.0;
-    kBBBackBD[2]        = 0.5;
-
-    kBBBreede[0]        = 0.0;
-    kBBBreede[1]        = 1.2;
-    kBBBreede[2]        = 1.95;
-
-    kBBCovert           = 0.2;
-
-    kBBFrontb[0]        = 5.5;
-    kBBFrontb[1]        = 15.0;
-    kBBFrontb[2]        = 0.5;
-
-    kBBPMTSiz[0]        = 1.09;
-    kBBPMTSiz[1]        = 1.29;
-    kBBPMTSiz[2]        = 2.2;
-
-    kBBQuartz[0]        = 0.0;
-    kBBQuartz[1]        = 360;
-    kBBQuartz[2]        = 6.0;
-    kBBQuartz[3]        = 2.0;
-    kBBQuartz[4]        = -1.5;
-    kBBQuartz[5]        = 0.0;
-    kBBQuartz[6]        = 1.27;
-    kBBQuartz[7]        = 1.5;
-    kBBQuartz[8]        = 0.0;
-    kBBQuartz[9]        = 1.27;
-
-    kBBShithi           = 0.1;
-
-    kBBSpacin           = 0.3;
-
-    kBBStruct[0]        = 5.0;
-    kBBStruct[1]        = 5.5;
-    kBBStruct[2]        = 12.5;
-
-    kBBZPosit[0]        = 144.35;
-    kBBZPosit[1]        = -144.35;
-
-    kBBDetect[0]        = kBBQuartz[0];
-    kBBDetect[1]        = kBBQuartz[1];
-    kBBDetect[2]        = kBBQuartz[2];
-    kBBDetect[3]        = kBBQuartz[3];
-    kBBDetect[4]        = kBBAttach[4]+kBBQuartz[4]-kBBPMTSiz[2]-kBBBreede[2];
-    kBBDetect[5]        = kBBQuartz[5];
-    kBBDetect[6]        = kBBAttach[6];
-    kBBDetect[7]        = kBBAttach[7]+kBBQuartz[7]+kBBPMTSiz[2]+kBBBreede[2];
-    kBBDetect[8]        = kBBQuartz[8];
-    kBBDetect[9]        = kBBAttach[9];
-
-    kBBBCover[0]        = kBBFrontb[1];
-    kBBBCover[1]        = kBBBCover[0]+kBBCovert;
-    kBBBCover[2]        = kBBStruct[2];
-
-    kBBMother[0]        = kBBStruct[0]; 
-    kBBMother[1]        = kBBBCover[1];
-    kBBMother[2]        = kBBStruct[2];
-
-    kBBShield[0]        = kBBQuartz[0];
-    kBBShield[1]        = kBBQuartz[1];
-    kBBShield[2]        = kBBQuartz[2];
-    kBBShield[3]        = kBBQuartz[3];
-    kBBShield[4]        = kBBQuartz[4]-kBBPMTSiz[2]-kBBBreede[2];
-    kBBShield[5]        = kBBAttach[6]-kBBShithi;
-    kBBShield[6]        = kBBAttach[6];
-    kBBShield[7]        = kBBQuartz[7]+kBBPMTSiz[2]+kBBBreede[2];
-    kBBShield[8]        = kBBAttach[9]-kBBShithi;
-    kBBShield[9]        = kBBAttach[9];
-
-    kYSTP               = kBBQuartz[6]+kBBSpacin*0.5;
-    kXSTP               = kYSTP*std::sqrt(3.0);
-
-    kMrow               = (int)(kBBFrontb[1]/kYSTP)+1;
-    kMcol               = (int)(kBBFrontb[1]/kXSTP)+1;
-
-    kRmax               = kBBFrontb[1]-kBBDetect[6]*2./sqrt(3);
-    kRmin               = kBBFrontb[0]-kBBDetect[6]*2./sqrt(3);
-    kRRMA               = kRmax*kRmax;
-    kRRMI               = kRmin*kRmin;
-
-    kMaxPMT             = 100;
-
-    // Parameters for ARM1
-    kARM1par[0] = 4.5;
-    kARM1par[1] = 12.65;
-    kARM1par[2] = 14;
-
-    kNegativeLargeWpar[0] = 4.01/2;
-    kNegativeLargeWpar[1] = 4.01/2;
-    kNegativeLargeWpar[2] = 7.2/2;
-
-    kNegativeSmallWpar[0] = 2.01/2;
-    kNegativeSmallWpar[1] = 2.01/2;
-    kNegativeSmallWpar[2] = 7.2/2;
-
+    basez = -100;
+    dz  = 0;
 
 
 
@@ -419,74 +366,74 @@ void RHICFDetectorConstruction::ConstructSDandField()
 {
 
 
-    G4SDManager::GetSDMpointer() -> SetVerboseLevel(1);
-    G4SDParticleFilter* OPFilter = new G4SDParticleFilter("NOP", "opticalphoton");
-
-    G4String detName;
-
-    G4String calName[9] = {"W_PL_1Logical", "W_PL_2Logical", "W_PL_3Logical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical", "SMDHLogical", "SMDVLogical"}; 
-
-
-    for(G4int i=0; i<9; i++)
-    {
-
-
-
-        if(i<4)
-        {
-            // Sensitive detector for deposit energy
-            G4cout << "detector:" << calName[i] << G4endl;
-            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
-
-            G4VPrimitiveScorer* PriDEL0;
-
-            PriDEL0 = new G4PSEnergyDeposit("DE",0);
-            SDforDE -> RegisterPrimitive(PriDEL0);
-
-            SetSensitiveDetector(calName[i], SDforDE);
-        }else
-        {
-    
-
-            // Sensitive detector for deposit energy and number of optical photon generated
-            G4cout << "detector:" << calName[i] << G4endl;
-            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
-
-            G4VPrimitiveScorer* PriDEandNoP;
-
-            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
-            SDforDE -> RegisterPrimitive(PriDEandNoP);
-            PriDEandNoP = new G4PSNofSecondary("NOP",0);
-            PriDEandNoP -> SetFilter(OPFilter);
-            SDforDE -> RegisterPrimitive(PriDEandNoP);
-
-            SetSensitiveDetector(calName[i], SDforDE);
-
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-    // Set Magnetic Field
-    //
-    fMagneticField          = new MagneticField();
-    fFieldMgr               = new G4FieldManager();
-    fFieldMgr               -> SetDetectorField(fMagneticField);
-    fFieldMgr               -> CreateChordFinder(fMagneticField);
-    //G4bool forceToAllDaughters = true;
-    //fMagneticLogical -> SetFieldManager(fFieldMgr, forceToAllDaughters);
-
-    G4AutoDelete::Register(fMagneticField);
-    G4AutoDelete::Register(fFieldMgr);
+    //Junsang****G4SDManager::GetSDMpointer() -> SetVerboseLevel(1);
+    //Junsang****G4SDParticleFilter* OPFilter = new G4SDParticleFilter("NOP", "opticalphoton");
+//Junsang****
+    //Junsang****G4String detName;
+//Junsang****
+    //Junsang****G4String calName[9] = {"W_PL_1Logical", "W_PL_2Logical", "W_PL_3Logical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical", "SMDHLogical", "SMDVLogical"}; 
+//Junsang****
+//Junsang****
+    //Junsang****for(G4int i=0; i<9; i++)
+    //Junsang****{
+//Junsang****
+//Junsang****
+//Junsang****
+        //Junsang****if(i<4)
+        //Junsang****{
+            //Junsang****// Sensitive detector for deposit energy
+            //Junsang****G4cout << "detector:" << calName[i] << G4endl;
+            //Junsang****G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
+//Junsang****
+            //Junsang****G4VPrimitiveScorer* PriDEL0;
+//Junsang****
+            //Junsang****PriDEL0 = new G4PSEnergyDeposit("DE",0);
+            //Junsang****SDforDE -> RegisterPrimitive(PriDEL0);
+//Junsang****
+            //Junsang****SetSensitiveDetector(calName[i], SDforDE);
+        //Junsang****}else
+        //Junsang****{
+    //Junsang****
+//Junsang****
+            //Junsang****// Sensitive detector for deposit energy and number of optical photon generated
+            //Junsang****G4cout << "detector:" << calName[i] << G4endl;
+            //Junsang****G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
+//Junsang****
+            //Junsang****G4VPrimitiveScorer* PriDEandNoP;
+//Junsang****
+            //Junsang****PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+            //Junsang****SDforDE -> RegisterPrimitive(PriDEandNoP);
+            //Junsang****PriDEandNoP = new G4PSNofSecondary("NOP",0);
+            //Junsang****PriDEandNoP -> SetFilter(OPFilter);
+            //Junsang****SDforDE -> RegisterPrimitive(PriDEandNoP);
+//Junsang****
+            //Junsang****SetSensitiveDetector(calName[i], SDforDE);
+//Junsang****
+        //Junsang****}
+//Junsang****
+//Junsang****
+    //Junsang****}
+//Junsang****
+//Junsang****
+//Junsang****
+//Junsang****
+//Junsang****
+//Junsang****
+//Junsang****
+//Junsang****
+//Junsang****
+//Junsang****
+    //Junsang****// Set Magnetic Field
+    //Junsang****//
+    //Junsang****fMagneticField          = new MagneticField();
+    //Junsang****fFieldMgr               = new G4FieldManager();
+    //Junsang****fFieldMgr               -> SetDetectorField(fMagneticField);
+    //Junsang****fFieldMgr               -> CreateChordFinder(fMagneticField);
+    //Junsang****//G4bool forceToAllDaughters = true;
+    //Junsang****//fMagneticLogical -> SetFieldManager(fFieldMgr, forceToAllDaughters);
+//Junsang****
+    //Junsang****G4AutoDelete::Register(fMagneticField);
+    //Junsang****G4AutoDelete::Register(fFieldMgr);
 
 
     G4SDManager::GetSDMpointer() -> SetVerboseLevel(0);
@@ -538,42 +485,38 @@ G4VPhysicalVolume* RHICFDetectorConstruction::HODOSCOPE(G4VPhysicalVolume* world
 ///////////////////////////////////////////////////////////////////////////////
 {
 
-    // Define 'HODO'
-    //
-    fHODOSolid              = new G4Box("HODOSolid", hodoPar[0]*cm, hodoPar[1]*cm, hodoPar[2]*cm);
-    fHODOLogical            = new G4LogicalVolume(fHODOSolid, FindMaterial("G4_Galactic"), "HODOLogical");
-    fHODOPhysical           = new G4PVPlacement(mat, G4ThreeVector(0.0, 0.0, 185.0*cm), "HODOPhysical", fHODOLogical, world_phys, 0, false, checkOverlaps);
+/*-*/// Define 'HODO'
+/*-*/fHODOSolid              = new G4Box("HODOSolid", hodoPar[0]*cm, hodoPar[1]*cm, hodoPar[2]*cm);
+/*-*/fHODOLogical            = new G4LogicalVolume(fHODOSolid, FindMaterial("G4_Galactic"), "HODOLogical");
+/*-*/fHODOPhysical           = new G4PVPlacement(mat, G4ThreeVector(0.0, 0.0, 185.0*cm), "HODOPhysical", fHODOLogical, world_phys, 0, false, checkOverlaps);
 
 
-    // Define 'SCIN'
-    //
-    //
-    fSCINSolid              = new G4Box("SCINSolid", scinPar[0]*cm, scinPar[1]*cm, scinPar[2]*cm);
-    fSCINLogical            = new G4LogicalVolume(fSCINSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SCINLogical");
+/*-*/// Define 'SCIN'
+/*-*/fSCINSolid              = new G4Box("SCINSolid", scinPar[0]*cm, scinPar[1]*cm, scinPar[2]*cm);
+/*-*/fSCINLogical            = new G4LogicalVolume(fSCINSolid, FindMaterial("G4_PLASTIC_SC_VINYLTOLUENE"), "SCINLogical");
 
-    // Put 'SCIN' into 'HODO'
-    //
-    for(G4int i=1; i<5; i++)
-    {
-        pos                 = 7.4 + i*8.15 - 4.075;
-        new G4PVPlacement(fNonRotation, G4ThreeVector(pos*cm, 0.0, 0.5*cm), fSCINLogical, "SCINPhysical", fHODOLogical, i, false, checkOverlaps);
-        //pos = 7.4 + (i+4)*8.15 - 4.075;
-        new G4PVPlacement(fNonRotation, G4ThreeVector(-pos*cm, 0.0, 0.5*cm), fSCINLogical, "SCINPhysical", fHODOLogical, i, false, checkOverlaps);
-        //pos = 7.4 + (i+8)*8.15 - 4.075;
-        new G4PVPlacement(HODORotation, G4ThreeVector(0.0, pos*cm, -0.5*cm), fSCINLogical, "SCINPhysical", fHODOLogical, i, false, checkOverlaps);
-        //pos = 7.4 + (i+12)*8.15 - 4.075;
-        new G4PVPlacement(HODORotation, G4ThreeVector(0.0, -pos*cm, -0.5*cm), fSCINLogical, "SCINPhysical", fHODOLogical, i, false, checkOverlaps);
-
-
-        visAttributes       = new G4VisAttributes(G4Colour(0.0, 0.0, 0.1));
-        visAttributes       -> SetVisibility(false);
-        fHODOLogical        -> SetVisAttributes(visAttributes);
-        fVisAttributes.push_back(visAttributes);
-
-        visAttributes       = new G4VisAttributes(G4Colour(0.7, 0.4, 0.1));
-        fSCINLogical        -> SetVisAttributes(visAttributes);
-        fVisAttributes.push_back(visAttributes);
-    }
+/*-*/// Put 'SCIN' into 'HODO'
+/*-*/for(G4int i=1; i<5; i++)
+/*-*/{
+/*-*/    pos                 = 7.4 + i*8.15 - 4.075;
+/*-*/    new G4PVPlacement(fNonRotation, G4ThreeVector(pos*cm, 0.0, 0.5*cm), fSCINLogical, "SCINPhysical", fHODOLogical, i, false, checkOverlaps);
+/*-*/    //pos = 7.4 + (i+4)*8.15 - 4.075;
+/*-*/    new G4PVPlacement(fNonRotation, G4ThreeVector(-pos*cm, 0.0, 0.5*cm), fSCINLogical, "SCINPhysical", fHODOLogical, i, false, checkOverlaps);
+/*-*/    //pos = 7.4 + (i+8)*8.15 - 4.075;
+/*-*/    new G4PVPlacement(HODORotation, G4ThreeVector(0.0, pos*cm, -0.5*cm), fSCINLogical, "SCINPhysical", fHODOLogical, i, false, checkOverlaps);
+/*-*/    //pos = 7.4 + (i+12)*8.15 - 4.075;
+/*-*/    new G4PVPlacement(HODORotation, G4ThreeVector(0.0, -pos*cm, -0.5*cm), fSCINLogical, "SCINPhysical", fHODOLogical, i, false, checkOverlaps);
+/*-*/
+/*-*/
+/*-*/    visAttributes       = new G4VisAttributes(G4Colour(0.0, 0.0, 0.1));
+/*-*/    visAttributes       -> SetVisibility(false);
+/*-*/    fHODOLogical        -> SetVisAttributes(visAttributes);
+/*-*/    fVisAttributes.push_back(visAttributes);
+/*-*/
+/*-*/    visAttributes       = new G4VisAttributes(G4Colour(0.7, 0.4, 0.1));
+/*-*/    fSCINLogical        -> SetVisAttributes(visAttributes);
+/*-*/    fVisAttributes.push_back(visAttributes);
+/*-*/}
 
     return fHODOPhysical;
 }
@@ -1972,160 +1915,555 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
 {
 
 
-    fARM1Solid          = new G4Box("ARM1Solid", kARM1par[0]*cm, kARM1par[1]*cm, kARM1par[2]*cm); 
-    fARM1Logical        = new G4LogicalVolume(fARM1Solid, FindMaterial("G4_Galactic"), "ARM1Logical");
-    fARM1Physical       = new G4PVPlacement(mat, vector, "ARM1Physical", fARM1Logical, world_phys, false, 0, checkOverlaps);
+/*-*/// Define ARM1
+/*-*/fARM1Solid          = new G4Box("ARM1Solid", kARM1par[0]*cm, kARM1par[1]*cm, kARM1par[2]*cm); 
+/*-*/fARM1Logical        = new G4LogicalVolume(fARM1Solid, FindMaterial("G4_Galactic"), "ARM1Logical");
+/*-*/fARM1Physical       = new G4PVPlacement(mat, vector, "ARM1Physical", fARM1Logical, world_phys, false, 0, checkOverlaps);
 
 
 
-    // Define 'Tunsten Plate Holder1'- First type of tungsten plate holder
-    std::vector<G4TwoVector> VectorForEdge1;
-    G4TwoVector EdgeOnWHolder = {10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {30.1/2*sqrt(2)*mm,-(30.1*sqrt(2)+5)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {4.6*mm,-(50.1/2*sqrt(2)-4.6)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {50.1/2*sqrt(2)*mm,0*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {8*mm,(50.1/2*sqrt(2)-8)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {8*mm,((50.1/2+9)*sqrt(2)-8)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {0*mm,(50.1/2+9)*sqrt(2)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-8*mm,((50.1/2+9)*sqrt(2)-8)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-8*mm,(50.1/2*sqrt(2)-8)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-50.1/2*sqrt(2)*mm,0*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-4.6*mm,-(50.1/2*sqrt(2)-4.6)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-30.1/2*sqrt(2)*mm,-(30.1*sqrt(2)+5)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
-    VectorForEdge1.push_back(EdgeOnWHolder);
-    G4ExtrudedSolid::ZSection Bottom(-7.1/2*mm,{0,0},1);
-    G4ExtrudedSolid::ZSection Top(7.1/2*mm,{0,0},1);
-    std::vector<G4ExtrudedSolid::ZSection> Hzsections;
-    Hzsections.push_back(Bottom);
-    Hzsections.push_back(Top);
-    fWHolderSolid1          = new G4ExtrudedSolid("ProtoSolid1", VectorForEdge1, Hzsections);
-
-    fNegativeLargeWSolid     = new G4Box("NegativeLargeW", kNegativeLargeWpar[0]*cm, kNegativeLargeWpar[1]*cm, kNegativeLargeWpar[2]*cm);
-    fNegativeSmallWSolid     = new G4Box("NegativeSmallW", kNegativeSmallWpar[0]*cm, kNegativeSmallWpar[1]*cm, kNegativeSmallWpar[2]*cm);
-    fNegativeTopRoundSolid   = new G4Tubs("NegativeTopRoundSolid", 0*cm, 0.45*cm, 0.72*cm, 0*deg, 360*deg);
-    fNegativeMiddleRoundSolid   = new G4Tubs("NegativeMiddleRoundSolid", 0.3*cm, 0.45*cm, 0.72*cm, 0*deg, 360*deg);
-    fNegativeBottomRoundSolid   = new G4Tubs("NegativeBottomRoundSolid", 1*cm, 1.5*cm, 0.71*cm, 0*deg, 360*deg);
-    fNegativeHoleSolid    = new G4Tubs("NegativeHole", 0*cm, 0.4*cm, 0.72*cm, 0*deg, 360*deg);
-    fWHolderSolid1            = new G4SubtractionSolid( "-LargeWSolid", fWHolderSolid1, fNegativeLargeWSolid, fRotationZ45, G4ThreeVector());
-    fWHolderSolid1            = new G4SubtractionSolid( "-SmallWSolid", fWHolderSolid1, fNegativeSmallWSolid, fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, 0*mm));
-    fWHolderSolid1            = new G4SubtractionSolid( "-TopHoleSolid", fWHolderSolid1, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, ((50.1/2+9)*sqrt(2)-8-2.65)*mm, 0*mm));
-    fWHolderSolid1            = new G4SubtractionSolid( "WHolderSolid1", fWHolderSolid1, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, (-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+10)*mm, 0*mm));
-
-
-    //Tungsten Plate
-    fLargeW_PLSolid         = new G4Box("LargeW_PLSolid", 2*cm, 2*cm, 0.305*cm);
-    fSmallW_PLSolid         = new G4Box("SmallW_PLSolid", 1*cm, 1*cm, 0.305*cm);
-
-    // Define 'Tunsten Plate Holder2'- Second type of tungsten plate holder
-    std::vector<G4TwoVector> VectorForEdge2;
-    EdgeOnWHolder = {10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {10*mm,(-(31.05*sqrt(2)+5)-(30.1/2*sqrt(2))+10)*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {30.1/2*sqrt(2)*mm,-(31.05*sqrt(2)+5)*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {3.22*mm,-30.42*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {48.19/2*sqrt(2)*mm,0*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {8*mm,(48.19/2*sqrt(2)-8)*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {8*mm,((48.19/2+9)*sqrt(2)-8)*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {0*mm,(48.19/2+9)*sqrt(2)*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-8*mm,((48.19/2+9)*sqrt(2)-8)*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-8*mm,(48.19/2*sqrt(2)-8)*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-48.19/2*sqrt(2)*mm,0*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-3.22*mm,-30.42*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-30.1/2*sqrt(2)*mm,-(31.05*sqrt(2)+5)*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-10*mm,(-(31.05*sqrt(2)+5)-(30.1/2*sqrt(2))+10)*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    EdgeOnWHolder = {-10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
-    VectorForEdge2.push_back(EdgeOnWHolder);
-    G4ExtrudedSolid::ZSection Bottom2(-7.1/2*mm,{0,0},1);
-    G4ExtrudedSolid::ZSection Top2(7.1/2*mm,{0,0},1);
-    fWHolderSolid2              = new G4ExtrudedSolid("ProtoSolid2", VectorForEdge2, Hzsections);
-    fWHolderSolid2              = new G4SubtractionSolid( "-SmallWSolid", fWHolderSolid2, fNegativeSmallWSolid, fRotationZ45, G4ThreeVector(0*mm, -(31.05*sqrt(2)+5)*mm, 0*mm));
-    fWHolderSolid2   = new G4SubtractionSolid( "-LargeWSolid", fWHolderSolid2, fNegativeLargeWSolid, fRotationZ45, G4ThreeVector());
-    fWHolderSolid2              = new G4SubtractionSolid( "-TopHoleSolid2", fWHolderSolid2, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, ((50.1/2+9)*sqrt(2)-8-2.65)*mm, 0*mm));
-    fWHolderSolid2              = new G4SubtractionSolid( "WHolderSolid2", fWHolderSolid2, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, (-(31.05*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+10)*mm, 0*mm));
-
-
-
-    // Define 'GSO Plate Holder1'
-    std::vector<G4TwoVector> VectorForEdge3;
-    G4TwoVector EdgeOnGSOHolder = {10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {30.1/2*sqrt(2)*mm,-(30.1*sqrt(2)+5)*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {4.6*mm,-(50.1/2*sqrt(2)-4.6)*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {50.1/2*sqrt(2)*mm,0*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {8*mm,(50.1/2*sqrt(2)-8)*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {8*mm,((50.1/2+9)*sqrt(2)-8)*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {0*mm,(50.1/2+9)*sqrt(2)*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {-30.9*mm,35.15*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {-30.9*mm,-3.59*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {-17.2*mm,-18.6*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {-27.06*mm,-28.7*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {-27.06*mm,-41.8*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {-10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    EdgeOnGSOHolder = {-10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
-    VectorForEdge3.push_back(EdgeOnGSOHolder);
-    G4ExtrudedSolid::ZSection BottomGSO(-3.2/2*mm,{0,0},1);
-    G4ExtrudedSolid::ZSection TopGSO(3.2/2*mm,{0,0},1);
-    std::vector<G4ExtrudedSolid::ZSection> HzsectionsGSO;
-    HzsectionsGSO.push_back(BottomGSO);
-    HzsectionsGSO.push_back(TopGSO);
-    fGSO_PLHolderSolid          = new G4ExtrudedSolid("GSO_PLHolderProto", VectorForEdge3, HzsectionsGSO);
-
-
-
-
-
-
-    fLargeW_PLLogical         = new G4LogicalVolume(fLargeW_PLSolid, FindMaterial("G4_W"), "LargeW_PLLogical");
-    fSmallW_PLLogical         = new G4LogicalVolume(fSmallW_PLSolid, FindMaterial("G4_W"), "SmallW_PLLogical");
     
-    //Junsang****fWHolderLogical            = new G4LogicalVolume(fSubtactLargeWSolidL1, FindMaterial("G10"), "WHolderLogical");
-    fWHolderLogical1            = new G4LogicalVolume(fGSO_PLHolderSolid, FindMaterial("G10"), "WHolderLogical");
-    fWHolderPhysical           = new G4PVPlacement(fNonRotation, G4ThreeVector(), fWHolderLogical1, "WHolderPhysical", fARM1Logical, false, 0, checkOverlaps);
-    
+    /* Define Holders-W_PLHolder1,2 GSO_PLHolder, GSOBarHolder */
+
+/*-*/// Define 'Tunsten Plate Holder1'- First type of tungsten plate holder
+/*-*/std::vector<G4TwoVector> VectorForEdge;
+/*-*/G4TwoVector TwoDVectorForEdge = {10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {30.1/2*sqrt(2)*mm,-(30.1*sqrt(2)+5)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {4.6*mm,-(50.1/2*sqrt(2)-4.6)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {50.1/2*sqrt(2)*mm,0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {8*mm,(50.1/2*sqrt(2)-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {8*mm,((50.1/2+9)*sqrt(2)-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {0*mm,(50.1/2+9)*sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-8*mm,((50.1/2+9)*sqrt(2)-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-8*mm,(50.1/2*sqrt(2)-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-50.1/2*sqrt(2)*mm,0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-4.6*mm,-(50.1/2*sqrt(2)-4.6)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-30.1/2*sqrt(2)*mm,-(30.1*sqrt(2)+5)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection Bottom(-7.1/2*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection Top(7.1/2*mm,{0,0},1);
+/*-*/std::vector<G4ExtrudedSolid::ZSection> Hzsections;
+/*-*/Hzsections.push_back(Bottom);
+/*-*/Hzsections.push_back(Top);
+/*-*/fWHolder_1Solid             = new G4ExtrudedSolid("ProtoSolid1", VectorForEdge, Hzsections);
+/*-*/fNegativeLargeWSolid       = new G4Box("NegativeLargeW", kNegativeLargeWpar[0]*cm, kNegativeLargeWpar[1]*cm, kNegativeLargeWpar[2]*cm);
+/*-*/fNegativeSmallWSolid       = new G4Box("NegativeSmallW", kNegativeSmallWpar[0]*cm, kNegativeSmallWpar[1]*cm, kNegativeSmallWpar[2]*cm);
+/*-*/fNegativeTopRoundSolid     = new G4Tubs("NegativeTopRoundSolid", 0*cm, 0.45*cm, 0.72*cm, 0*deg, 360*deg);
+/*-*/fNegativeMiddleRoundSolid  = new G4Tubs("NegativeMiddleRoundSolid", 0.3*cm, 0.45*cm, 0.72*cm, 0*deg, 360*deg);
+/*-*/fNegativeBottomRoundSolid  = new G4Tubs("NegativeBottomRoundSolid", 1*cm, 1.5*cm, 0.71*cm, 0*deg, 360*deg);
+/*-*/fNegativeHoleSolid         = new G4Tubs("NegativeHole", 0*cm, 0.4*cm, 0.72*cm, 0*deg, 360*deg);
+/*-*/fWHolder_1Solid             = new G4SubtractionSolid( "-LargeWSolid", fWHolder_1Solid, fNegativeLargeWSolid, fRotationZ45, G4ThreeVector());
+/*-*/fWHolder_1Solid             = new G4SubtractionSolid( "-SmallWSolid", fWHolder_1Solid, fNegativeSmallWSolid, fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, 0*mm));
+/*--*/fWHolder_1Solid            = new G4SubtractionSolid( "-TopHoleSolid", fWHolder_1Solid, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, ((50.1/2+9)*sqrt(2)-8-2.65)*mm, 0*mm));
+/*--*/fWHolder_1Solid            = new G4SubtractionSolid( "WHolder_1Solid", fWHolder_1Solid, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, (-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+10)*mm, 0*mm));
+
+/*-*/// Define 'Tunsten Plate Holder2'- Second type of tungsten plate holder
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {10*mm,(-(31.05*sqrt(2)+5)-(30.1/2*sqrt(2))+10)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {30.1/2*sqrt(2)*mm,-(31.05*sqrt(2)+5)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {3.22*mm,-30.42*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {48.19/2*sqrt(2)*mm,0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {8*mm,(48.19/2*sqrt(2)-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {8*mm,((48.19/2+9)*sqrt(2)-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {0*mm,(48.19/2+9)*sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-8*mm,((48.19/2+9)*sqrt(2)-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-8*mm,(48.19/2*sqrt(2)-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-48.19/2*sqrt(2)*mm,0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-3.22*mm,-30.42*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-30.1/2*sqrt(2)*mm,-(31.05*sqrt(2)+5)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-10*mm,(-(31.05*sqrt(2)+5)-(30.1/2*sqrt(2))+10)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection Bottom2(-7.1/2*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection Top2(7.1/2*mm,{0,0},1);
+/*-*/Hzsections.push_back(Bottom2);
+/*-*/Hzsections.push_back(Top2);
+/*-*/fWHolder_2Solid              = new G4ExtrudedSolid("ProtoSolid2", VectorForEdge, Hzsections);
+/*-*/fWHolder_2Solid              = new G4SubtractionSolid( "-SmallWSolid", fWHolder_2Solid, fNegativeSmallWSolid, fRotationZ45, G4ThreeVector(0*mm, -(31.05*sqrt(2)+5)*mm, 0*mm));
+/*-*/fWHolder_2Solid              = new G4SubtractionSolid( "-LargeWSolid", fWHolder_2Solid, fNegativeLargeWSolid, fRotationZ45, G4ThreeVector());
+/*-*/fWHolder_2Solid              = new G4SubtractionSolid( "-TopHoleSolid2", fWHolder_2Solid, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, ((50.1/2+9)*sqrt(2)-8-2.65)*mm, 0*mm));
+/*-*/fWHolder_2Solid              = new G4SubtractionSolid( "WHolder_2Solid", fWHolder_2Solid, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, (-(31.05*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+10)*mm, 0*mm));
+
+/*-*/// Define 'GSO Plate Holder1'
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {30.1/2*sqrt(2)*mm,-(30.1*sqrt(2)+5)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {4.6*mm,-(50.1/2*sqrt(2)-4.6)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {50.1/2*sqrt(2)*mm,0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {8*mm,(50.1/2*sqrt(2)-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {8*mm,((50.1/2+9)*sqrt(2)-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {0*mm,(50.1/2+9)*sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-30.9*mm,35.15*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-30.9*mm,-3.59*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-17.2*mm,-18.6*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-27.06*mm,-28.7*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-27.06*mm,-41.8*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection BottomGSO(-3.2/2*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopGSO(3.2/2*mm,{0,0},1);
+/*-*/Hzsections.push_back(BottomGSO);
+/*-*/Hzsections.push_back(TopGSO);
+/*-*/fGSO_PLHolderSolid             = new G4ExtrudedSolid("GSO_PLHolderProto", VectorForEdge, Hzsections);
+/*-*///// SolidVolume for negative volume of light guide
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {40.2/sqrt(2)*mm, 0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {0*mm, 40.2/sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {19.82-40.2/sqrt(2)*mm, 34*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {16.48-40.2/sqrt(2)*mm, 46.72*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-1.17-40.2/sqrt(2)*mm, 37.38*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {1.02-40.2/sqrt(2)*mm, 38.14*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-40.2/sqrt(2)*mm, 0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {0*mm, -40.2/sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection BottomNegativeGuide(-0.6*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopNegativeGuide(0.6*mm,{0,0},1);
+/*-*/Hzsections.push_back(BottomNegativeGuide);
+/*-*/Hzsections.push_back(TopNegativeGuide);
+/*-*/fNegativeGuideLargeSolid       = new G4ExtrudedSolid("NegativeGuideLarge", VectorForEdge, Hzsections);
+/*-*///// SolidVolume for negative volume of Small guide
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {20.2/sqrt(2)*mm, 0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {0*mm, 20.2/sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {1.58-20.2/sqrt(2)*mm, 19.38*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-5.84-20.2/sqrt(2)*mm, 28.03*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-13.6-20.2/sqrt(2)*mm, 19.71*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-5.31-20.2/sqrt(2)*mm, 11.67*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-20.2/sqrt(2)*mm, 0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {0*mm, -20.2/sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/Hzsections.push_back(BottomNegativeGuide);
+/*-*/Hzsections.push_back(TopNegativeGuide);
+/*-*/fNegativeGuideSmallSolid        = new G4ExtrudedSolid("NegativeGuideSmall", VectorForEdge, Hzsections);
+/*-*/fGSO_PLHolderSolid              = new G4SubtractionSolid( "-GSO_PLSmallWSolid", fGSO_PLHolderSolid, fNegativeGuideSmallSolid, fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, 0*mm));
+/*-*/fGSO_PLHolderSolid              = new G4SubtractionSolid( "-GSO_PLLargeWSolid", fGSO_PLHolderSolid, fNegativeGuideLargeSolid, fNonRotation, G4ThreeVector());
+/*-*/fGSO_PLHolderSolid              = new G4SubtractionSolid( "-TopHoleSolid2", fGSO_PLHolderSolid, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, ((50.1/2+9)*sqrt(2)-8-2.65)*mm, 0*mm));
+/*-*/fGSO_PLHolderSolid              = new G4SubtractionSolid( "GSO_PLHolderSolid", fGSO_PLHolderSolid, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, (-(31.05*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+10)*mm, 0*mm));
+
+/*-*/// Define 'GSO Bar Holder'
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {40.1/2*sqrt(2)*mm,-(30.1*sqrt(2)+5-5*sqrt(2))*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {(4.6+5*sqrt(2)-2.07/2)*mm,-(50.1/2*sqrt(2)-4.6-5*sqrt(2)-2.07/2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {(53.74/2*sqrt(2)-1)*mm,(3.64/sqrt(2)-1+2.07)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {(53.74/2*sqrt(2)-1)*mm,(3.64/sqrt(2)+1+2.07)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {8*mm,(50.1/2*sqrt(2)-8+3.64/sqrt(2)+2.07)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {8*mm,((50.1/2+9)*sqrt(2)-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {0*mm,(50.1/2+9)*sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-8*mm,((50.1/2+9)*sqrt(2)-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-8*mm,(50.1/2*sqrt(2)-8+3.64/sqrt(2)+2.07)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {(-53.74/2*sqrt(2)+1)*mm,(3.64/sqrt(2)+1+2.07)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {(-53.74/2*sqrt(2)+1)*mm,(3.64/sqrt(2)-1+2.07)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {(-4.6-5*sqrt(2)+2.07/2)*mm,-(50.1/2*sqrt(2)-4.6-5*sqrt(2)-2.07/2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-40.1/2*sqrt(2)*mm,-(30.1*sqrt(2)+5-5*sqrt(2))*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-10*mm,(-(30.1*3/2*sqrt(2)+5)+10)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-10*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection BottomGSOBarHolder(-3.8/2*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopGSOBarHolder(3.8/2*mm,{0,0},1);
+/*-*/Hzsections.push_back(BottomGSOBarHolder);
+/*-*/Hzsections.push_back(TopGSOBarHolder);
+/*-*/fGSOBarHolderSolid          = new G4ExtrudedSolid("GSOBarSolidProto", VectorForEdge, Hzsections);
+/*-*///// SolidVolume for negative right volume of GSO large bar 
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {40.35/sqrt(2)*mm,0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {(40.34/sqrt(2)-53.74*sqrt(2))*mm,53.74*sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-53.74*sqrt(2)*mm,(53.74*sqrt(2)-40.34/sqrt(2))*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {0*mm,-40.34/sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection BottomNegativeRightLargeGSOBar(-0.4*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopNegativeRightLargeGSOBar(2.0*mm,{0,0},1);
+/*-*/Hzsections.push_back(BottomNegativeRightLargeGSOBar);
+/*-*/Hzsections.push_back(TopNegativeRightLargeGSOBar);
+/*-*/fNegativeGSOBarLargeRightSolid          = new G4ExtrudedSolid("NegativeGSOBarLargeRightSolid", VectorForEdge, Hzsections);
+/*-*///// SolidVolume for negative left volume of GSO large bar 
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {53.74*sqrt(2)*mm,(53.74*sqrt(2)-40.34/sqrt(2))*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-(40.34/sqrt(2)-53.74*sqrt(2))*mm,53.74*sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-40.35/sqrt(2)*mm,0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {0*mm,-40.34/sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection BottomNegativeLeftLargeGSOBar(0.2*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopNegativeLeftLargeGSOBar(2.0*mm,{0,0},1);
+/*-*/Hzsections.push_back(BottomNegativeLeftLargeGSOBar);
+/*-*/Hzsections.push_back(TopNegativeLeftLargeGSOBar);
+/*-*/fNegativeGSOBarLargeLeftSolid          = new G4ExtrudedSolid("NegativeGSOBarLargeLeftSolid", VectorForEdge, Hzsections);
+/*-*///// SolidVolume for negative right volume of GSO small bar 
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {20.1/sqrt(2)*mm,0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {(20.1/sqrt(2)-40.1*sqrt(2))*mm,40.1*sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-40.1*sqrt(2)*mm,(40.1*sqrt(2)-20.1/sqrt(2))*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {0*mm,-20.1/sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection BottomNegativeRightSmallGSOBar(-0.4*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopNegativeRightSmallGSOBar(2.0*mm,{0,0},1);
+/*-*/Hzsections.push_back(BottomNegativeRightSmallGSOBar);
+/*-*/Hzsections.push_back(TopNegativeRightSmallGSOBar);
+/*-*/fNegativeGSOBarSmallRightSolid          = new G4ExtrudedSolid("NegativeGSOBarSmallRightSolid", VectorForEdge, Hzsections);
+/*-*///// SolidVolume for negative left volume of GSO small bar 
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {20.1/sqrt(2)*mm,0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {(20.1/sqrt(2)+40.1*sqrt(2))*mm,40.1*sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {40.1*sqrt(2)*mm,(40.1*sqrt(2)+20.1/sqrt(2))*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-20.1/sqrt(2)*mm,0*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {0*mm,-20.1/sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection BottomNegativeLeftSmallGSOBar(0.2*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopNegativeLeftSmallGSOBar(2.0*mm,{0,0},1);
+/*-*/Hzsections.push_back(BottomNegativeLeftSmallGSOBar);
+/*-*/Hzsections.push_back(TopNegativeLeftSmallGSOBar);
+/*-*/fNegativeGSOBarSmallLeftSolid         = new G4ExtrudedSolid("NegativeGSOBarSmallLeftSolid", VectorForEdge, Hzsections);
+/*-*/fGSOBarHolderSolid                    = new G4SubtractionSolid("-GSOBarLargeRightSolid", fGSOBarHolderSolid, fNegativeGSOBarLargeRightSolid, fNonRotation, G4ThreeVector());
+/*-*/fGSOBarHolderSolid                    = new G4SubtractionSolid("-GSOBarLargeLeftSolid", fGSOBarHolderSolid, fNegativeGSOBarLargeLeftSolid, fNonRotation, G4ThreeVector());
+/*-*/fGSOBarHolderSolid                    = new G4SubtractionSolid("-GSOBarSmallRightSolid", fGSOBarHolderSolid, fNegativeGSOBarSmallRightSolid, fNonRotation, G4ThreeVector(0*mm,-(30.1*sqrt(2)+5)*mm, 0*mm));
+/*-*/fGSOBarHolderSolid                    = new G4SubtractionSolid("-GSOBarSmallLeftSolid", fGSOBarHolderSolid, fNegativeGSOBarSmallLeftSolid, fNonRotation, G4ThreeVector(0*mm,-(30.1*sqrt(2)+5)*mm, 0*mm));
+/*-*/fGSOBarHolderSolid                    = new G4SubtractionSolid( "-TopHoleGSOBarSolid", fGSOBarHolderSolid, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, ((50.1/2+9)*sqrt(2)-8-2.65)*mm, 0*mm));
+/*-*/fGSOBarHolderSolid                    = new G4SubtractionSolid( "GSOBarHolderSolid", fGSOBarHolderSolid, fNegativeHoleSolid, fNonRotation, G4ThreeVector(0*mm, (-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+10)*mm, 0*mm));
+
+/*-*/// Solid volumes for tungsten plate
+/*-*/fLargeW_PLSolid                       = new G4Box("LargeW_PLSolid", 2*cm, 2*cm, 0.305*cm);
+/*-*/fSmallW_PLSolid                       = new G4Box("SmallW_PLSolid", 1*cm, 1*cm, 0.305*cm);
+
+/*-*/// Solid volumes for GSO pate
+/*-*/fLargeGSO_PLSolid                     = new G4Box("LargeGSO_PLSolid", 2*cm, 2*cm, 0.05*cm); 
+/*-*/fSmallGSO_PLSolid                     = new G4Box("SmallGSO_PLSolid", 1*cm, 1*cm, 0.05*cm); 
+
+    /* Solid volumes for light guide */
+
+/*-*/// SolidVolume for negative volume of light guide
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {-0.01*mm, 40.1/sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {19.82-40.2/sqrt(2)*mm, 33.5*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {1.01-40.2/sqrt(2)*mm, 38.14*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-40.2/sqrt(2)*mm, 0.01*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection BottomLightGuideLarge(-0.5*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopLightGuideLarge(0.5*mm,{0,0},1);
+/*-*/Hzsections.push_back(BottomLightGuideLarge);
+/*-*/Hzsections.push_back(TopLightGuideLarge);
+/*-*/fLightGuideLargeSolid       = new G4ExtrudedSolid("LightGuideLargeSolid", VectorForEdge, Hzsections);
+
+/*-*/// SolidVolume for volume of Small guide
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {-0.01*mm, 20.1/sqrt(2)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {1.58-20.2/sqrt(2)*mm, 19.37*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-5.30-20.2/sqrt(2)*mm, 11.67*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-20.2/sqrt(2)*mm, 0.01*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/Hzsections.push_back(BottomLightGuideLarge);
+/*-*/Hzsections.push_back(TopLightGuideLarge);
+/*-*/fLightGuideSmallSolid        = new G4ExtrudedSolid("LightGuideSmallSolid", VectorForEdge, Hzsections);
+
+/*-*/// SolidVolume for GSO bar belt
+/*-*/fGSOSmallBarSolid                 = new G4Box("GSOSmallBarSolid", 10*mm, 0.5*mm, 0.5*mm); 
+/*-*/fGSOLargeBarSolid                 = new G4Box("GSOLargeBarSolid", 20*mm, 0.5*mm, 0.5*mm); 
+/*-*/fGSOSmallBarBeltSolid             = new G4Box("GSOSmallBarBeltSolid", 10*mm, 10*mm, 0.5*mm);
+/*-*/fGSOLargeBarBeltSolid             = new G4Box("GSOLargeBarBeltSolid", 20*mm, 20*mm, 0.5*mm);
+
+/*-*/// Define logical volumes for tungsten plate
+/*-*/fLargeW_PLLogical                     = new G4LogicalVolume(fLargeW_PLSolid, FindMaterial("G4_W"), "LargeW_PLLogical");
+/*-*/fSmallW_PLLogical                     = new G4LogicalVolume(fSmallW_PLSolid, FindMaterial("G4_W"), "SmallW_PLLogical");
+
+/*-*/// Define logical volumes for GSO plate
+/*-*/fLargeGSO_PLLogcail                   = new G4LogicalVolume(fLargeGSO_PLSolid, FindMaterial("GSO"), "LargeGSO_PLLogical");
+/*-*/fSmallGSO_PLLogcail                   = new G4LogicalVolume(fSmallGSO_PLSolid, FindMaterial("GSO"), "SmallGSO_PLLogical");
+
+/*-*/// Define logical volumes for GSO bar belt
+/*-*/fGSORightSmallBarBelt_1Logical                   = new G4LogicalVolume(fGSOSmallBarBeltSolid, FindMaterial("G4_AIR"), "GSORightBarBelt_1Logical");
+/*-*/fGSORightSmallBarBelt_2Logical                   = new G4LogicalVolume(fGSOSmallBarBeltSolid, FindMaterial("G4_AIR"), "GSORightBarBelt_2Logical");
+/*-*/fGSORightSmallBarBelt_3Logical                   = new G4LogicalVolume(fGSOSmallBarBeltSolid, FindMaterial("G4_AIR"), "GSORightBarBelt_3Logical");
+/*-*/fGSORightSmallBarBelt_4Logical                   = new G4LogicalVolume(fGSOSmallBarBeltSolid, FindMaterial("G4_AIR"), "GSORightBarBelt_4Logical");
+/*-*/fGSOLeftSmallBarBelt_1Logical                    = new G4LogicalVolume(fGSOSmallBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_1Logical");
+/*-*/fGSOLeftSmallBarBelt_2Logical                    = new G4LogicalVolume(fGSOSmallBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_2Logical");
+/*-*/fGSOLeftSmallBarBelt_3Logical                    = new G4LogicalVolume(fGSOSmallBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_3Logical");
+/*-*/fGSOLeftSmallBarBelt_4Logical                    = new G4LogicalVolume(fGSOSmallBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_4Logical");
+/*-*/fGSORightLargeBarBelt_1Logical                   = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSORightBarBelt_1Logical");
+/*-*/fGSORightLargeBarBelt_2Logical                   = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSORightBarBelt_2Logical");
+/*-*/fGSORightLargeBarBelt_3Logical                   = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSORightBarBelt_3Logical");
+/*-*/fGSORightLargeBarBelt_4Logical                   = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSORightBarBelt_4Logical");
+/*-*/fGSOLeftLargeBarBelt_1Logical                    = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_1Logical");
+/*-*/fGSOLeftLargeBarBelt_2Logical                    = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_2Logical");
+/*-*/fGSOLeftLargeBarBelt_3Logical                    = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_3Logical");
+/*-*/fGSOLeftLargeBarBelt_4Logical                    = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_4Logical");
+/*-*///Define logical volumes for GSO bar
+/*-*/fGSORightSmallBarLogical                           = new G4LogicalVolume(fGSOSmallBarSolid, FindMaterial("GSO"), "GSORightBarLogical");
+/*-*/fGSOLeftSmallBarLogical                            = new G4LogicalVolume(fGSOSmallBarSolid, FindMaterial("GSO"), "GSOLeftBarLogical");
+/*-*/fGSORightLargeBarLogical                           = new G4LogicalVolume(fGSOLargeBarSolid, FindMaterial("GSO"), "GSORightBarLogical");
+/*-*/fGSOLeftLargeBarLogical                            = new G4LogicalVolume(fGSOLargeBarSolid, FindMaterial("GSO"), "GSOLeftBarLogical");
+
+/*-*///Put GSO bar into GSO bar belt
+/*-*/for(int i=0; i<4; i++)
+/*-*/{
+/*-*/
+/*-*/    // Implement first GSO bars
+/*-*/    if(i==0)
+/*-*/    {
+/*-*/        // Insert GSO bars into GSO bar belt
+/*-*/        for(int j=0; j<20; j++)
+/*-*/        {
+/*-*/            ypos = j-9.5;
+/*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftSmallBarLogical, "GSOLeftSmallBarLogical", fGSOLeftSmallBarBelt_1Logical, false, j, checkOverlaps);
+/*-*/            xpos = j-9.5;
+/*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightSmallBarLogical, "GSORightSmallBarLogical", fGSORightSmallBarBelt_1Logical, false, j, checkOverlaps);
+/*-*/        }
+/*-*/
+/*-*/        for(int j=0; j<40; j++)
+/*-*/        {
+/*-*/
+/*-*/            ypos = j-19.5;
+/*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftLargeBarLogical, "GSOLeftLargeBarLogical", fGSOLeftLargeBarBelt_1Logical, false, j, checkOverlaps);
+/*-*/            xpos = j-19.5;
+/*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightLargeBarLogical, "GSORightLargeBarLogical", fGSORightLargeBarBelt_1Logical, false, j, checkOverlaps);
+/*-*/        }
+/*-*/
+/*-*/    }
+/*-*/
+/*-*/    // Implement second GSO bars
+/*-*/    if(i==1)
+/*-*/    {
+/*-*/        // Insert GSO bars into GSO bar belt
+/*-*/        for(int j=20; j<40; j++)
+/*-*/        {
+/*-*/            ypos = j%20-9.5;
+/*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftSmallBarLogical, "GSOLeftSmallBarLogical", fGSOLeftSmallBarBelt_2Logical, false, j, checkOverlaps);
+/*-*/            xpos = j%20-9.5;
+/*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightSmallBarLogical, "GSORightSmallBarLogical", fGSORightSmallBarBelt_2Logical, false, j, checkOverlaps);
+/*-*/        }
+/*-*/
+/*-*/        for(int j=40; j<80; j++)
+/*-*/        {
+/*-*/
+/*-*/            ypos = j%20-19.5;
+/*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftLargeBarLogical, "GSOLeftLargeBarLogical", fGSOLeftLargeBarBelt_2Logical, false, j, checkOverlaps);
+/*-*/            xpos = j%20-19.5;
+/*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightLargeBarLogical, "GSORightLargeBarLogical", fGSORightLargeBarBelt_2Logical, false, j, checkOverlaps);
+/*-*/        }
+/*-*/
+/*-*/    }
+/*-*/
+/*-*/    // Implement third GSO bars
+/*-*/    if(i==2)
+/*-*/    {
+/*-*/        // Insert GSO bars into GSO bar belt
+/*-*/        for(int j=40; j<60; j++)
+/*-*/        {
+/*-*/            ypos = j%20-9.5;
+/*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftSmallBarLogical, "GSOLeftSmallBarLogical", fGSOLeftSmallBarBelt_3Logical, false, j, checkOverlaps);
+/*-*/            xpos = j%20-9.5;
+/*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightSmallBarLogical, "GSORightSmallBarLogical", fGSORightSmallBarBelt_3Logical, false, j, checkOverlaps);
+/*-*/        }
+/*-*/
+/*-*/        for(int j=80; j<120; j++)
+/*-*/        {
+/*-*/
+/*-*/            ypos = j%20-19.5;
+/*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftLargeBarLogical, "GSOLeftLargeBarLogical", fGSOLeftLargeBarBelt_3Logical, false, j, checkOverlaps);
+/*-*/            xpos = j%20-19.5;
+/*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightLargeBarLogical, "GSORightLargeBarLogical", fGSORightLargeBarBelt_3Logical, false, j, checkOverlaps);
+/*-*/        }
+/*-*/
+/*-*/    }
+/*-*/
+/*-*/    // Implement fourth GSO bars
+/*-*/    if(i==2)
+/*-*/    {
+/*-*/        // Insert GSO bars into GSO bar belt
+/*-*/        for(int j=60; j<80; j++)
+/*-*/        {
+/*-*/            ypos = j%20-9.5;
+/*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftSmallBarLogical, "GSOLeftSmallBarLogical", fGSOLeftSmallBarBelt_3Logical, false, j, checkOverlaps);
+/*-*/            xpos = j%20-9.5;
+/*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightSmallBarLogical, "GSORightSmallBarLogical", fGSORightSmallBarBelt_3Logical, false, j, checkOverlaps);
+/*-*/        }
+/*-*/
+/*-*/        for(int j=80; j<120; j++)
+/*-*/        {
+/*-*/
+/*-*/            ypos = j%20-19.5;
+/*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftLargeBarLogical, "GSOLeftLargeBarLogical", fGSOLeftLargeBarBelt_3Logical, false, j, checkOverlaps);
+/*-*/            xpos = j%20-19.5;
+/*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightLargeBarLogical, "GSORightLargeBarLogical", fGSORightLargeBarBelt_3Logical, false, j, checkOverlaps);
+/*-*/        }
+/*-*/
+/*-*/    }
+/*-*/}
+
+/*-*///Define logical volumes for tungsten plate holder
+/*-*/fWHolder_1Logical                       = new G4LogicalVolume(fWHolder_1Solid, FindMaterial("G10"), "WHolder_1Logical");
+/*-*/fWHolder_2Logical                       = new G4LogicalVolume(fWHolder_2Solid, FindMaterial("G10"), "WHolder_2Logical");
+//Junsang****/*-*/fWHolderPhysical                       = new G4PVPlacement(fRotationZ45, G4ThreeVector(), fGSOLeftSmallBarBelt_1Logical, "WHolderPhysical", fARM1Logical, false, 0, checkOverlaps);
+/*-*///Define logical volume  for GSO plate holder
+/*-*/fGSO_PLHolderLogical                = new G4LogicalVolume(fGSO_PLHolderSolid, FindMaterial("Acrylic"), "GSO_PLHolderLogical");
+
+/*-*///Define logical volume for GSO bar holder
+/*-*/fGSOBarHolderLogical                = new G4LogicalVolume(fGSOBarHolderSolid, FindMaterial("Acrylic"), "GSOBarHolderLogical");
+
+/*-*///Define logical volimes for light guide
+/*-*/fLightGuideLargeLogical             = new G4LogicalVolume(fLightGuideLargeSolid, FindMaterial("Quartz"), "LightGuideLargeLogical");
+/*-*/fLightGuideSmallLogical             = new G4LogicalVolume(fLightGuideSmallSolid, FindMaterial("Quartz"), "LightGuideSmallLogical");
+
+
+
+    // Put tungstem plate holder into amr1
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (0+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (10.30+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (20.60+basez+dz)*mm), fWHolder_2Logical, "WHolder_2Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (34.70+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (45.00+basez+dz)*mm), fWHolder_2Logical, "WHolder_2Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (59.10+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (69.40+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (79.70+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (90.00+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (100.30+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (110.60+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (120.90+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (128.00+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (138.30+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (145.40+basez+dz)*mm), fWHolder_2Logical, "WHolder_2Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (159.50+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (166.60+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (176.90+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (184.00+basez+dz)*mm), fWHolder_2Logical, "WHolder_2Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (198.10+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (205.20+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (215.50+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
+
+    // Put GSO bar holder into arm1
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (26.05+basez+dz)*mm), fGSOBarHolderLogical, "GSOBarHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (50.45+basez+dz)*mm), fGSOBarHolderLogical, "GSOBarHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (150.85+basez+dz)*mm), fGSOBarHolderLogical, "GSOBarHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (189.45+basez+dz)*mm), fGSOBarHolderLogical, "GSOBarHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+
+
+    // Put GSO plate holder into arm1
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (5.15+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (15.45+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (29.55+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (39.85+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (53.95+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (64.25+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (74.55+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (84.85+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (95.15+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (105.45+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (115.75+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (133.15+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (154.35+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (171.75+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (192.95+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (210.35+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+
+
+
     visAttributes           = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
     visAttributes           -> SetVisibility(false);
     fARM1Logical        -> SetVisAttributes(visAttributes);
