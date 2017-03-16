@@ -35,6 +35,8 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4bool GetSDforWHolder(){ return SDforWHolder; };
         G4bool GetSDforGSOBar(){ return SDforGSOBar; };
         G4bool GetSDforGSOPlate(){ return SDforGSOPlate; };
+        G4bool GetSDforAlFrame(){ return SDforAlFrame; };
+        G4bool GetSDforPanels(){ return SDforPanels; };
 
 
         virtual void ConstructSDandField();
@@ -110,6 +112,21 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VSolid*                   fGSOLargeBarSolid;
         G4VSolid*                   fGSOSmallBarBeltSolid;
         G4VSolid*                   fGSOLargeBarBeltSolid;
+        G4VSolid*                   fAlFramePart1Solid;
+        G4VSolid*                   fAlFramePart2Solid;
+        G4VSolid*                   fAlFramePart3Solid;
+        G4VSolid*                   fAlFramePart5Solid;
+        G4VSolid*                   fAlFramePart6Solid;
+        G4VSolid*                   fAlFramePart7Solid;
+        G4VSolid*                   fAlFramePart8Solid;
+        G4VSolid*                   fAlFramePart9Solid;
+        G4VSolid*                   fAlFramePart10Solid;
+        G4VSolid*                   fAlFrameSolid;
+        G4VSolid*                   fAlFrame1Solid;
+        G4VSolid*                   fAlFrame2Solid;
+        G4VSolid*                   fSidePanelSolid;
+        G4VSolid*                   fFrontPanelSolid;
+
 
 
 
@@ -187,8 +204,8 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            fNegativeSmallWLogical;
         G4LogicalVolume*            fLargeW_PLLogical;
         G4LogicalVolume*            fSmallW_PLLogical;
-        G4LogicalVolume*            fLargeGSO_PLLogcail;
-        G4LogicalVolume*            fSmallGSO_PLLogcail;
+        G4LogicalVolume*            fLargeGSO_PLLogical;
+        G4LogicalVolume*            fSmallGSO_PLLogical;
         G4LogicalVolume*            fGSORightSmallBarBelt_1Logical;
         G4LogicalVolume*            fGSORightSmallBarBelt_2Logical;
         G4LogicalVolume*            fGSORightSmallBarBelt_3Logical;
@@ -214,6 +231,12 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            fGSOBarHolderLogical;
         G4LogicalVolume*            fLightGuideLargeLogical;
         G4LogicalVolume*            fLightGuideSmallLogical;
+        G4LogicalVolume*            fAlFramePart1Logical;
+        G4LogicalVolume*            fAlFramePart2Logical;
+        G4LogicalVolume*            fAlFrame1Logical;
+        G4LogicalVolume*            fAlFrame2Logical;
+        G4LogicalVolume*            fSidePanelLogical;
+        G4LogicalVolume*            fFrontPanelLogical;
 
 
         G4VPhysicalVolume*          fBlockerPhysical;
@@ -345,7 +368,8 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4bool                      SDforWHolder; 
         G4bool                      SDforGSOBar;  
         G4bool                      SDforGSOPlate;
-
+        G4bool                      SDforAlFrame;
+        G4bool                      SDforPanels;
 
         G4double                    Nlay,Nmod;
 
@@ -370,4 +394,5 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         
 
 };
+
 #endif

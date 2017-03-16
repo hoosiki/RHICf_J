@@ -175,6 +175,21 @@ void RHICFMaterials::CreateMaterials()
   natoms.clear();
 
   //--------------------------------------------------
+  // Duralumin
+  //--------------------------------------------------
+
+  elements.push_back("Al");      natoms.push_back(0.95);
+  elements.push_back("Cu");      natoms.push_back(0.05);
+
+  density = 2.7*g/cm3;
+
+  fDuralumin = fNistMan->
+          ConstructNewMaterial("Duralumin", elements, natoms, density);
+
+  elements.clear();
+  natoms.clear();
+
+  //--------------------------------------------------
   // Aacrylic
   //--------------------------------------------------
 

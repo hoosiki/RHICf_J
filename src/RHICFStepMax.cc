@@ -50,7 +50,12 @@ RHICFStepMax::~RHICFStepMax() { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RHICFStepMax::RHICFStepMax(RHICFStepMax& right) : G4VDiscreteProcess(right) { }
+RHICFStepMax::RHICFStepMax(RHICFStepMax& right) : G4VDiscreteProcess(right) 
+{
+
+    fMaxChargedStep = DBL_MAX;
+
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

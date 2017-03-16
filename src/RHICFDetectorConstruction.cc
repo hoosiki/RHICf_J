@@ -12,6 +12,7 @@
 #include "G4NistManager.hh"
 #include "G4LogicalVolume.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4UnionSolid.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -163,14 +164,14 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     //G4ThreeVector a         = G4ThreeVector(towposX[1]-4.5*mm,-towposY[1]-12.5*mm+57.5*mm,0);
     //G4ThreeVector a         = G4ThreeVector(towposX[1]-4.5*mm,-towposY[1]-12.5*mm+72.5*mm,0);
 
-    //G4ThreeVector b         = G4ThreeVector(0,-4.05/sqrt(2.)*mm,-1860*cm);
-    G4ThreeVector b         = G4ThreeVector(40*cm,-4.05/sqrt(2.)*mm,-200*cm);
+    //Junsang****G4ThreeVector b         = G4ThreeVector(0,-4.05/sqrt(2.)*mm,-1860*cm);
+    G4ThreeVector b         = G4ThreeVector(0*cm,-4.05/sqrt(2.)*mm,-200*cm);
 
     //HODO                    = HODOSCOPE(fWorldPhysical,INVERSERotation);
     //Junsang****LOCALPOLINSTALL         = LOCALPOL(fWorldPhysical, b, fNonRotation);
-    //Junsang****STARZDCINSTALL         = STARZDC(fWorldPhysical, b, fNonRotation);
+    STARZDCINSTALL         = STARZDC(fWorldPhysical, b, fNonRotation);
     
-    ARM1INSTALL              = ARM1(fWorldPhysical, G4ThreeVector(), fNonRotation);
+    //Junsang****ARM1INSTALL              = ARM1(fWorldPhysical, G4ThreeVector(), fNonRotation);
 
     //BBCINSTALL              = BBC(fWorldPhysical, a, fNonRotation);
 
@@ -189,15 +190,18 @@ void RHICFDetectorConstruction::DefineDimension()
 
     
 /*-*/// Setting for sensitive detectors
-/*-*/SDforWInZDC         = true;
-/*-*/SDforI_PL           = true;
-/*-*/SDforPMMA           = true;
-/*-*/SDforSMD            = true;
+/*-*/// ZDC
+/*-*/SDforWInZDC         = false;
+/*-*/SDforI_PL           = false;
+/*-*/SDforPMMA           = false;
+/*-*/SDforSMD            = false;
+// ARM1
 /*-*/SDforWInARM1        = true;
 /*-*/SDforWHolder        = true;
 /*-*/SDforGSOBar         = true;
 /*-*/SDforGSOPlate       = true;
-
+/*-*/SDforAlFrame        = true;
+/*-*/SDforPanels         = true;
     
 
 /*-*/// Define parameters for geometry
@@ -351,7 +355,7 @@ void RHICFDetectorConstruction::DefineDimension()
 /*-*/kNegativeSmallWpar[1] = 2.01/2;
 /*-*/kNegativeSmallWpar[2] = 7.2/2;
 
-    basez = -100;
+    basez = 116.75;
     dz  = 0;
 
 
@@ -366,74 +370,140 @@ void RHICFDetectorConstruction::ConstructSDandField()
 {
 
 
-    //Junsang****G4SDManager::GetSDMpointer() -> SetVerboseLevel(1);
-    //Junsang****G4SDParticleFilter* OPFilter = new G4SDParticleFilter("NOP", "opticalphoton");
-//Junsang****
-    //Junsang****G4String detName;
-//Junsang****
-    //Junsang****G4String calName[9] = {"W_PL_1Logical", "W_PL_2Logical", "W_PL_3Logical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical", "SMDHLogical", "SMDVLogical"}; 
-//Junsang****
-//Junsang****
-    //Junsang****for(G4int i=0; i<9; i++)
-    //Junsang****{
-//Junsang****
-//Junsang****
-//Junsang****
-        //Junsang****if(i<4)
-        //Junsang****{
-            //Junsang****// Sensitive detector for deposit energy
-            //Junsang****G4cout << "detector:" << calName[i] << G4endl;
-            //Junsang****G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
-//Junsang****
-            //Junsang****G4VPrimitiveScorer* PriDEL0;
-//Junsang****
-            //Junsang****PriDEL0 = new G4PSEnergyDeposit("DE",0);
-            //Junsang****SDforDE -> RegisterPrimitive(PriDEL0);
-//Junsang****
-            //Junsang****SetSensitiveDetector(calName[i], SDforDE);
+    G4SDManager::GetSDMpointer() -> SetVerboseLevel(1);
+    G4SDParticleFilter* OPFilter = new G4SDParticleFilter("NOP", "opticalphoton");
+
+    G4String detName;
+
+    G4String calName[9] = {"W_PL_1Logical", "W_PL_2Logical", "W_PL_3Logical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical", "SMDHLogical", "SMDVLogical"}; 
+
+
+    for(G4int i=0; i<9; i++)
+    {
+
+
+
+        if(i<3)
+        {
+            if(SDforWInZDC==true)
+            {
+                // Sensitive detector for deposit energy
+                G4cout << "detector:" << calName[i] << G4endl;
+                G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
+
+                G4VPrimitiveScorer* PriDEL0;
+
+                PriDEL0 = new G4PSEnergyDeposit("DE",0);
+                SDforDE -> RegisterPrimitive(PriDEL0);
+
+                SetSensitiveDetector(calName[i], SDforDE);
+            }
+
+
+
+        }
+
+        if(i==3)
+        {
+            if(SDforI_PL==true)
+            {
+                // Sensitive detector for deposit energy
+                G4cout << "detector:" << calName[i] << G4endl;
+                G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
+
+                G4VPrimitiveScorer* PriDEL0;
+
+                PriDEL0 = new G4PSEnergyDeposit("DE",0);
+                SDforDE -> RegisterPrimitive(PriDEL0);
+
+                SetSensitiveDetector(calName[i], SDforDE);
+
+            }
+
+        }
+
+        if(i<7 && i>3)
+        {
+
+                // Sensitive detector for deposit energy and number of optical photon generated
+                G4cout << "detector:" << calName[i] << G4endl;
+                G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
+
+                G4VPrimitiveScorer* PriDEandNoP;
+
+                PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+                SDforDE -> RegisterPrimitive(PriDEandNoP);
+                PriDEandNoP = new G4PSNofSecondary("NOP",0);
+                PriDEandNoP -> SetFilter(OPFilter);
+                SDforDE -> RegisterPrimitive(PriDEandNoP);
+
+                SetSensitiveDetector(calName[i], SDforDE);
+        }
+
+
+        if(i>6)
+        {
+
+                // Sensitive detector for deposit energy and number of optical photon generated
+                G4cout << "detector:" << calName[i] << G4endl;
+                G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
+
+                G4VPrimitiveScorer* PriDEandNoP;
+
+                PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+                SDforDE -> RegisterPrimitive(PriDEandNoP);
+                PriDEandNoP = new G4PSNofSecondary("NOP",0);
+                PriDEandNoP -> SetFilter(OPFilter);
+                SDforDE -> RegisterPrimitive(PriDEandNoP);
+
+                SetSensitiveDetector(calName[i], SDforDE);
+        }
         //Junsang****}else
         //Junsang****{
     //Junsang****
+            //Junsang****if()
+            //Junsang****{
 //Junsang****
-            //Junsang****// Sensitive detector for deposit energy and number of optical photon generated
-            //Junsang****G4cout << "detector:" << calName[i] << G4endl;
-            //Junsang****G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
+                //Junsang****// Sensitive detector for deposit energy and number of optical photon generated
+                //Junsang****G4cout << "detector:" << calName[i] << G4endl;
+                //Junsang****G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
 //Junsang****
-            //Junsang****G4VPrimitiveScorer* PriDEandNoP;
+                //Junsang****G4VPrimitiveScorer* PriDEandNoP;
 //Junsang****
-            //Junsang****PriDEandNoP = new G4PSEnergyDeposit("DE",0);
-            //Junsang****SDforDE -> RegisterPrimitive(PriDEandNoP);
-            //Junsang****PriDEandNoP = new G4PSNofSecondary("NOP",0);
-            //Junsang****PriDEandNoP -> SetFilter(OPFilter);
-            //Junsang****SDforDE -> RegisterPrimitive(PriDEandNoP);
+                //Junsang****PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+                //Junsang****SDforDE -> RegisterPrimitive(PriDEandNoP);
+                //Junsang****PriDEandNoP = new G4PSNofSecondary("NOP",0);
+                //Junsang****PriDEandNoP -> SetFilter(OPFilter);
+                //Junsang****SDforDE -> RegisterPrimitive(PriDEandNoP);
 //Junsang****
-            //Junsang****SetSensitiveDetector(calName[i], SDforDE);
+                //Junsang****SetSensitiveDetector(calName[i], SDforDE);
+            //Junsang****}
 //Junsang****
         //Junsang****}
-//Junsang****
-//Junsang****
-    //Junsang****}
-//Junsang****
-//Junsang****
-//Junsang****
-//Junsang****
-//Junsang****
-//Junsang****
-//Junsang****
-//Junsang****
-//Junsang****
-//Junsang****
-    //Junsang****// Set Magnetic Field
-    //Junsang****//
-    //Junsang****fMagneticField          = new MagneticField();
-    //Junsang****fFieldMgr               = new G4FieldManager();
-    //Junsang****fFieldMgr               -> SetDetectorField(fMagneticField);
-    //Junsang****fFieldMgr               -> CreateChordFinder(fMagneticField);
-    //Junsang****//G4bool forceToAllDaughters = true;
-    //Junsang****//fMagneticLogical -> SetFieldManager(fFieldMgr, forceToAllDaughters);
-//Junsang****
-    //Junsang****G4AutoDelete::Register(fMagneticField);
-    //Junsang****G4AutoDelete::Register(fFieldMgr);
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+    // Set Magnetic Field
+    //
+    fMagneticField          = new MagneticField();
+    fFieldMgr               = new G4FieldManager();
+    fFieldMgr               -> SetDetectorField(fMagneticField);
+    fFieldMgr               -> CreateChordFinder(fMagneticField);
+    //G4bool forceToAllDaughters = true;
+    //fMagneticLogical -> SetFieldManager(fFieldMgr, forceToAllDaughters);
+
+    G4AutoDelete::Register(fMagneticField);
+    G4AutoDelete::Register(fFieldMgr);
 
 
     G4SDManager::GetSDMpointer() -> SetVerboseLevel(0);
@@ -2176,7 +2246,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
 /*-*/TwoDVectorForEdge = {0*mm,-40.34/sqrt(2)*mm};
 /*-*/VectorForEdge.push_back(TwoDVectorForEdge);
 /*-*/G4ExtrudedSolid::ZSection BottomNegativeLeftLargeGSOBar(0.2*mm,{0,0},1);
-/*-*/G4ExtrudedSolid::ZSection TopNegativeLeftLargeGSOBar(2.0*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopNegativeLeftLargeGSOBar(2.6*mm,{0,0},1);
 /*-*/Hzsections.push_back(BottomNegativeLeftLargeGSOBar);
 /*-*/Hzsections.push_back(TopNegativeLeftLargeGSOBar);
 /*-*/fNegativeGSOBarLargeLeftSolid          = new G4ExtrudedSolid("NegativeGSOBarLargeLeftSolid", VectorForEdge, Hzsections);
@@ -2210,7 +2280,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
 /*-*/TwoDVectorForEdge = {0*mm,-20.1/sqrt(2)*mm};
 /*-*/VectorForEdge.push_back(TwoDVectorForEdge);
 /*-*/G4ExtrudedSolid::ZSection BottomNegativeLeftSmallGSOBar(0.2*mm,{0,0},1);
-/*-*/G4ExtrudedSolid::ZSection TopNegativeLeftSmallGSOBar(2.0*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopNegativeLeftSmallGSOBar(2.6*mm,{0,0},1);
 /*-*/Hzsections.push_back(BottomNegativeLeftSmallGSOBar);
 /*-*/Hzsections.push_back(TopNegativeLeftSmallGSOBar);
 /*-*/fNegativeGSOBarSmallLeftSolid         = new G4ExtrudedSolid("NegativeGSOBarSmallLeftSolid", VectorForEdge, Hzsections);
@@ -2238,7 +2308,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
 /*-*/VectorForEdge.push_back(TwoDVectorForEdge);
 /*-*/TwoDVectorForEdge = {19.82-40.2/sqrt(2)*mm, 33.5*mm};
 /*-*/VectorForEdge.push_back(TwoDVectorForEdge);
-/*-*/TwoDVectorForEdge = {1.01-40.2/sqrt(2)*mm, 38.14*mm};
+/*-*/TwoDVectorForEdge = {1.01-40.2/sqrt(2)*mm, 36.14*mm};
 /*-*/VectorForEdge.push_back(TwoDVectorForEdge);
 /*-*/TwoDVectorForEdge = {-40.2/sqrt(2)*mm, 0.01*mm};
 /*-*/VectorForEdge.push_back(TwoDVectorForEdge);
@@ -2269,13 +2339,121 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
 /*-*/fGSOSmallBarBeltSolid             = new G4Box("GSOSmallBarBeltSolid", 10*mm, 10*mm, 0.5*mm);
 /*-*/fGSOLargeBarBeltSolid             = new G4Box("GSOLargeBarBeltSolid", 20*mm, 20*mm, 0.5*mm);
 
-/*-*/// Define logical volumes for tungsten plate
+    // SolidVolume for aluminum frame
+/*-*/// SolidVolume for part1
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {30*mm, 20.6+29.96*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-30*mm, 20.6+29.96*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-30*mm, -29.5+29.96*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-43*mm, -29.5+29.96*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-43*mm, -37.5+29.96*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-30*mm, -37.5+29.96*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-30*mm, (-(30.1*sqrt(2)+5)-41.43+10.05*sqrt(2)-8.75)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {30*mm, (-(30.1*sqrt(2)+5)-41.43+10.05*sqrt(2)-8.75)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {30*mm, -37.5+29.96*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {43*mm, -37.5+29.96*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {43*mm, -29.5+29.96*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {30*mm, -29.5+29.96*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection BottomAlFramePart1(-110.73*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopAlFramePart1(-102.53*mm,{0,0},1);
+/*-*/Hzsections.push_back(BottomAlFramePart1);
+/*-*/Hzsections.push_back(TopAlFramePart1);
+/*-*/fAlFramePart1Solid        = new G4ExtrudedSolid("AlFramePart1Solid", VectorForEdge, Hzsections);
+/*-*/// SolidVolume for part2
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {30*mm, 20.6+29.96*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-30*mm, 20.6+29.96*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-30*mm, (-(30.1*sqrt(2)+5)-41.43+10.05*sqrt(2)-8.75)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {30*mm, (-(30.1*sqrt(2)+5)-41.43+10.05*sqrt(2)-8.75)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection BottomAlFramePart2(120.325*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopAlFramePart2(121.61*mm,{0,0},1);
+/*-*/Hzsections.push_back(BottomAlFramePart2);
+/*-*/Hzsections.push_back(TopAlFramePart2);
+/*-*/fAlFramePart2Solid        = new G4ExtrudedSolid("AlFramePart2Solid", VectorForEdge, Hzsections);
+/*-*/// SolidVolume for part3(pole)
+/*-*/fAlFramePart3Solid         = new G4Tubs("AlFramePart3Solid", 0*mm, 3.99*mm, 275/2*mm, 0*deg, 360*deg);
+/*-*/// SolidVolume for part5(bottom)
+/*-*/VectorForEdge.clear();  //Delete G2Vecotrs in VectorForEdge
+/*-*/Hzsections.clear(); //Delete ZSections in Hzsections
+/*-*/TwoDVectorForEdge = {44.0*mm, (-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.85)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-44.0*mm, (-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.85)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {-44.0*mm, (-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/TwoDVectorForEdge = {44.0*mm, (-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75-8)*mm};
+/*-*/VectorForEdge.push_back(TwoDVectorForEdge);
+/*-*/G4ExtrudedSolid::ZSection BottomAlFramePart5(-139.0*mm,{0,0},1);
+/*-*/G4ExtrudedSolid::ZSection TopAlFramePart5(139.0*mm,{0,0},1);
+/*-*/Hzsections.push_back(BottomAlFramePart5);
+/*-*/Hzsections.push_back(TopAlFramePart5);
+/*-*/fAlFramePart5Solid        = new G4ExtrudedSolid("AlFramePart5Solid", VectorForEdge, Hzsections);
+/*-*/// SolidVolume for part6,7,8,9,10
+/*-*/fAlFramePart6Solid         = new G4Box("AlFramePart6Solid", 5.0*mm, 109.9*mm, 5.0*mm);
+/*-*/fAlFramePart7Solid         = new G4Box("AlFramePart7Solid", 20.0*mm, 7.0*mm, 9.0/2*mm);
+/*-*/fAlFramePart8Solid         = new G4Box("AlFramePart8Solid", 40.0*mm, 10.0*mm, 5.0*mm);
+/*-*/fAlFramePart9Solid         = new G4Box("AlFramePart9Solid", 20.0*mm, 7.0*mm, 9.0*mm);
+/*-*/fAlFramePart10Solid         = new G4Box("AlFramePart10Solid", 10.0*mm, 10.0*mm, 9.0/2*mm);
+
+/*-*/// SolidVolume for Al frame Top part
+/*-*/// Rear & Front 
+/*-*/fAlFrame1Solid              = new G4UnionSolid("Part1+Part2", fAlFramePart1Solid, fAlFramePart2Solid);
+/*-*/// Top pole
+/*-*/fAlFrame1Solid              = new G4UnionSolid("Part1+Part2+Part3", fAlFrame1Solid, fAlFramePart3Solid, fNonRotation, G4ThreeVector(0*mm,((50.1/2+9)*sqrt(2)-8-2.65)*mm, 0*mm));
+/*-*/// Column
+/*-*/fAlFrame1Solid              = new G4UnionSolid("Part1+Part2+Part3+Part6", fAlFrame1Solid, fAlFramePart6Solid, fNonRotation, G4ThreeVector(39*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+110.0)*mm, 134.0*mm));
+/*-*/fAlFrame1Solid              = new G4UnionSolid("Part1+Part2+Part3+Part6+Part7", fAlFrame1Solid, fAlFramePart6Solid, fNonRotation, G4ThreeVector(-39*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+110.0)*mm, 134.0*mm));
+/*-*/fAlFrame1Solid              = new G4UnionSolid("Part1+Part2+Part3+Part6+Part7+Part8", fAlFrame1Solid, fAlFramePart6Solid, fNonRotation, G4ThreeVector(39*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+110.0)*mm, -134.0*mm));
+/*-*/fAlFrame1Solid              = new G4UnionSolid("Part1+Part2+Part3+Part6+Part7+Part8+Part9", fAlFrame1Solid, fAlFramePart6Solid, fNonRotation, G4ThreeVector(-39*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+110.0)*mm, -134.0*mm));
+/*-*/// Rear parts
+/*-*/fAlFrame1Solid              = new G4UnionSolid("Part1+Part2+Part3+Part6+Part7+Part8+Part9+Part10", fAlFrame1Solid, fAlFramePart8Solid, fNonRotation, G4ThreeVector(0.0*mm,((50.1/2+9)*sqrt(2)-8-2.65)*mm, -134.0*mm));
+/*-*/// Front parts
+/*-*/fAlFrame1Solid              = new G4UnionSolid("Part1+Part2+Part3+Part6+Part7+Part8+Part9+Part10+Part11", fAlFrame1Solid, fAlFramePart8Solid, fNonRotation, G4ThreeVector(0.0*mm,((50.1/2+9)*sqrt(2)-8-2.65)*mm, 134.0*mm));
+/*-*/fAlFrame1Solid              = new G4UnionSolid("Part1+Part2+Part3+Part6+Part7+Part8+Part9+Part10+Part11+Part12", fAlFrame1Solid, fAlFramePart10Solid, fNonRotation, G4ThreeVector(0.0*mm,((50.1/2+9)*sqrt(2)-8-2.65)*mm, 125.5*mm));
+/*-*/fAlFrame1Solid                    = new G4SubtractionSolid( "AlFrameTopSolid", fAlFrame1Solid, fAlFramePart3Solid, fNonRotation, G4ThreeVector(0*mm, (-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+10)*mm, 0*mm));
+
+
+
+
+/*-*/// SolidVolume for Al frame Bottom part
+/*-*/fAlFrame2Solid              = new G4UnionSolid("Part1+Part2", fAlFramePart5Solid, fAlFramePart7Solid, fNonRotation, G4ThreeVector(0.0*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.85+7)*mm, -134.5*mm));
+/*-*/fAlFrame2Solid              = new G4UnionSolid("Part1+Part2+Part3", fAlFrame2Solid, fAlFramePart9Solid, fNonRotation, G4ThreeVector(0.0*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.85+7)*mm, 130.0*mm));
+/*-*/// Bottom pole
+/*-*/fAlFrame2Solid              = new G4UnionSolid("Part1+Part2+Part3+Part4", fAlFrame2Solid, fAlFramePart3Solid, fNonRotation, G4ThreeVector(0*mm,(-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75+10)*mm, 0*mm));
+
+/*-*/// SolidVolume for Panels
+/*-*/fSidePanelSolid             = new G4Box("SidePanelSolid", 0.5*mm, 235/2*mm, 278/2*mm);
+/*-*/fFrontPanelSolid            = new G4Box("FrontPanelSolid", 44.0*mm, 235/2*mm, 0.5*mm);
+
+/*-*/// Define logical volume for front/side panels
+/*-*/fSidePanelLogical             = new G4LogicalVolume(fSidePanelSolid, FindMaterial("Duralumin"), "SidePanelLogical");
+/*-*/fFrontPanelLogical            = new G4LogicalVolume(fFrontPanelSolid, FindMaterial("Duralumin"), "FrontPanelLogical");
+
+/*-*/// Define logical volume for tungsten plate
 /*-*/fLargeW_PLLogical                     = new G4LogicalVolume(fLargeW_PLSolid, FindMaterial("G4_W"), "LargeW_PLLogical");
 /*-*/fSmallW_PLLogical                     = new G4LogicalVolume(fSmallW_PLSolid, FindMaterial("G4_W"), "SmallW_PLLogical");
 
 /*-*/// Define logical volumes for GSO plate
-/*-*/fLargeGSO_PLLogcail                   = new G4LogicalVolume(fLargeGSO_PLSolid, FindMaterial("GSO"), "LargeGSO_PLLogical");
-/*-*/fSmallGSO_PLLogcail                   = new G4LogicalVolume(fSmallGSO_PLSolid, FindMaterial("GSO"), "SmallGSO_PLLogical");
+/*-*/fLargeGSO_PLLogical                   = new G4LogicalVolume(fLargeGSO_PLSolid, FindMaterial("GSO"), "LargeGSO_PLLogical");
+/*-*/fSmallGSO_PLLogical                   = new G4LogicalVolume(fSmallGSO_PLSolid, FindMaterial("GSO"), "SmallGSO_PLLogical");
 
 /*-*/// Define logical volumes for GSO bar belt
 /*-*/fGSORightSmallBarBelt_1Logical                   = new G4LogicalVolume(fGSOSmallBarBeltSolid, FindMaterial("G4_AIR"), "GSORightBarBelt_1Logical");
@@ -2294,11 +2472,17 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
 /*-*/fGSOLeftLargeBarBelt_2Logical                    = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_2Logical");
 /*-*/fGSOLeftLargeBarBelt_3Logical                    = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_3Logical");
 /*-*/fGSOLeftLargeBarBelt_4Logical                    = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_4Logical");
-/*-*///Define logical volumes for GSO bar
+/*-*/// Define logical volumes for GSO bar
 /*-*/fGSORightSmallBarLogical                           = new G4LogicalVolume(fGSOSmallBarSolid, FindMaterial("GSO"), "GSORightBarLogical");
 /*-*/fGSOLeftSmallBarLogical                            = new G4LogicalVolume(fGSOSmallBarSolid, FindMaterial("GSO"), "GSOLeftBarLogical");
 /*-*/fGSORightLargeBarLogical                           = new G4LogicalVolume(fGSOLargeBarSolid, FindMaterial("GSO"), "GSORightBarLogical");
 /*-*/fGSOLeftLargeBarLogical                            = new G4LogicalVolume(fGSOLargeBarSolid, FindMaterial("GSO"), "GSOLeftBarLogical");
+
+// Put panels into ARM1
+new G4PVPlacement(fNonRotation, G4ThreeVector( 0*mm, ((-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75-8)+235/2)*mm, 139.51*mm), fFrontPanelLogical, "FrontPanelPhysical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector( 0*mm, ((-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75-8)+235/2)*mm, -139.51*mm), fFrontPanelLogical, "FrontPanelPhysical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector( 44.51*mm, ((-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75-8)+235/2)*mm, 0.0*mm), fSidePanelLogical, "SidePanelPhysical", fARM1Logical, false, 0, checkOverlaps);
+new G4PVPlacement(fNonRotation, G4ThreeVector( -44.51*mm, ((-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75-8)+235/2)*mm, 0.0*mm), fSidePanelLogical, "SidePanelPhysical", fARM1Logical, false, 0, checkOverlaps);
 
 /*-*///Put GSO bar into GSO bar belt
 /*-*/for(int i=0; i<4; i++)
@@ -2342,9 +2526,9 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
 /*-*/        for(int j=40; j<80; j++)
 /*-*/        {
 /*-*/
-/*-*/            ypos = j%20-19.5;
+/*-*/            ypos = j%40-19.5;
 /*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftLargeBarLogical, "GSOLeftLargeBarLogical", fGSOLeftLargeBarBelt_2Logical, false, j, checkOverlaps);
-/*-*/            xpos = j%20-19.5;
+/*-*/            xpos = j%40-19.5;
 /*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightLargeBarLogical, "GSORightLargeBarLogical", fGSORightLargeBarBelt_2Logical, false, j, checkOverlaps);
 /*-*/        }
 /*-*/
@@ -2365,9 +2549,9 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
 /*-*/        for(int j=80; j<120; j++)
 /*-*/        {
 /*-*/
-/*-*/            ypos = j%20-19.5;
+/*-*/            ypos = j%40-19.5;
 /*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftLargeBarLogical, "GSOLeftLargeBarLogical", fGSOLeftLargeBarBelt_3Logical, false, j, checkOverlaps);
-/*-*/            xpos = j%20-19.5;
+/*-*/            xpos = j%40-19.5;
 /*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightLargeBarLogical, "GSORightLargeBarLogical", fGSORightLargeBarBelt_3Logical, false, j, checkOverlaps);
 /*-*/        }
 /*-*/
@@ -2380,18 +2564,18 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
 /*-*/        for(int j=60; j<80; j++)
 /*-*/        {
 /*-*/            ypos = j%20-9.5;
-/*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftSmallBarLogical, "GSOLeftSmallBarLogical", fGSOLeftSmallBarBelt_3Logical, false, j, checkOverlaps);
+/*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftSmallBarLogical, "GSOLeftSmallBarLogical", fGSOLeftSmallBarBelt_4Logical, false, j, checkOverlaps);
 /*-*/            xpos = j%20-9.5;
-/*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightSmallBarLogical, "GSORightSmallBarLogical", fGSORightSmallBarBelt_3Logical, false, j, checkOverlaps);
+/*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightSmallBarLogical, "GSORightSmallBarLogical", fGSORightSmallBarBelt_4Logical, false, j, checkOverlaps);
 /*-*/        }
 /*-*/
 /*-*/        for(int j=80; j<120; j++)
 /*-*/        {
 /*-*/
-/*-*/            ypos = j%20-19.5;
-/*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftLargeBarLogical, "GSOLeftLargeBarLogical", fGSOLeftLargeBarBelt_3Logical, false, j, checkOverlaps);
-/*-*/            xpos = j%20-19.5;
-/*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightLargeBarLogical, "GSORightLargeBarLogical", fGSORightLargeBarBelt_3Logical, false, j, checkOverlaps);
+/*-*/            ypos = j%40-19.5;
+/*-*/            new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, ypos*mm, 0*mm), fGSOLeftLargeBarLogical, "GSOLeftLargeBarLogical", fGSOLeftLargeBarBelt_4Logical, false, j, checkOverlaps);
+/*-*/            xpos = j%40-19.5;
+/*-*/            new G4PVPlacement(fRotationZ90, G4ThreeVector(xpos*mm, 0*mm, 0*mm), fGSORightLargeBarLogical, "GSORightLargeBarLogical", fGSORightLargeBarBelt_4Logical, false, j, checkOverlaps);
 /*-*/        }
 /*-*/
 /*-*/    }
@@ -2413,69 +2597,295 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
 
 
 
-    // Put tungstem plate holder into amr1
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (0+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (10.30+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (20.60+basez+dz)*mm), fWHolder_2Logical, "WHolder_2Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (34.70+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (45.00+basez+dz)*mm), fWHolder_2Logical, "WHolder_2Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (59.10+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (69.40+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (79.70+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (90.00+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (100.30+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (110.60+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (120.90+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (128.00+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (138.30+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (145.40+basez+dz)*mm), fWHolder_2Logical, "WHolder_2Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (159.50+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (166.60+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (176.90+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (184.00+basez+dz)*mm), fWHolder_2Logical, "WHolder_2Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (198.10+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (205.20+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (215.50+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Logical", fARM1Logical, false, 0, checkOverlaps);
-
-    // Put GSO bar holder into arm1
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (26.05+basez+dz)*mm), fGSOBarHolderLogical, "GSOBarHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (50.45+basez+dz)*mm), fGSOBarHolderLogical, "GSOBarHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (150.85+basez+dz)*mm), fGSOBarHolderLogical, "GSOBarHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (189.45+basez+dz)*mm), fGSOBarHolderLogical, "GSOBarHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/// Put tungstem plate holder into amr1
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-0+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-10.30+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-20.60+basez+dz)*mm), fWHolder_2Logical, "WHolder_2Physical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-34.70+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-45.00+basez+dz)*mm), fWHolder_2Logical, "WHolder_2Physical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-59.10+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 3, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-69.40+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 4, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-79.70+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 5, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-90.00+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 6, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-100.30+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 7, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-110.60+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 8, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-120.90+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 9, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-128.00+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 10, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-138.30+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 11, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-145.40+basez+dz)*mm), fWHolder_2Logical, "WHolder_2Physical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-159.50+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 12, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-166.60+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 13, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-176.90+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 14, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-184.00+basez+dz)*mm), fWHolder_2Logical, "WHolder_2Physical", fARM1Logical, false, 3, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-198.10+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 15, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-205.20+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 16, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-215.50+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 17, checkOverlaps);
 
 
-    // Put GSO plate holder into arm1
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (5.15+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (15.45+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (29.55+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (39.85+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (53.95+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (64.25+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (74.55+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (84.85+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (95.15+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (105.45+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (115.75+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (133.15+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (154.35+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (171.75+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (192.95+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
-new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (210.35+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderLogical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/// Put GSO bar holder into arm1
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-26.05+basez+dz)*mm), fGSOBarHolderLogical, "GSOBarHolderPhysical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-50.45+basez+dz)*mm), fGSOBarHolderLogical, "GSOBarHolderPhysical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-150.85+basez+dz)*mm), fGSOBarHolderLogical, "GSOBarHolderPhysical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-189.45+basez+dz)*mm), fGSOBarHolderLogical, "GSOBarHolderPhysical", fARM1Logical, false, 3, checkOverlaps);
 
 
+/*-*/// Put GSO plate holder into arm1
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-5.15+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-15.45+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-29.55+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-39.85+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 3, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-53.95+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 4, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-64.25+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 5, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-74.55+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 6, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-84.85+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 7, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-95.15+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 8, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-105.45+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 9, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-115.75+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 10, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-133.15+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 11, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-154.35+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 12, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-171.75+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 13, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-192.95+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 14, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-210.35+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 15, checkOverlaps);
 
-    visAttributes           = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
-    visAttributes           -> SetVisibility(false);
-    fARM1Logical        -> SetVisAttributes(visAttributes);
+/*-*/// Put tungsten plates
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-0+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-10.30+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-20.60+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-34.70+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-45.00+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-59.10+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-69.40+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 4, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-79.70+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 5, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-90.00+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 6, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-100.30+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 7, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-110.60+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 8, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-120.90+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 9, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-128.00+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 10, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-138.30+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 11, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-145.40+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-159.50+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 12, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-166.60+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 13, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-176.90+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 14, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-184.00+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-198.10+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 15, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-205.20+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 16, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-215.50+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 17, checkOverlaps);
+/*-*///// Put small tungsten plate into arm1
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-0+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-10.30+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-20.60+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-34.70+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-45.00+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-59.10+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-69.40+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 4, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-79.70+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 5, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-90.00+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 6, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-100.30+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 7, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-110.60+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 8, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-120.90+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 9, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-128.00+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 10, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-138.30+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 11, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-145.40+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-159.50+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 12, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-166.60+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 13, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-176.90+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 14, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-184.00+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-198.10+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 15, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-205.20+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 16, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-215.50+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 17, checkOverlaps);
 
-    fVisAttributes.push_back(visAttributes);
 
-    visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.8888, 0.0));
-    visAttributes           -> SetVisibility(false);
+/*-*/// Put GSO plate into arm1
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-5.15+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-15.45+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-29.55+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-39.85+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-53.95+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 4, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-64.25+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 5, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-74.55+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 6, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-84.85+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 7, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-95.15+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 8, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-105.45+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 9, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-115.75+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 10, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-133.15+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 11, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-154.35+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 12, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-171.75+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 13, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-192.95+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 14, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-210.35+basez+dz)*mm), fLargeGSO_PLLogical, "LargeGSO_PLPhysical", fARM1Logical, false, 15, checkOverlaps);
+/*-*/// Small GSO plate
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-5.15+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-15.45+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-29.55+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-39.85+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-53.95+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 4, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-64.25+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 5, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-74.55+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 6, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-84.85+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 7, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-95.15+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 8, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-105.45+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 9, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-115.75+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 10, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-133.15+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 11, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-154.35+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 12, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-171.75+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 13, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-192.95+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 14, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-210.35+basez+dz)*mm), fSmallGSO_PLLogical, "SmallGSO_PLPhysical", fARM1Logical, false, 15, checkOverlaps);
+
+
+/*-*/// Put Light guide into arm1
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-5.15+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-15.45+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-29.55+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-39.85+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 3, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-53.95+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 4, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-64.25+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 5, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-74.55+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 6, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-84.85+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 7, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-95.15+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 8, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-105.45+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 9, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-115.75+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 10, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-133.15+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 11, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-154.35+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 12, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-171.75+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 13, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-192.95+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 14, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-210.35+basez+dz)*mm), fLightGuideLargeLogical, "LightGuideLargePhysical", fARM1Logical, false, 15, checkOverlaps);
+/*-*/// Small Light guide
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-5.15+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-15.45+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-29.55+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-39.85+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 3, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-53.95+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 4, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-64.25+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 5, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-74.55+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 6, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-84.85+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 7, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-95.15+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 8, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-105.45+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 9, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-115.75+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 10, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-133.15+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 11, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-154.35+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 12, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-171.75+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 13, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-192.95+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 14, checkOverlaps);
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-210.35+basez+dz)*mm), fLightGuideSmallLogical, "LightGuideSmallPhysical", fARM1Logical, false, 15, checkOverlaps);
+
+/*-*/// Put GSO large bar belt into arm1
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-26.05+basez+dz+0.11)*mm), fGSORightLargeBarBelt_1Logical, "GSORightLargeBarBelt_1Physical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-50.45+basez+dz+0.11)*mm), fGSORightLargeBarBelt_2Logical, "GSORightLargeBarBelt_2Physical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-150.85+basez+dz+0.11)*mm), fGSORightLargeBarBelt_3Logical, "GSORightLargeBarBelt_3Physical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-189.45+basez+dz+0.11)*mm), fGSORightLargeBarBelt_4Logical, "GSORightLargeBarBelt_4Physical", fARM1Logical, false, 3, checkOverlaps);
+    // Put GSO small bar bet into arm1
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-26.05+basez+dz+1.12)*mm), fGSOLeftLargeBarBelt_1Logical, "GSOLeftLargeBarBelt_1Physical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-50.45+basez+dz+1.12)*mm), fGSOLeftLargeBarBelt_2Logical, "GSOLeftLargeBarBelt_2Physical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-150.85+basez+dz+1.12)*mm), fGSOLeftLargeBarBelt_3Logical, "GSOLeftLargeBarBelt_3Physical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-189.45+basez+dz+1.12)*mm), fGSOLeftLargeBarBelt_4Logical, "GSOLeftLargeBarBelt_4Physical", fARM1Logical, false, 3, checkOverlaps);
+
+
+/*-*/// Put GSO large bar belt into arm1
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-26.05+basez+dz+0.11)*mm), fGSORightSmallBarBelt_1Logical, "GSORightSmallBarBelt_1Physical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-50.45+basez+dz+0.11)*mm), fGSORightSmallBarBelt_2Logical, "GSORightSmallBarBelt_2Physical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-150.85+basez+dz+0.11)*mm), fGSORightSmallBarBelt_3Logical, "GSORightSmallBarBelt_3Physical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-189.45+basez+dz+0.11)*mm), fGSORightSmallBarBelt_4Logical, "GSORightSmallBarBelt_4Physical", fARM1Logical, false, 3, checkOverlaps);
+/*-*/// Put GSO small bar belt into arm1
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-26.05+basez+dz+1.12)*mm), fGSOLeftSmallBarBelt_1Logical, "GSOLeftSmallBarBelt_1Physical", fARM1Logical, false, 0, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-50.45+basez+dz+1.12)*mm), fGSOLeftSmallBarBelt_2Logical, "GSOLeftSmallBarBelt_2Physical", fARM1Logical, false, 1, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-150.85+basez+dz+1.12)*mm), fGSOLeftSmallBarBelt_3Logical, "GSOLeftSmallBarBelt_3Physical", fARM1Logical, false, 2, checkOverlaps);
+/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-189.45+basez+dz+1.12)*mm), fGSOLeftSmallBarBelt_4Logical, "GSOLeftSmallBarBelt_4Physical", fARM1Logical, false, 3, checkOverlaps);
+
+
+/*-*/// Define Logical volume for Al frame
+/*-*/fAlFrame1Logical      =   new G4LogicalVolume(fAlFrame1Solid, FindMaterial("G4_Al"), "AlFrameLogical");// Top part
+/*-*/fAlFrame2Logical      =   new G4LogicalVolume(fAlFrame2Solid, FindMaterial("G4_Al"), "AlFrameLogical");// Bottom part
+
+/*-*/// Put Al frame into arm1
+//Junsang****/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(), fAlFrame1Logical, "AlFrame1Physical", fARM1Logical, false, 0, checkOverlaps);// Top part
+//Junsang****/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(), fAlFrame2Logical, "AlFrame2Physical", fARM1Logical, false, 0, checkOverlaps);// Bottom part
+
+
+/*-*/// Setting for color
+/*-*///Junsang****visAttributes           = new G4VisAttributes(G4Colour(2.0, 2.0, 0)); //Yellow
+/*-*///Junsang****visAttributes       = new G4VisAttributes(G4Colour(0.7, 0.4, 0.1));// Brown
+/*-*///Junsang****visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.7, 0.0));//Green
+/*-*///Junsang****visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));//Blue
+/*-*///Junsang****visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.0, 0.5));//Dark blue
+/*-*///Junsang****visAttributes           = new G4VisAttributes(G4Colour(0.1, 0.1, 0.1));//Black
+/*-*///Junsang****visAttributes           = new G4VisAttributes(G4Colour(0.2, 0.2, 0.2));//Dark grey
+/*-*///Junsang****visAttributes           = new G4VisAttributes(G4Colour(0.3, 0.3, 0.3));//Dark grey
+/*-*///Junsang****visAttributes           = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));//Light green
+/*-*///Junsang****visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.5, 0.0));//Dark green
+/*-*///Junsang****visAttributes           = new G4VisAttributes(G4Colour(0.0, 10.0, 0.0));//Ligtest green
+/*-*///Junsang****visAttributes           = new G4VisAttributes(G4Colour(10.0, 0.0, 0.0));//Lightest red
+/*-*///Junsang****visAttributes           = new G4VisAttributes(G4Colour(10.0, 0.0, 2.0));//Light magenta
+/*-*/visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));//Blue
+/*-*/fSidePanelLogical               -> SetVisAttributes(visAttributes);
+/*-*/fFrontPanelLogical               -> SetVisAttributes(visAttributes);
+/*-*/fVisAttributes.push_back(visAttributes);
+/*-*/visAttributes           = new G4VisAttributes(G4Colour(0.0, 2.0, 2.0));//Light azure: GSO plate
+/*-*/fLargeGSO_PLLogical         -> SetVisAttributes(visAttributes);
+/*-*/fSmallGSO_PLLogical         -> SetVisAttributes(visAttributes);
+/*-*/fVisAttributes.push_back(visAttributes);
+/*-*/visAttributes           = new G4VisAttributes(G4Colour(2.0, 2.0, 0)); //Yellow: Quartz
+/*-*/fLightGuideLargeLogical     -> SetVisAttributes(visAttributes);
+/*-*/fLightGuideSmallLogical     -> SetVisAttributes(visAttributes);
+/*-*/fVisAttributes.push_back(visAttributes);
+/*-*/visAttributes           = new G4VisAttributes(G4Colour(0.9, 0.9, 0.9)); //Light grey: Acrylic
+/*-*/fGSO_PLHolderLogical        -> SetVisAttributes(visAttributes);
+/*-*/fGSOBarHolderLogical        -> SetVisAttributes(visAttributes);
+/*-*/fVisAttributes.push_back(visAttributes);
+/*-*/visAttributes           = new G4VisAttributes(G4Colour(0.3, 0.3, 0.3));//Dark grey: G10
+/*-*/fWHolder_1Logical           -> SetVisAttributes(visAttributes);
+/*-*/fWHolder_2Logical           -> SetVisAttributes(visAttributes);
+/*-*/fVisAttributes.push_back(visAttributes);
+/*-*/visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.0, 0.5));//Dark blue: Tungsten
+/*-*/fLargeW_PLLogical           -> SetVisAttributes(visAttributes);
+/*-*/fSmallW_PLLogical           -> SetVisAttributes(visAttributes);
+/*-*/fVisAttributes.push_back(visAttributes);
+/*-*/visAttributes           = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));//Light green: GSO bar
+/*-*/fGSOLeftSmallBarLogical     -> SetVisAttributes(visAttributes);
+/*-*/fGSORightSmallBarLogical    -> SetVisAttributes(visAttributes);
+/*-*/fGSOLeftLargeBarLogical     -> SetVisAttributes(visAttributes);
+/*-*/fGSORightLargeBarLogical    -> SetVisAttributes(visAttributes);
+/*-*/fVisAttributes.push_back(visAttributes);
+/*-*/visAttributes           = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+/*-*/visAttributes           -> SetVisibility(false);//Transparant: ARM1, GSOBarBelt
+/*-*/fARM1Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSORightLargeBarBelt_1Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSORightLargeBarBelt_2Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSORightLargeBarBelt_3Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSORightLargeBarBelt_4Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSOLeftLargeBarBelt_1Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSOLeftLargeBarBelt_2Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSOLeftLargeBarBelt_3Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSOLeftLargeBarBelt_4Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSORightSmallBarBelt_1Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSORightSmallBarBelt_2Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSORightSmallBarBelt_3Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSORightSmallBarBelt_4Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSOLeftSmallBarBelt_1Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSOLeftSmallBarBelt_2Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSOLeftSmallBarBelt_3Logical            -> SetVisAttributes(visAttributes);
+/*-*/fGSOLeftSmallBarBelt_4Logical            -> SetVisAttributes(visAttributes);
+    // Make all parts invisible
+//Junsang****/*-*/fLargeGSO_PLLogical         -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fSmallGSO_PLLogical         -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fLightGuideLargeLogical     -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fLightGuideSmallLogical     -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fGSO_PLHolderLogical        -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fGSOBarHolderLogical        -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fWHolder_1Logical           -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fWHolder_2Logical           -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fLargeW_PLLogical           -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fSmallW_PLLogical           -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fGSOLeftSmallBarLogical     -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fGSORightSmallBarLogical    -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fGSOLeftLargeBarLogical     -> SetVisAttributes(visAttributes);
+//Junsang****/*-*/fGSORightLargeBarLogical    -> SetVisAttributes(visAttributes);
+//
+//
+//
+/*-*/fVisAttributes.push_back(visAttributes);
+
 
     
 
-    return fARM1Physical;
+/*-*/return fARM1Physical;
 }
 
 

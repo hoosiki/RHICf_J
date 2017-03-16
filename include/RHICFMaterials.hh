@@ -42,6 +42,7 @@ class RHICFMaterials
     G4Material*         fGSO;
     G4Material*         fGten;
     G4Material*         fG10;
+    G4Material*         fDuralumin;
     G4Material*         fAcrylic;
 
 

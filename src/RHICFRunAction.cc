@@ -1,5 +1,6 @@
 // Edited by Junsang Park. 2014.12.10
 #include "RHICFRunAction.hh"
+#include "RHICFDetectorConstruction.hh"
 ////////////////////////////////////////////////////////////////////////////////
 #include "G4Run.hh"
 #include "G4UnitsTable.hh"
@@ -24,28 +25,28 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
     fAnalysisManager->SetVerboseLevel(1);
     fAnalysisManager->SetFileName("RHICf_J");
 
-    
-    G4String SMDHCHDE = "SMDHLeftToRight_DE";// Deposit energy
-    G4String SMDVCHDE = "SMDVTopToDown_DE";
-    G4String ZDC1CHDE = "ZDC1FrontToRear_DE";
-    G4String ZDC2CHDE = "ZDC2FrontToRear_DE";
-    G4String ZDC3CHDE = "ZDC3FrontToRear_DE";
-    G4String ZDC1WCHDE = "ZDC1WFrontToReal_DE";
-    G4String ZDC2WCHDE = "ZDC2WFrontToReal_DE";
-    G4String ZDC3WCHDE = "ZDC3WFrontToReal_DE";
-    G4String SMDHTDE   = "SMDHTotalDE";
-    G4String SMDVTDE   = "SMDVTotalDE";
-    G4String ZDCTDE    = "ZDCTotalDE";
-    G4String W_PLTDE   = "TungstenTotalDE";
-    G4String I_PLTDE   = "IronTotalDE";
-    G4String SMDHCHNOP = "SMDHLeftToRight_NOP";// Number of photon
-    G4String SMDVCHNOP = "SMDVTopToDown_NOP";
-    G4String ZDC1CHNOP = "ZDC1FrontToRear_NOP";
-    G4String ZDC2CHNOP = "ZDC2FrontToRear_NOP";
-    G4String ZDC3CHNOP = "ZDC3FrontToRear_NOP";
-    G4String ZDCTNOP   = "ZDCTotalNOP";
-    G4String SMDHTNOP   = "SMDHTotalNOP";
-    G4String SMDVTNOP  = "SMDVTotalNOP";
+/*-*/// Define tree name in root file
+/*-*/G4String SMDHCHDE = "SMDHLeftToRight_DE";// Deposit energy
+/*-*/G4String SMDVCHDE = "SMDVTopToDown_DE";
+/*-*/G4String ZDC1CHDE = "ZDC1FrontToRear_DE";
+/*-*/G4String ZDC2CHDE = "ZDC2FrontToRear_DE";
+/*-*/G4String ZDC3CHDE = "ZDC3FrontToRear_DE";
+/*-*/G4String ZDC1WCHDE = "ZDC1WFrontToReal_DE";
+/*-*/G4String ZDC2WCHDE = "ZDC2WFrontToReal_DE";
+/*-*/G4String ZDC3WCHDE = "ZDC3WFrontToReal_DE";
+/*-*/G4String SMDHTDE   = "SMDHTotalDE";
+/*-*/G4String SMDVTDE   = "SMDVTotalDE";
+/*-*/G4String ZDCTDE    = "ZDCTotalDE";
+/*-*/G4String W_PLTDE   = "TungstenTotalDE";
+/*-*/G4String I_PLTDE   = "IronTotalDE";
+/*-*/G4String SMDHCHNOP = "SMDHLeftToRight_NOP";// Number of photon
+/*-*/G4String SMDVCHNOP = "SMDVTopToDown_NOP";
+/*-*/G4String ZDC1CHNOP = "ZDC1FrontToRear_NOP";
+/*-*/G4String ZDC2CHNOP = "ZDC2FrontToRear_NOP";
+/*-*/G4String ZDC3CHNOP = "ZDC3FrontToRear_NOP";
+/*-*/G4String ZDCTNOP   = "ZDCTotalNOP";
+/*-*/G4String SMDHTNOP   = "SMDHTotalNOP";
+/*-*/G4String SMDVTNOP  = "SMDVTotalNOP";
 
 
 
@@ -184,6 +185,21 @@ RHICFRunAction::~RHICFRunAction()
 void RHICFRunAction::BeginOfRunAction(const G4Run* run)
 ////////////////////////////////////////////////////////////////////////////////
 {
+
+
+    RHICFDetectorConstruction* fConstruction = new RHICFDetectorConstruction();
+                                                                            
+    G4cout << "SDforWInZDC  : " << fConstruction->GetSDforWInZDC() << G4endl;
+    G4cout << "SDforI_PL    : " << fConstruction->GetSDforI_PL() << G4endl;
+    G4cout << "SDforPMMA    : " << fConstruction->GetSDforPMMA() << G4endl;
+    G4cout << "SDforSMD     : " << fConstruction->GetSDforSMD() << G4endl;
+    G4cout << "SDforWInARM1 : " << fConstruction->GetSDforWInARM1() << G4endl;
+    G4cout << "SDforWHolder : " << fConstruction->GetSDforWHolder() << G4endl;
+    G4cout << "SDforGSOBar  : " << fConstruction->GetSDforGSOBar() << G4endl;
+    G4cout << "SDforGSOPlate: " << fConstruction->GetSDforGSOPlate() << G4endl;
+    G4cout << "SDforAlFrame : " << fConstruction->GetSDforAlFrame() << G4endl;
+    G4cout << "SDforPanels  : " << fConstruction->GetSDforPanels() << G4endl;
+
 
     G4RunManager::GetRunManager()->SetRandomNumberStore(true);
     G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
