@@ -171,7 +171,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     //Junsang****LOCALPOLINSTALL         = LOCALPOL(fWorldPhysical, b, fNonRotation);
     STARZDCINSTALL         = STARZDC(fWorldPhysical, b, fNonRotation);
     
-    //Junsang****ARM1INSTALL              = ARM1(fWorldPhysical, G4ThreeVector(), fNonRotation);
+    ARM1INSTALL              = ARM1(fWorldPhysical, G4ThreeVector(), fNonRotation);
 
     //BBCINSTALL              = BBC(fWorldPhysical, a, fNonRotation);
 
@@ -197,10 +197,11 @@ void RHICFDetectorConstruction::DefineDimension()
 /*-*/SDforSMD            = false;
 // ARM1
 /*-*/SDforWInARM1        = true;
-/*-*/SDforWHolder        = true;
+/*-*/SDforHolder        = true;
+//Junsang****/*-*/SDforGSOBarHolder   = true;
 /*-*/SDforGSOBar         = true;
 /*-*/SDforGSOPlate       = true;
-/*-*/SDforAlFrame        = true;
+/*-*/SDforFrame        = true;
 /*-*/SDforPanels         = true;
     
 
@@ -375,89 +376,211 @@ void RHICFDetectorConstruction::ConstructSDandField()
 
     G4String detName;
 
-    G4String calName[9] = {"W_PL_1Logical", "W_PL_2Logical", "W_PL_3Logical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical", "SMDHLogical", "SMDVLogical"}; 
+    G4String calNameForZDC[9] = {"W_PL_1Logical", "W_PL_2Logical", "W_PL_3Logical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical", "SMDHLogical", "SMDVLogical"}; 
 
 
-    for(G4int i=0; i<9; i++)
-    {
+/*-*/// Set sensitive detectors for ZDC
+/*-*/for(G4int i=0; i<9; i++)
+/*-*/{
+/*-*/
+/*-*/
+/*-*/
+/*-*/    if(i<3)
+/*-*/    {
+/*-*/        if(SDforWInZDC==true)
+/*-*/        {
+/*-*/            // Sensitive detector for deposit energy
+/*-*/            G4cout << "detector:" << calNameForZDC[i] << G4endl;
+/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
+/*-*/
+/*-*/            G4VPrimitiveScorer* PriDEL0;
+/*-*/
+/*-*/            PriDEL0 = new G4PSEnergyDeposit("DE",0);
+/*-*/            SDforDE -> RegisterPrimitive(PriDEL0);
+/*-*/
+/*-*/            SetSensitiveDetector(calNameForZDC[i], SDforDE);
+/*-*/        }
+/*-*/
+/*-*/
+/*-*/
+/*-*/    }
+/*-*/
+/*-*/    if(i==3)
+/*-*/    {
+/*-*/        if(SDforI_PL==true)
+/*-*/        {
+/*-*/            // Sensitive detector for deposit energy
+/*-*/            G4cout << "detector:" << calNameForZDC[i] << G4endl;
+/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
+/*-*/
+/*-*/            G4VPrimitiveScorer* PriDEL0;
+/*-*/
+/*-*/            PriDEL0 = new G4PSEnergyDeposit("DE",0);
+/*-*/            SDforDE -> RegisterPrimitive(PriDEL0);
+/*-*/
+/*-*/            SetSensitiveDetector(calNameForZDC[i], SDforDE);
+/*-*/
+/*-*/        }
+/*-*/
+/*-*/    }
+/*-*/
+/*-*/    if(i<7 && i>3)
+/*-*/    {
+/*-*/
+/*-*/            // Sensitive detector for deposit energy and number of optical photon generated
+/*-*/            G4cout << "detector:" << calNameForZDC[i] << G4endl;
+/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
+/*-*/
+/*-*/            G4VPrimitiveScorer* PriDEandNoP;
+/*-*/
+/*-*/            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+/*-*/            PriDEandNoP = new G4PSNofSecondary("NOP",0);
+/*-*/            PriDEandNoP -> SetFilter(OPFilter);
+/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+/*-*/
+/*-*/            SetSensitiveDetector(calNameForZDC[i], SDforDE);
+/*-*/    }
+/*-*/
+/*-*/
+/*-*/    if(i>6)
+/*-*/    {
+/*-*/
+/*-*/            // Sensitive detector for deposit energy and number of optical photon generated
+/*-*/            G4cout << "detector:" << calNameForZDC[i] << G4endl;
+/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
+/*-*/
+/*-*/            G4VPrimitiveScorer* PriDEandNoP;
+/*-*/
+/*-*/            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+/*-*/            PriDEandNoP = new G4PSNofSecondary("NOP",0);
+/*-*/            PriDEandNoP -> SetFilter(OPFilter);
+/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+/*-*/
+/*-*/            SetSensitiveDetector(calNameForZDC[i], SDforDE);
+/*-*/    }
+/*-*/
+/*-*/
+/*-*/}
 
 
-
-        if(i<3)
-        {
-            if(SDforWInZDC==true)
-            {
-                // Sensitive detector for deposit energy
-                G4cout << "detector:" << calName[i] << G4endl;
-                G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
-
-                G4VPrimitiveScorer* PriDEL0;
-
-                PriDEL0 = new G4PSEnergyDeposit("DE",0);
-                SDforDE -> RegisterPrimitive(PriDEL0);
-
-                SetSensitiveDetector(calName[i], SDforDE);
-            }
+    G4String calNameForARM1[18] = {"LargeW_PLLogical", "SmallW_PLLogical", "WHolder_1Logical", "WHolder_2Logical", "GSO_PLHolderLogical", "GSOBarHolderLogical", "AlFrame1Logical", "AlFrame2Logical", "SidePanelLogical", "FrontPanelLogical", "LargeGSO_PLLogical", "SmallGSO_PLLogical", "LightGuideLargeLogical", "LightGuideSmallLogical", "GSORightSmallBarLogical", "GSOLeftSmallBarLogical", "GSORightLargeBarLogical", "GSOLeftLargeBarLogical"};
 
 
+/*-*/// Set sensitive detectors for tungsten plate
+/*-*/if(SDforWInARM1==true)
+/*-*/{
+/*-*/   for(G4int i=0; i<2; i++)
+/*-*/   {
+/*-*/        // Sensitive detector for deposit energy
+/*-*/        G4cout << "detector:" << calNameForARM1[i] << G4endl;
+/*-*/        G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForARM1[i]);
+/*-*/
+/*-*/        G4VPrimitiveScorer* PriDEL0;
+/*-*/
+/*-*/        PriDEL0 = new G4PSEnergyDeposit("DE",0);
+/*-*/        SDforDE -> RegisterPrimitive(PriDEL0);
+/*-*/
+/*-*/        SetSensitiveDetector(calNameForARM1[i], SDforDE);
+/*-*/   }
+/*-*/}
+/*-*/// Set sensitive detectors for holders
+/*-*/if(SDforHolder==true)
+/*-*/{
+/*-*/   for(G4int i=2; i<6; i++)
+/*-*/   {
+/*-*/        // Sensitive detector for deposit energy
+/*-*/        G4cout << "detector:" << calNameForARM1[i] << G4endl;
+/*-*/        G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForARM1[i]);
+/*-*/
+/*-*/        G4VPrimitiveScorer* PriDEL0;
+/*-*/
+/*-*/        PriDEL0 = new G4PSEnergyDeposit("DE",0);
+/*-*/        SDforDE -> RegisterPrimitive(PriDEL0);
+/*-*/
+/*-*/        SetSensitiveDetector(calNameForARM1[i], SDforDE);
+/*-*/   }
+/*-*/}
+/*-*/// Set sensitive detectors for frame
+/*-*/if(SDforFrame==true)
+/*-*/{
+/*-*/   for(G4int i=6; i<10; i++)
+/*-*/   {
+/*-*/        // Sensitive detector for deposit energy
+/*-*/        G4cout << "detector:" << calNameForARM1[i] << G4endl;
+/*-*/        G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForARM1[i]);
+/*-*/
+/*-*/        G4VPrimitiveScorer* PriDEL0;
+/*-*/
+/*-*/        PriDEL0 = new G4PSEnergyDeposit("DE",0);
+/*-*/        SDforDE -> RegisterPrimitive(PriDEL0);
+/*-*/
+/*-*/        SetSensitiveDetector(calNameForARM1[i], SDforDE);
+/*-*/   }
+/*-*/}
+/*-*/// Set sensitive detectors for GSO plate
+/*-*/if(SDforGSOPlate==true)
+/*-*/{
+/*-*/   for(G4int i=10; i<12; i++)
+/*-*/   {
+/*-*/            // Sensitive detector for deposit energy and number of optical photon generated
+/*-*/            G4cout << "detector:" << calNameForARM1[i] << G4endl;
+/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForARM1[i]);
+/*-*/
+/*-*/            G4VPrimitiveScorer* PriDEandNoP;
+/*-*/
+/*-*/            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+/*-*/            PriDEandNoP = new G4PSNofSecondary("NOP",0);
+/*-*/            PriDEandNoP -> SetFilter(OPFilter);
+/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+/*-*/
+/*-*/            SetSensitiveDetector(calNameForARM1[i], SDforDE);
+/*-*/   }
+/*-*/}
+/*-*/// Set sensitive detectors for light guide
+/*-*/if(SDforLightGuide==true)
+/*-*/{
+/*-*/   for(G4int i=12; i<14; i++)
+/*-*/   {
+/*-*/            // Sensitive detector for deposit energy and number of optical photon generated
+/*-*/            G4cout << "detector:" << calNameForARM1[i] << G4endl;
+/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForARM1[i]);
+/*-*/
+/*-*/            G4VPrimitiveScorer* PriDEandNoP;
+/*-*/
+/*-*/            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+/*-*/            PriDEandNoP = new G4PSNofSecondary("NOP",0);
+/*-*/            PriDEandNoP -> SetFilter(OPFilter);
+/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+/*-*/
+/*-*/            SetSensitiveDetector(calNameForARM1[i], SDforDE);
+/*-*/   }
+/*-*/}
+/*-*/// Set sensitive detectors for GSO bar
+/*-*/if(SDforGSOBar==true)
+/*-*/{
+/*-*/   for(G4int i=14; i<18; i++)
+/*-*/   {
+/*-*/            // Sensitive detector for deposit energy and number of optical photon generated
+/*-*/            G4cout << "detector:" << calNameForARM1[i] << G4endl;
+/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForARM1[i]);
+/*-*/
+/*-*/            G4VPrimitiveScorer* PriDEandNoP;
+/*-*/
+/*-*/            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+/*-*/            PriDEandNoP = new G4PSNofSecondary("NOP",0);
+/*-*/            PriDEandNoP -> SetFilter(OPFilter);
+/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+/*-*/
+/*-*/            SetSensitiveDetector(calNameForARM1[i], SDforDE);
+/*-*/   }
+/*-*/}
 
-        }
 
-        if(i==3)
-        {
-            if(SDforI_PL==true)
-            {
-                // Sensitive detector for deposit energy
-                G4cout << "detector:" << calName[i] << G4endl;
-                G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
-
-                G4VPrimitiveScorer* PriDEL0;
-
-                PriDEL0 = new G4PSEnergyDeposit("DE",0);
-                SDforDE -> RegisterPrimitive(PriDEL0);
-
-                SetSensitiveDetector(calName[i], SDforDE);
-
-            }
-
-        }
-
-        if(i<7 && i>3)
-        {
-
-                // Sensitive detector for deposit energy and number of optical photon generated
-                G4cout << "detector:" << calName[i] << G4endl;
-                G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
-
-                G4VPrimitiveScorer* PriDEandNoP;
-
-                PriDEandNoP = new G4PSEnergyDeposit("DE",0);
-                SDforDE -> RegisterPrimitive(PriDEandNoP);
-                PriDEandNoP = new G4PSNofSecondary("NOP",0);
-                PriDEandNoP -> SetFilter(OPFilter);
-                SDforDE -> RegisterPrimitive(PriDEandNoP);
-
-                SetSensitiveDetector(calName[i], SDforDE);
-        }
-
-
-        if(i>6)
-        {
-
-                // Sensitive detector for deposit energy and number of optical photon generated
-                G4cout << "detector:" << calName[i] << G4endl;
-                G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
-
-                G4VPrimitiveScorer* PriDEandNoP;
-
-                PriDEandNoP = new G4PSEnergyDeposit("DE",0);
-                SDforDE -> RegisterPrimitive(PriDEandNoP);
-                PriDEandNoP = new G4PSNofSecondary("NOP",0);
-                PriDEandNoP -> SetFilter(OPFilter);
-                SDforDE -> RegisterPrimitive(PriDEandNoP);
-
-                SetSensitiveDetector(calName[i], SDforDE);
-        }
         //Junsang****}else
         //Junsang****{
     //Junsang****
@@ -465,8 +588,8 @@ void RHICFDetectorConstruction::ConstructSDandField()
             //Junsang****{
 //Junsang****
                 //Junsang****// Sensitive detector for deposit energy and number of optical photon generated
-                //Junsang****G4cout << "detector:" << calName[i] << G4endl;
-                //Junsang****G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calName[i]);
+                //Junsang****G4cout << "detector:" << calNameForZDC[i] << G4endl;
+                //Junsang****G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
 //Junsang****
                 //Junsang****G4VPrimitiveScorer* PriDEandNoP;
 //Junsang****
@@ -476,17 +599,10 @@ void RHICFDetectorConstruction::ConstructSDandField()
                 //Junsang****PriDEandNoP -> SetFilter(OPFilter);
                 //Junsang****SDforDE -> RegisterPrimitive(PriDEandNoP);
 //Junsang****
-                //Junsang****SetSensitiveDetector(calName[i], SDforDE);
+                //Junsang****SetSensitiveDetector(calNameForZDC[i], SDforDE);
             //Junsang****}
 //Junsang****
         //Junsang****}
-
-
-    }
-
-
-
-
 
 
 
@@ -2473,10 +2589,10 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
 /*-*/fGSOLeftLargeBarBelt_3Logical                    = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_3Logical");
 /*-*/fGSOLeftLargeBarBelt_4Logical                    = new G4LogicalVolume(fGSOLargeBarBeltSolid, FindMaterial("G4_AIR"), "GSOLeftBarBelt_4Logical");
 /*-*/// Define logical volumes for GSO bar
-/*-*/fGSORightSmallBarLogical                           = new G4LogicalVolume(fGSOSmallBarSolid, FindMaterial("GSO"), "GSORightBarLogical");
-/*-*/fGSOLeftSmallBarLogical                            = new G4LogicalVolume(fGSOSmallBarSolid, FindMaterial("GSO"), "GSOLeftBarLogical");
-/*-*/fGSORightLargeBarLogical                           = new G4LogicalVolume(fGSOLargeBarSolid, FindMaterial("GSO"), "GSORightBarLogical");
-/*-*/fGSOLeftLargeBarLogical                            = new G4LogicalVolume(fGSOLargeBarSolid, FindMaterial("GSO"), "GSOLeftBarLogical");
+/*-*/fGSORightSmallBarLogical                           = new G4LogicalVolume(fGSOSmallBarSolid, FindMaterial("GSO"), "GSORightSmallBarLogical");
+/*-*/fGSOLeftSmallBarLogical                            = new G4LogicalVolume(fGSOSmallBarSolid, FindMaterial("GSO"), "GSOLeftSmallBarLogical");
+/*-*/fGSORightLargeBarLogical                           = new G4LogicalVolume(fGSOLargeBarSolid, FindMaterial("GSO"), "GSORightLargeBarLogical");
+/*-*/fGSOLeftLargeBarLogical                            = new G4LogicalVolume(fGSOLargeBarSolid, FindMaterial("GSO"), "GSOLeftLargeBarLogical");
 
 // Put panels into ARM1
 new G4PVPlacement(fNonRotation, G4ThreeVector( 0*mm, ((-(30.1*sqrt(2)+5)-40.43+10.05*sqrt(2)-9.75-8)+235/2)*mm, 139.51*mm), fFrontPanelLogical, "FrontPanelPhysical", fARM1Logical, false, 0, checkOverlaps);
@@ -2647,52 +2763,52 @@ new G4PVPlacement(fNonRotation, G4ThreeVector( -44.51*mm, ((-(30.1*sqrt(2)+5)-40
 /*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-192.95+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 14, checkOverlaps);
 /*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-210.35+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 15, checkOverlaps);
 
-/*-*/// Put tungsten plates
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-0+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-10.30+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-20.60+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-34.70+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-45.00+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-59.10+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-69.40+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 4, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-79.70+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 5, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-90.00+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 6, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-100.30+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 7, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-110.60+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 8, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-120.90+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 9, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-128.00+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 10, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-138.30+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 11, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-145.40+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-159.50+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 12, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-166.60+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 13, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-176.90+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 14, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-184.00+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-198.10+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 15, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-205.20+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 16, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-215.50+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 17, checkOverlaps);
-/*-*///// Put small tungsten plate into arm1
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-0+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-10.30+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-20.60+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-34.70+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-45.00+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-59.10+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-69.40+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 4, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-79.70+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 5, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-90.00+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 6, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-100.30+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 7, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-110.60+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 8, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-120.90+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 9, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-128.00+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 10, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-138.30+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 11, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-145.40+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-159.50+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 12, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-166.60+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 13, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-176.90+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 14, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-184.00+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-198.10+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 15, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-205.20+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 16, checkOverlaps);
-/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-215.50+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 17, checkOverlaps);
+//Junsang****/*-*/// Put tungsten plates
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-0+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-10.30+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-20.60+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-34.70+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-45.00+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-59.10+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-69.40+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 4, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-79.70+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 5, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-90.00+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 6, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-100.30+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 7, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-110.60+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 8, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-120.90+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 9, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-128.00+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 10, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-138.30+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 11, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-145.40+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-159.50+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 12, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-166.60+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 13, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-176.90+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 14, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-184.00+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-198.10+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 15, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-205.20+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 16, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-215.50+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 17, checkOverlaps);
+//Junsang****/*-*///// Put small tungsten plate into arm1
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-0+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-10.30+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-20.60+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-34.70+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-45.00+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-59.10+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-69.40+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 4, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-79.70+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 5, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-90.00+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 6, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-100.30+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 7, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-110.60+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 8, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-120.90+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 9, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-128.00+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 10, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-138.30+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 11, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-145.40+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-159.50+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 12, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-166.60+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 13, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-176.90+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 14, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-184.00+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 3, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-198.10+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 15, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-205.20+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 16, checkOverlaps);
+//Junsang****/*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-215.50+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 17, checkOverlaps);
 
 
 /*-*/// Put GSO plate into arm1
@@ -2791,12 +2907,12 @@ new G4PVPlacement(fNonRotation, G4ThreeVector( -44.51*mm, ((-(30.1*sqrt(2)+5)-40
 
 
 /*-*/// Define Logical volume for Al frame
-/*-*/fAlFrame1Logical      =   new G4LogicalVolume(fAlFrame1Solid, FindMaterial("G4_Al"), "AlFrameLogical");// Top part
-/*-*/fAlFrame2Logical      =   new G4LogicalVolume(fAlFrame2Solid, FindMaterial("G4_Al"), "AlFrameLogical");// Bottom part
+/*-*/fAlFrame1Logical      =   new G4LogicalVolume(fAlFrame1Solid, FindMaterial("G4_Al"), "AlFrame1Logical");// Top part
+/*-*/fAlFrame2Logical      =   new G4LogicalVolume(fAlFrame2Solid, FindMaterial("G4_Al"), "AlFrame2Logical");// Bottom part
 
 /*-*/// Put Al frame into arm1
-//Junsang****/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(), fAlFrame1Logical, "AlFrame1Physical", fARM1Logical, false, 0, checkOverlaps);// Top part
-//Junsang****/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(), fAlFrame2Logical, "AlFrame2Physical", fARM1Logical, false, 0, checkOverlaps);// Bottom part
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(), fAlFrame1Logical, "AlFrame1Physical", fARM1Logical, false, 0, checkOverlaps);// Top part
+/*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(), fAlFrame2Logical, "AlFrame2Physical", fARM1Logical, false, 0, checkOverlaps);// Bottom part
 
 
 /*-*/// Setting for color

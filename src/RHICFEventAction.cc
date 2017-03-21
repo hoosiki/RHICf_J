@@ -130,27 +130,27 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 
 
 
-//#ofMapW_1,2,3 [1-27]
-G4THitsMap<G4double>* fEvMapForW_1;
-G4THitsMap<G4double>* fEvMapForW_2;
-G4THitsMap<G4double>* fEvMapForW_3;
-//#ofMapSMDH [1-8]
-G4THitsMap<G4double>* fEvMapForSMDH;  
-//#ofMapSMDV [1-7]
-G4THitsMap<G4double>* fEvMapForSMDV ; 
-//#ofMapSMDH,V [1-8],[1-7] for Number
-G4THitsMap<G4double>* fNOPMapForSMDH; 
-G4THitsMap<G4double>* fNOPMapForSMDV;
-//#ofMapI_PL [0]
-G4THitsMap<G4double>* fEvMapForI_PL;
-//#ofMapGAP_1,2,3 [1-26]
-G4THitsMap<G4double>* fEvMapForGAP_1; 
-G4THitsMap<G4double>* fEvMapForGAP_2;
-G4THitsMap<G4double>* fEvMapForGAP_3;
-//#ofMapGAP_1,2,3 [1-26] for Number o
-G4THitsMap<G4double>* fNOPMapForGAP_1;
-G4THitsMap<G4double>* fNOPMapForGAP_2;
-G4THitsMap<G4double>* fNOPMapForGAP_3;
+    //#ofMapW_1,2,3 [1-27]
+    G4THitsMap<G4double>* fEvMapForW_1;
+    G4THitsMap<G4double>* fEvMapForW_2;
+    G4THitsMap<G4double>* fEvMapForW_3;
+    //#ofMapSMDH [1-8]
+    G4THitsMap<G4double>* fEvMapForSMDH;  
+    //#ofMapSMDV [1-7]
+    G4THitsMap<G4double>* fEvMapForSMDV; 
+    //#ofMapSMDH,V [1-8],[1-7] for Number
+    G4THitsMap<G4double>* fNOPMapForSMDH; 
+    G4THitsMap<G4double>* fNOPMapForSMDV;
+    //#ofMapI_PL [0]
+    G4THitsMap<G4double>* fEvMapForI_PL;
+    //#ofMapGAP_1,2,3 [1-26]
+    G4THitsMap<G4double>* fEvMapForGAP_1; 
+    G4THitsMap<G4double>* fEvMapForGAP_2;
+    G4THitsMap<G4double>* fEvMapForGAP_3;
+    //#ofMapGAP_1,2,3 [1-26] for Number o
+    G4THitsMap<G4double>* fNOPMapForGAP_1;
+    G4THitsMap<G4double>* fNOPMapForGAP_2;
+    G4THitsMap<G4double>* fNOPMapForGAP_3;
 
 
     if(fConstruction->GetSDforWInZDC())
@@ -168,6 +168,7 @@ G4THitsMap<G4double>* fNOPMapForGAP_3;
         //#ofMapSMDV [1-7]
         fEvMapForSMDV         = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbSMDV));
         //#ofMapSMDH,V [1-8],[1-7] for Number of Photon
+        fNOPMapForSMDH         = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbNOPSMDH));
         fNOPMapForSMDV         = (G4THitsMap<G4double>*)(fHCE -> GetHC(NbNOPSMDV));
 
     }

@@ -194,10 +194,10 @@ void RHICFRunAction::BeginOfRunAction(const G4Run* run)
     G4cout << "SDforPMMA    : " << fConstruction->GetSDforPMMA() << G4endl;
     G4cout << "SDforSMD     : " << fConstruction->GetSDforSMD() << G4endl;
     G4cout << "SDforWInARM1 : " << fConstruction->GetSDforWInARM1() << G4endl;
-    G4cout << "SDforWHolder : " << fConstruction->GetSDforWHolder() << G4endl;
+    G4cout << "SDforWHolder : " << fConstruction->GetSDforHolder() << G4endl;
     G4cout << "SDforGSOBar  : " << fConstruction->GetSDforGSOBar() << G4endl;
     G4cout << "SDforGSOPlate: " << fConstruction->GetSDforGSOPlate() << G4endl;
-    G4cout << "SDforAlFrame : " << fConstruction->GetSDforAlFrame() << G4endl;
+    G4cout << "SDforAlFrame : " << fConstruction->GetSDforFrame() << G4endl;
     G4cout << "SDforPanels  : " << fConstruction->GetSDforPanels() << G4endl;
 
 

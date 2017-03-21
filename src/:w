@@ -32,10 +32,10 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4bool GetSDforPMMA(){ return SDforPMMA; };
         G4bool GetSDforSMD(){ return SDforSMD; };    
         G4bool GetSDforWInARM1(){ return SDforWInARM1; };
-        G4bool GetSDforHolder(){ return SDforHolder; };
+        G4bool GetSDforWHolder(){ return SDforWHolder; };
         G4bool GetSDforGSOBar(){ return SDforGSOBar; };
         G4bool GetSDforGSOPlate(){ return SDforGSOPlate; };
-        G4bool GetSDforFrame(){ return SDforFrame; };
+        G4bool GetSDforAlFrame(){ return SDforAlFrame; };
         G4bool GetSDforPanels(){ return SDforPanels; };
 
 
@@ -364,12 +364,12 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4bool                      SDforI_PL;
         G4bool                      SDforPMMA;    
         G4bool                      SDforSMD;     
-        G4bool                      SDforWInARM1; 
-        G4bool                      SDforHolder; 
+        G4bool                      SDforLargeWInARM1; 
+        G4bool                      SDforSmallWInARM1; 
+        G4bool                      SDforWHolder; 
         G4bool                      SDforGSOBar;  
         G4bool                      SDforGSOPlate;
-        G4bool                      SDforLightGuide;
-        G4bool                      SDforFrame;
+        G4bool                      SDforAlFrame;
         G4bool                      SDforPanels;
 
         G4double                    Nlay,Nmod;

@@ -27,6 +27,7 @@ private:
 
     B5PrimaryGeneratorAction* fB5Primary;
 
+    // Number for Sensitive detector
     G4int NbW_1;
     G4int NbW_2;
     G4int NbW_3;
@@ -41,6 +42,23 @@ private:
     G4int NbNOPGAP_3;
     G4int NbNOPSMDH;
     G4int NbNOPSMDV;
+    G4int NbWHolder;
+    G4int NbLargeW_PL;
+    G4int NbSmallW_PL;
+    G4int NbGSO_PLHolder;
+    G4int NbLargeGSO_PL;
+    G4int NbSmallGSO_PL;
+    G4int NbLargeLightGuide;
+    G4int NbSmallLightGuide;
+    G4int NbGSOBarHolder;
+    G4int NbGSOSmallRightBar;
+    G4int NbGSOLargeRightBar;
+    G4int NbGSOSmallLeftBar;
+    G4int NbGSOLargeLeftBar;
+    G4int AlFrame;
+    
+    
+
 
 
 
