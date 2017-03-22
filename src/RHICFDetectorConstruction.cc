@@ -348,11 +348,11 @@ void RHICFDetectorConstruction::DefineDimension()
 /*-*/kARM1par[0] = 4.5;
 /*-*/kARM1par[1] = 12.65;
 /*-*/kARM1par[2] = 14;
-/*-*/kNegativeLargeWpar[0] = 4.011/2;
-/*-*/kNegativeLargeWpar[1] = 4.011/2;
+/*-*/kNegativeLargeWpar[0] = 4.012/2;
+/*-*/kNegativeLargeWpar[1] = 4.012/2;
 /*-*/kNegativeLargeWpar[2] = 7.2/2;
-/*-*/kNegativeSmallWpar[0] = 2.011/2;
-/*-*/kNegativeSmallWpar[1] = 2.011/2;
+/*-*/kNegativeSmallWpar[0] = 2.012/2;
+/*-*/kNegativeSmallWpar[1] = 2.012/2;
 /*-*/kNegativeSmallWpar[2] = 7.2/2;
 
     basez = 116.75;
