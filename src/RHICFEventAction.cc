@@ -28,8 +28,13 @@ using namespace std;
 
 
 
+
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////
-RHICFEventAction::RHICFEventAction(B5PrimaryGeneratorAction* B5G): G4UserEventAction(), NbW_1(-1), NbW_2(-1), NbW_3(-1), NbSMDH(-1), NbSMDV(-1), NbI_PL(-1), NbNOPSMDH(-1), NbNOPSMDV(-1), fB5Primary(B5G)
+RHICFEventAction::RHICFEventAction(B5PrimaryGeneratorAction* B5G): G4UserEventAction(), NbW_1(-1), NbW_2(-1), NbW_3(-1), NbSMDH(-1), NbSMDV(-1), NbI_PL(-1), NbNOPSMDH(-1), NbNOPSMDV(-1), NbLargeW_PL(-1), NbSmallW_PL(-1), NbW_1Holder(-1), NbW_2Holder(-1), NbLargeGSO_PL(-1), NbSmallGSO_PL(-1), NbLargeLightGuide(-1), NbSmallLightGuide(-1), NbGSO_PLHolder(-1), NbGSOBarHolder(-1), NbGSOSmallRightBar(-1), NbGSOLargeRightBar(-1), NbGSOSmallLeftBar(-1), NbGSOLargeLeftBar(-1), NbAlFrame(-1), NbSidePanels(-1), NbFrontPanels(-1), fB5Primary(B5G)
 ///////////////////////////////////////////////////////////////////////////////
 {
 
@@ -50,13 +55,10 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
 {
 
 
-    //Junsang****RHICFDetectorConstruction* fConstruction = new RHICFDetectorConstruction();
-//Junsang****
-    //Junsang****G4cout << "SDforWInZDC: " << fConstruction->GetSDforWInZDC() << G4endl;
-    RHICFDetectorConstruction* fConstruction = new RHICFDetectorConstruction();
+    RHICFDetectorConstruction* fConstruction = new RHICFDetectorConstruction();// Detector construction for get information about SD
 
 
-
+    // Get SD number for each sensitive detector
     if(NbSMDH == -1)
     {
 
@@ -91,11 +93,46 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
             NbI_PL         = fSDManager -> GetCollectionID("I_PLLogical/DE");
 
         }
+        if(fConstruction->GetSDforWInARM1())
+        {
+            NbLargeW_PL     = fSDManager -> GetCollectionID("LargeW_PLLogical/DE");
+            NbSmallW_PL     = fSDManager -> GetCollectionID("SmallW_PLLogical/DE");
+        }
+        if(fConstruction->GetSDforHolder())
+        {
+            NbW_1Holder     = fSDManager -> GetCollectionID("WHolder_1Logical/DE");
+            NbW_2Holder     = fSDManager -> GetCollectionID("WHolder_2Logical/DE");
+            NbGSO_PLHolder  = fSDManager -> GetCollectionID("GSO_PLHolderLogical/DE");
+            NbGSOBarHolder  = fSDManager -> GetCollectionID("GSOBarHolderLogical/DE");
+        }
+        if(fConstruction->GetSDforFrame())
+        {
+            //Junsang****NbAlFrame
+
+        }
     }
 
 
 }     
 
+/*-*/G4String calNameForARM1[18] = {"LargeW_PLLogical", "SmallW_PLLogical", "WHolder_1Logical", "WHolder_2Logical", "GSO_PLHolderLogical", "GSOBarHolderLogical", "AlFrame1Logical", "AlFrame2Logical", "SidePanelLogical", "FrontPanelLogical", "LargeGSO_PLLogical", "SmallGSO_PLLogical", "LightGuideLargeLogical", "LightGuideSmallLogical", "GSORightSmallBarLogical", "GSOLeftSmallBarLogical", "GSORightLargeBarLogical", "GSOLeftLargeBarLogical"};
+    G4int NbLargeW_PL;
+    G4int NbSmallW_PL;
+    G4int NbW_1Holder;
+    G4int NbW_2Holder;
+    G4int NbLargeGSO_PL;
+    G4int NbSmallGSO_PL;
+    G4int NbLargeLightGuide;
+    G4int NbSmallLightGuide;
+    G4int NbGSO_PLHolder;
+    G4int NbGSOBarHolder;
+    G4int NbGSOSmallRightBar;
+    G4int NbGSOLargeRightBar;
+    G4int NbGSOSmallLeftBar;
+    G4int NbGSOLargeLeftBar;
+    G4int AlFrame;
+    G4int SidePanels;
+    G4int FrontPanels;
 
 ///////////////////////////////////////////////////////////////////////////////
 void RHICFEventAction::EndOfEventAction(const G4Event* event)
@@ -500,4 +537,3 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     fAnalysisManager -> AddNtupleRow();
 
 }
-

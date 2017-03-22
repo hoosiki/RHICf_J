@@ -42,20 +42,23 @@ private:
     G4int NbNOPGAP_3;
     G4int NbNOPSMDH;
     G4int NbNOPSMDV;
-    G4int NbWHolder;
     G4int NbLargeW_PL;
     G4int NbSmallW_PL;
-    G4int NbGSO_PLHolder;
+    G4int NbW_1Holder;
+    G4int NbW_2Holder;
     G4int NbLargeGSO_PL;
     G4int NbSmallGSO_PL;
     G4int NbLargeLightGuide;
     G4int NbSmallLightGuide;
+    G4int NbGSO_PLHolder;
     G4int NbGSOBarHolder;
     G4int NbGSOSmallRightBar;
     G4int NbGSOLargeRightBar;
     G4int NbGSOSmallLeftBar;
     G4int NbGSOLargeLeftBar;
-    G4int AlFrame;
+    G4int NbAlFrame;
+    G4int NbSidePanels;
+    G4int NbFrontPanels;
     
     
 
