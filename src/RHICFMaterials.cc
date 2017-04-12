@@ -178,8 +178,8 @@ void RHICFMaterials::CreateMaterials()
   // Duralumin
   //--------------------------------------------------
 
-  elements.push_back("Al");      natoms.push_back(0.95);
-  elements.push_back("Cu");      natoms.push_back(0.05);
+  elements.push_back("Al");      natoms.push_back(19);
+  elements.push_back("Cu");      natoms.push_back(1);
 
   density = 2.7*g/cm3;
 
