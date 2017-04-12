@@ -115,24 +115,6 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
 
 }     
 
-/*-*/G4String calNameForARM1[18] = {"LargeW_PLLogical", "SmallW_PLLogical", "WHolder_1Logical", "WHolder_2Logical", "GSO_PLHolderLogical", "GSOBarHolderLogical", "AlFrame1Logical", "AlFrame2Logical", "SidePanelLogical", "FrontPanelLogical", "LargeGSO_PLLogical", "SmallGSO_PLLogical", "LightGuideLargeLogical", "LightGuideSmallLogical", "GSORightSmallBarLogical", "GSOLeftSmallBarLogical", "GSORightLargeBarLogical", "GSOLeftLargeBarLogical"};
-    G4int NbLargeW_PL;
-    G4int NbSmallW_PL;
-    G4int NbW_1Holder;
-    G4int NbW_2Holder;
-    G4int NbLargeGSO_PL;
-    G4int NbSmallGSO_PL;
-    G4int NbLargeLightGuide;
-    G4int NbSmallLightGuide;
-    G4int NbGSO_PLHolder;
-    G4int NbGSOBarHolder;
-    G4int NbGSOSmallRightBar;
-    G4int NbGSOLargeRightBar;
-    G4int NbGSOSmallLeftBar;
-    G4int NbGSOLargeLeftBar;
-    G4int AlFrame;
-    G4int SidePanels;
-    G4int FrontPanels;
 
 ///////////////////////////////////////////////////////////////////////////////
 void RHICFEventAction::EndOfEventAction(const G4Event* event)
@@ -453,14 +435,14 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     TDE_ZDC = TDE_W_1+ TDE_W_2+ TDE_W_3+ TDE_SMDH+ TDE_SMDV+ TDE_I_PL+ TDE_GAP_1+ TDE_GAP_2+ TDE_GAP_3;
     TNOP_ZDC = TNOP_GAP_1 + TNOP_GAP_2 + TNOP_GAP_3;
 
-    //Junsang****fAnalysisManager -> FillNtupleDColumn(343, (G4double)TDE_ZDC/GeV);
-    //Junsang****fAnalysisManager -> FillNtupleIColumn(344, (G4int)TNOP_ZDC);
-    //Junsang****fAnalysisManager -> FillNtupleDColumn(345, (G4double)TDE_I_PL/GeV);
-    //Junsang****fAnalysisManager -> FillNtupleDColumn(346, (G4double)TDE_W/GeV);
-    //Junsang****fAnalysisManager -> FillNtupleDColumn(347, (G4double)TDE_SMDH/MeV);
-    //Junsang****fAnalysisManager -> FillNtupleIColumn(348, (G4int)TNOP_SMDH);
-    //Junsang****fAnalysisManager -> FillNtupleDColumn(349, (G4double)TDE_SMDV/MeV);
-    //Junsang****fAnalysisManager -> FillNtupleIColumn(350, (G4int)TNOP_SMDV);
+    fAnalysisManager -> FillNtupleDColumn(343, (G4double)TDE_ZDC/GeV);
+    fAnalysisManager -> FillNtupleIColumn(344, (G4int)TNOP_ZDC);
+    fAnalysisManager -> FillNtupleDColumn(345, (G4double)TDE_I_PL/GeV);
+    fAnalysisManager -> FillNtupleDColumn(346, (G4double)TDE_W/GeV);
+    fAnalysisManager -> FillNtupleDColumn(347, (G4double)TDE_SMDH/MeV);
+    fAnalysisManager -> FillNtupleIColumn(348, (G4int)TNOP_SMDH);
+    fAnalysisManager -> FillNtupleDColumn(349, (G4double)TDE_SMDV/MeV);
+    fAnalysisManager -> FillNtupleIColumn(350, (G4int)TNOP_SMDV);
 
 
     //Junsang****G4cout << "TDE_ZDC: " << TDE_ZDC/GeV << "GeV" << G4endl;
