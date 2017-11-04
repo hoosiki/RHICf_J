@@ -11,7 +11,7 @@
 #endif
 #include "G4UImanager.hh"
 #include "G4ParallelWorldPhysics.hh"
-#include "G4UICommand.hh"
+//Junsang****#include "G4UICommand.hh"
 #include "QGSP_BERT.hh"
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
