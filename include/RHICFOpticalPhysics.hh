@@ -52,7 +52,7 @@ class RHICFOpticalPhysics : public G4VPhysicsConstructor
 {
   public:
 
-    RHICFOpticalPhysics(G4bool toggle=true);
+    RHICFOpticalPhysics(G4bool toggle=false);
     virtual ~RHICFOpticalPhysics();
 
     virtual void ConstructParticle();

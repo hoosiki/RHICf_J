@@ -27,21 +27,43 @@ private:
 
     B5PrimaryGeneratorAction* fB5Primary;
 
-    G4int fPMT_1NP;
-    G4int fPMT_2NP;
-    G4int fPMT_3NP;
-    G4int fPMT_1DE;
-    G4int fPMT_2DE;
-    G4int fPMT_3DE;
-    G4int fW_1;
-    G4int fW_2;
-    G4int fW_3;
-    G4int fSMDH;
-    G4int fSMDV;
-    G4int fSMDHN;
-    G4int fSMDVN;
-    G4int fI_PL;
-    G4int fFIBRID;
+    // Number for Sensitive detector
+    G4int NbW_1;
+    G4int NbW_2;
+    G4int NbW_3;
+    G4int NbSMDH;
+    G4int NbSMDV;
+    G4int NbI_PL;
+    G4int NbGAP_1;
+    G4int NbGAP_2;
+    G4int NbGAP_3;
+    G4int NbNOPGAP_1;
+    G4int NbNOPGAP_2;
+    G4int NbNOPGAP_3;
+    G4int NbNOPSMDH;
+    G4int NbNOPSMDV;
+    G4int NbLargeW_PL;
+    G4int NbSmallW_PL;
+    G4int NbW_1Holder;
+    G4int NbW_2Holder;
+    G4int NbLargeGSO_PL;
+    G4int NbSmallGSO_PL;
+    G4int NbLargeLightGuide;
+    G4int NbSmallLightGuide;
+    G4int NbGSO_PLHolder;
+    G4int NbGSOBarHolder;
+    G4int NbGSOSmallRightBar;
+    G4int NbGSOLargeRightBar;
+    G4int NbGSOSmallLeftBar;
+    G4int NbGSOLargeLeftBar;
+    G4int NbAlFrame;
+    G4int NbSidePanels;
+    G4int NbFrontPanels;
+    
+    
+
+
+
 
     G4int fPrintModulo;
 };

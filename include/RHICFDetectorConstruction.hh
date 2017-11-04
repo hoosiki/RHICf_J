@@ -27,6 +27,17 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         RHICFDetectorConstruction();
         virtual ~RHICFDetectorConstruction();
         virtual G4VPhysicalVolume* Construct();
+        G4bool GetSDforWInZDC(){ return SDforWInZDC; };
+        G4bool GetSDforI_PL(){ return SDforI_PL; };
+        G4bool GetSDforPMMA(){ return SDforPMMA; };
+        G4bool GetSDforSMD(){ return SDforSMD; };    
+        G4bool GetSDforWInARM1(){ return SDforWInARM1; };
+        G4bool GetSDforHolder(){ return SDforHolder; };
+        G4bool GetSDforGSOBar(){ return SDforGSOBar; };
+        G4bool GetSDforGSOPlate(){ return SDforGSOPlate; };
+        G4bool GetSDforFrame(){ return SDforFrame; };
+        G4bool GetSDforPanels(){ return SDforPanels; };
+
 
         virtual void ConstructSDandField();
 
@@ -42,10 +53,11 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VisAttributes*            visAttributes;
                                     
         G4VPhysicalVolume*          HODOSCOPE(G4VPhysicalVolume*, G4RotationMatrix*);
-        G4VPhysicalVolume*          WCNT(G4VPhysicalVolume*, G4ThreeVector,  G4RotationMatrix*);
+        G4VPhysicalVolume*          LOCALPOL(G4VPhysicalVolume*, G4ThreeVector,  G4RotationMatrix*);
         G4VPhysicalVolume*          BBC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
         G4VPhysicalVolume*          PIPE();
-        G4VPhysicalVolume*          ARM2(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
+        G4VPhysicalVolume*          ARM1(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
+        G4VPhysicalVolume*          STARZDC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
                                     
         static G4ThreadLocal        MagneticField* fMagneticField;
         static G4ThreadLocal        G4FieldManager* fFieldMgr;
@@ -55,36 +67,73 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VSolid*                   fWorldSolid;
         G4VSolid*                   fHODOSolid;
         G4VSolid*                   fSCINSolid;
-        G4VSolid*                   fWCNTSolid;
+        G4VSolid*                   fLOCALPOLSolid;
         G4VSolid*                   fZDCSolid;
+        G4VSolid*                   fSTARZDCSolid;
         G4VSolid*                   fGAPFSolid;
         G4VSolid*                   fGAPF1Solid;
         G4VSolid*                   fGAPF2Solid;
         G4VSolid*                   fFIBSolid;
         G4VSolid*                   fFIBRSolid;
-        G4VSolid*                   fPMTSolid;
-        G4VSolid*                   fPPMTSolid;
         G4VSolid*                   fBlockerSolid;
         G4VSolid*                   fW_PLSolid;
         G4VSolid*                   fI_PLSolid;
         G4VSolid*                   fFEPLSolid;
         G4VSolid*                   fALPLSolid;
-        G4VSolid*                   fRCSCSolid;
-        G4VSolid*                   fFCSCSolid;
         G4VSolid*                   fSMDSolid;
         G4VSolid*                   fSMDHSolid;
         G4VSolid*                   fSMDVSolid;
-        G4VSolid*                   fSMDHPMTSolid;
-        G4VSolid*                   fSMDVPMTSolid;
-        G4VSolid*                   fSMDHPMTCoreSolid;
-        G4VSolid*                   fSMDVPMTCoreSolid;
-        G4LogicalVolume*            fSMDHPMTLogical;
-        G4LogicalVolume*            fSMDVPMTLogical;
-        G4LogicalVolume*            fSMDHPMTCoreLogical;
-        G4LogicalVolume*            fSMDVPMTCoreLogical;
-        G4LogicalVolume*            fSMDLogical;
+        G4VSolid*                   fSMDVStripSolid;
+        G4VSolid*                   fSMDHStripSolid;
+        G4VSolid*                   fARM1Solid;//SolidVolumes for ARM1
+        G4VSolid*                   fWHolder_1Solid;
+        G4VSolid*                   fWHolder_2Solid;
+        G4VSolid*                   fNegativeSmallWSolid;
+        G4VSolid*                   fNegativeLargeWSolid;
+        G4VSolid*                   fNegativeTopRoundSolid;
+        G4VSolid*                   fNegativeMiddleRoundSolid;
+        G4VSolid*                   fNegativeBottomRoundSolid;
+        G4VSolid*                   fNegativeHoleSolid;
+        G4VSolid*                   fLargeW_PLSolid;
+        G4VSolid*                   fSmallW_PLSolid;
+        G4VSolid*                   fGSO_PLHolderSolid;     
+        G4VSolid*                   fNegativeGuideLargeSolid;
+        G4VSolid*                   fNegativeGuideSmallSolid;
+        G4VSolid*                   fLargeGSO_PLSolid;
+        G4VSolid*                   fSmallGSO_PLSolid;
+        G4VSolid*                   fGSOBarHolderSolid;
+        G4VSolid*                   fNegativeGSOBarLargeRightSolid;
+        G4VSolid*                   fNegativeGSOBarLargeLeftSolid;
+        G4VSolid*                   fNegativeGSOBarSmallRightSolid;
+        G4VSolid*                   fNegativeGSOBarSmallLeftSolid;
+        G4VSolid*                   fLightGuideLargeSolid;
+        G4VSolid*                   fLightGuideSmallSolid;
+        G4VSolid*                   fGSOSmallBarSolid;
+        G4VSolid*                   fGSOLargeBarSolid;
+        G4VSolid*                   fGSOSmallBarBeltSolid;
+        G4VSolid*                   fGSOLargeBarBeltSolid;
+        G4VSolid*                   fAlFramePart1Solid;
+        G4VSolid*                   fAlFramePart2Solid;
+        G4VSolid*                   fAlFramePart3Solid;
+        G4VSolid*                   fAlFramePart5Solid;
+        G4VSolid*                   fAlFramePart6Solid;
+        G4VSolid*                   fAlFramePart7Solid;
+        G4VSolid*                   fAlFramePart8Solid;
+        G4VSolid*                   fAlFramePart9Solid;
+        G4VSolid*                   fAlFramePart10Solid;
+        G4VSolid*                   fAlFrameSolid;
+        G4VSolid*                   fAlFrame1Solid;
+        G4VSolid*                   fAlFrame2Solid;
+        G4VSolid*                   fSidePanelSolid;
+        G4VSolid*                   fFrontPanelSolid;
+
+
+
+
+        G4LogicalVolume*            fSMDLogical;//Logical volumes for ZDC
         G4LogicalVolume*            fZDCLogical;
-        G4LogicalVolume*            fWCNTLogical;
+        G4LogicalVolume*            fLOCALPOLLogical;
+        G4LogicalVolume*            fSTARZDCLogical;
         G4LogicalVolume*            fSCINLogical;
         G4LogicalVolume*            fWorldLogical;
         G4LogicalVolume*            fHODOLogical;
@@ -93,29 +142,21 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            fGAPF_3Logical;
         G4LogicalVolume*            fGAPF1Logical;
         G4LogicalVolume*            fGAPF2Logical;
-        G4LogicalVolume*            fRCSCLogical;
-        G4LogicalVolume*            fFCSCLogical;
+        // SMDV
         G4LogicalVolume*            fSMDVLogical;
-        G4LogicalVolume*            fFIBRLogical;
         G4LogicalVolume*            fMagneticLogical;
         G4LogicalVolume*            fW_PL_1Logical;
         G4LogicalVolume*            fW_PL_2Logical;
         G4LogicalVolume*            fW_PL_3Logical;
-        G4LogicalVolume*            fFIBLogical;
         G4LogicalVolume*            fBBCRLogical;
         G4LogicalVolume*            fBBCPLogical;
-        G4LogicalVolume*            fPMT_1Logical;
-        G4LogicalVolume*            fPMT_2Logical;
-        G4LogicalVolume*            fPMT_3Logical;
-        G4LogicalVolume*            fPPMT_1Logical;
-        G4LogicalVolume*            fPPMT_2Logical;
-        G4LogicalVolume*            fPPMT_3Logical;
         G4LogicalVolume*            fBlockerLogical;
         G4LogicalVolume*            fI_PLLogical;
         G4LogicalVolume*            fFEPLLogical;
         G4LogicalVolume*            fALPLLogical;
+        // SMDH
         G4LogicalVolume*            fSMDHLogical;
-        G4LogicalVolume*            RB14Logical;
+        G4LogicalVolume*            RB14Logical;//Logical volumes for pipe
         G4LogicalVolume*            FLS4Logical;
         G4LogicalVolume*            CM11Logical;
         G4LogicalVolume*            CM12Logical;
@@ -156,17 +197,48 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            SM81Logical;
         G4LogicalVolume*            SP82Logical;
         G4LogicalVolume*            SP81Logical;
+        G4LogicalVolume*            fARM1Logical;//Logical volumes for ARM1
+        G4LogicalVolume*            fWHolder_1Logical;
+        G4LogicalVolume*            fWHolder_2Logical;
+        G4LogicalVolume*            fNegativeLargeWLogical;
+        G4LogicalVolume*            fNegativeSmallWLogical;
+        G4LogicalVolume*            fLargeW_PLLogical;
+        G4LogicalVolume*            fSmallW_PLLogical;
+        G4LogicalVolume*            fLargeGSO_PLLogical;
+        G4LogicalVolume*            fSmallGSO_PLLogical;
+        G4LogicalVolume*            fGSORightSmallBarBelt_1Logical;
+        G4LogicalVolume*            fGSORightSmallBarBelt_2Logical;
+        G4LogicalVolume*            fGSORightSmallBarBelt_3Logical;
+        G4LogicalVolume*            fGSORightSmallBarBelt_4Logical;
+        G4LogicalVolume*            fGSORightLargeBarBelt_1Logical;
+        G4LogicalVolume*            fGSORightLargeBarBelt_2Logical;
+        G4LogicalVolume*            fGSORightLargeBarBelt_3Logical;
+        G4LogicalVolume*            fGSORightLargeBarBelt_4Logical;
+        G4LogicalVolume*            fGSOLeftSmallBarBelt_1Logical;
+        G4LogicalVolume*            fGSOLeftSmallBarBelt_2Logical;
+        G4LogicalVolume*            fGSOLeftSmallBarBelt_3Logical;
+        G4LogicalVolume*            fGSOLeftSmallBarBelt_4Logical;
+        G4LogicalVolume*            fGSOLeftLargeBarBelt_1Logical;
+        G4LogicalVolume*            fGSOLeftLargeBarBelt_2Logical;
+        G4LogicalVolume*            fGSOLeftLargeBarBelt_3Logical;
+        G4LogicalVolume*            fGSOLeftLargeBarBelt_4Logical;
+        G4LogicalVolume*            fGSORightSmallBarLogical;
+        G4LogicalVolume*            fGSOLeftSmallBarLogical;
+        G4LogicalVolume*            fGSORightLargeBarLogical;
+        G4LogicalVolume*            fGSOLeftLargeBarLogical;
+        G4LogicalVolume*            fGSOLeftSmallBarBeltLogical;
+        G4LogicalVolume*            fGSO_PLHolderLogical;
+        G4LogicalVolume*            fGSOBarHolderLogical;
+        G4LogicalVolume*            fLightGuideLargeLogical;
+        G4LogicalVolume*            fLightGuideSmallLogical;
+        G4LogicalVolume*            fAlFramePart1Logical;
+        G4LogicalVolume*            fAlFramePart2Logical;
+        G4LogicalVolume*            fAlFrame1Logical;
+        G4LogicalVolume*            fAlFrame2Logical;
+        G4LogicalVolume*            fSidePanelLogical;
+        G4LogicalVolume*            fFrontPanelLogical;
 
-        G4VPhysicalVolume*          fSMDHPMTPhysical;
-        G4VPhysicalVolume*          fSMDVPMTPhysical;
-        G4VPhysicalVolume*          fSMDHPMTCorePhysical;
-        G4VPhysicalVolume*          fSMDVPMTCorePhysical;
-        G4VPhysicalVolume*          fPMT_1Physical;
-        G4VPhysicalVolume*          fPMT_2Physical;
-        G4VPhysicalVolume*          fPMT_3Physical;
-        G4VPhysicalVolume*          fPPMT_1Physical;
-        G4VPhysicalVolume*          fPPMT_2Physical;
-        G4VPhysicalVolume*          fPPMT_3Physical;
+
         G4VPhysicalVolume*          fBlockerPhysical;
         G4VPhysicalVolume*          fFIBRPhysical;
         G4VPhysicalVolume*          fWorldPhysical;
@@ -182,13 +254,15 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          fW_PL_2Physical;
         G4VPhysicalVolume*          fW_PL_3Physical;
         G4VPhysicalVolume*          fFIBPhysical;
-        G4VPhysicalVolume*          fWCNTPhysical;
+        G4VPhysicalVolume*          fLOCALPOLPhysical;
+        G4VPhysicalVolume*          fSTARZDCPhysical;
         G4VPhysicalVolume*          fBBCMPhysical;
         G4VPhysicalVolume*          HODOINSTALL;
         G4VPhysicalVolume*          LOCALPOLINSTALL;
+        G4VPhysicalVolume*          STARZDCINSTALL;
         G4VPhysicalVolume*          PIPEINSTALL;
         G4VPhysicalVolume*          BBCINSTALL;
-        G4VPhysicalVolume*          ARM2INSTALL;
+        G4VPhysicalVolume*          ARM1INSTALL;
         G4VPhysicalVolume*          fBBCCPhysical;
         G4VPhysicalVolume*          fBBCBPhysical;
         G4VPhysicalVolume*          fBBCFPhysical;
@@ -197,6 +271,8 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          fBBCHPhysical;
         G4VPhysicalVolume*          fBBCQPhysical;
         G4VPhysicalVolume*          fBBCAPhysical;
+        G4VPhysicalVolume*          fARM1Physical;
+        G4VPhysicalVolume*          fWHolderPhysical;
 
         G4MaterialPropertiesTable* fBlack;
 
@@ -216,6 +292,12 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4RotationMatrix*           fNonRotation;
         G4RotationMatrix*           fQPhi;
         G4RotationMatrix*           fSMDRotation;
+        G4RotationMatrix*           SMDV1Rotation;
+        G4RotationMatrix*           SMDV2Rotation;
+        G4RotationMatrix*           SMDHRotation;
+        G4RotationMatrix*           SMDH2Rotation;
+        G4RotationMatrix*           fRotationZ45;
+        G4RotationMatrix*           fRotationZ90;
 
 
         G4int iron; 
@@ -226,6 +308,8 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4double                    pipeInr, pipeOutr, pipeLength;
         G4double                    Lmod;
         G4double                    ivolu, judgeNS;
+        G4double                    basez;
+        G4double                    dz;
 
 
         G4double                    par[5];
@@ -276,57 +360,41 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
 
         G4bool                      checkOverlaps;
 
+        // bool variables for setting Sensitive detector
+        G4bool                      SDforWInZDC;
+        G4bool                      SDforI_PL;
+        G4bool                      SDforPMMA;    
+        G4bool                      SDforSMD;     
+        G4bool                      SDforWInARM1; 
+        G4bool                      SDforHolder; 
+        G4bool                      SDforGSOBar;  
+        G4bool                      SDforGSOPlate;
+        G4bool                      SDforLightGuide;
+        G4bool                      SDforFrame;
+        G4bool                      SDforPanels;
 
         G4double                    Nlay,Nmod;
 
 
-        // Parameter for ARM2
+
+
+
+
+
+
+
+        // Parameter for ARM1
         //
 
-        G4int                       lcur_num;
-        G4int                       wcur_num;
-        G4int                       noflayer;
-        G4int                       nofssdset;
-        G4double                    TL;
-        G4double                    TS;
-        G4double                    SSDX;
-        G4double                    SSDY;
-        G4double                    gsoThickness;
-        G4double                    acrylThickness;
-        G4double                    ssdsiThickness;
-        G4double                    ssdalThickness;
-        G4double                    ssdacrylThickness;
-        G4double                    firstThickness;
-        G4double                    Arm2SizeX;
-        G4double                    Arm2SizeY;
-        G4double                    firstSizeY;
-        G4double                    gapThickness;
-        G4double                    layerThickness;
-        G4double                    ssdThickness;
-        G4double                    ssdxyThickness;
-        G4double                    Arm2Thickness;
-        G4double                    place;
 
+        G4double                    kARM1par[3];
+        G4double                    kNegativeLargeWpar[3];
+        G4double                    kNegativeSmallWpar[3];
 
-        //G4double lhollowThickness[2][16];
-        //G4double wThickness[2][22];
-        //G4double towposX[2];
-        //G4double towposY[2];
-        //G4double layerposX[2];
-        //G4double layerposY[2];
-        //G4double wepicsposX[2][22];
-        //G4double wepicsposY[2][22];
-        //G4double gtenSizeX[7];
-        //G4double gtenSizeY[7];
-        //G4double layerSizeXY[2];
-        //G4double towSizeXY[2];
-        //G4double wSizeX[2][22];
-        //G4double wSozeY[2][22];
-        //G4int nolet[7];
-        //G4int nowet[7];
 
 
         
 
 };
+
 #endif

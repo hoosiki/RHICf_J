@@ -78,7 +78,7 @@ RHICFPhysicsList::RHICFPhysicsList(G4String physName) : G4VModularPhysicsList()
                 GetSubInstanceManager().offset[GetInstanceID()].physicsVector;
     
     fPhysicsVector->push_back(new RHICFExtraPhysics());
-    //Junsang****fPhysicsVector->push_back(fOpticalPhysics = new RHICFOpticalPhysics(fAbsorptionOn));
+    fPhysicsVector->push_back(fOpticalPhysics = new RHICFOpticalPhysics(fAbsorptionOn));
 
     //Junsang****fPhysicsVector->push_back(new G4RadioactiveDecayPhysics());
 
@@ -290,7 +290,7 @@ RHICFStepMax* RHICFPhysicsList::GetStepMaxProcess()
 void RHICFPhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-
+  auto theParticleIterator = GetParticleIterator();
   theParticleIterator->reset();
   while ((*theParticleIterator)()){
       G4ParticleDefinition* particle = theParticleIterator->value();
