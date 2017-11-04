@@ -49,11 +49,6 @@ int main(int argc, char** argv)
 
     G4VUserDetectorConstruction* RHICFDC = new RHICFDetectorConstruction();
 
-    G4String parallelWorldName = "ReadOutWorld";
-
-    //RHICFROGeometry* fROWorld = new RHICFROGeometry(parallelWorldName);
-
-    //RHICFDC -> RegisterParallelWorld(fROWorld);
 
     
 
@@ -61,7 +56,6 @@ int main(int argc, char** argv)
     runManager -> SetUserInitialization(RHICFDC);
 
     G4VModularPhysicsList* physicsList = new RHICFPhysicsList("QGSP_BERT");
-    //physicsList -> RegisterPhysics(new G4ParallelWorldPhysics(parallelWorldName));
 
     runManager -> SetUserInitialization(physicsList);
     G4VUserActionInitialization* actions = new RHICFActionInitialization;
