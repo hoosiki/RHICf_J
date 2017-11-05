@@ -113,6 +113,7 @@ void RHICFOpticalPhysics::ConstructProcess()
   G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
   fScintProcess->AddSaturation(emSaturation);
 
+  auto aParticleIterator=GetParticleIterator();
   aParticleIterator->reset();
   while ( (*aParticleIterator)() ){
 

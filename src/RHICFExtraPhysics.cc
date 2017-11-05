@@ -59,6 +59,7 @@ void RHICFExtraPhysics::ConstructProcess()
     G4cout << "RHICFExtraPhysics:: Add Extra Physics Processes"
               << G4endl;
 
+    auto aParticleIterator=GetParticleIterator();
     aParticleIterator->reset();
 
     while ((*aParticleIterator)()) {

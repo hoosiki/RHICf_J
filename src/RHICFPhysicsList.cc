@@ -290,7 +290,7 @@ RHICFStepMax* RHICFPhysicsList::GetStepMaxProcess()
 void RHICFPhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-
+  auto theParticleIterator = GetParticleIterator();
   theParticleIterator->reset();
   while ((*theParticleIterator)()){
       G4ParticleDefinition* particle = theParticleIterator->value();
