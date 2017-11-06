@@ -57,6 +57,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          BBC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
         G4VPhysicalVolume*          PIPE();
         G4VPhysicalVolume*          ARM1(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
+        G4VPhysicalVolume*          STARPIPE(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
         G4VPhysicalVolume*          STARZDC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
                                     
         static G4ThreadLocal        MagneticField* fMagneticField;
@@ -273,6 +274,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          fBBCAPhysical;
         G4VPhysicalVolume*          fARM1Physical;
         G4VPhysicalVolume*          fWHolderPhysical;
+        G4VPhysicalVolume*          fSTARPIPEPhysical;
 
         G4MaterialPropertiesTable* fBlack;
 
@@ -297,6 +299,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4RotationMatrix*           SMDH2Rotation;
         G4RotationMatrix*           fRotationZ45;
         G4RotationMatrix*           fRotationZ90;
+        G4RotationMatrix*           fRotationY180;
 
 
         G4int iron; 
