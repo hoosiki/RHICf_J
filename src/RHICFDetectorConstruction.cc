@@ -159,7 +159,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     //Junsang****LOCALPOLINSTALL         = LOCALPOL(fWorldPhysical, b, fNonRotation);
     //Junsang****STARZDCINSTALL         = STARZDC(fWorldPhysical, b, fNonRotation);
 
-    ARM1INSTALL              = ARM1(fWorldPhysical, G4ThreeVector(), fNonRotation);
+    //Junsang****ARM1INSTALL              = ARM1(fWorldPhysical, G4ThreeVector(), fNonRotation);
 
     //BBCINSTALL              = BBC(fWorldPhysical, a, fNonRotation);
 
@@ -2626,6 +2626,8 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
 
 G4VPhysicalVolume* RHICFDetectorConstruction::STARPIPE(G4VPhysicalVolume* world_phys, G4ThreeVector vector, G4RotationMatrix* mat)
 {
+
+
 
     return fSTARPIPEPhysical;
 }
