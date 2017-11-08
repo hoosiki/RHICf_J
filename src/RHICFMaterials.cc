@@ -73,7 +73,7 @@ void RHICFMaterials::CreateMaterials()
   // =====================
 
   //--------------------------------------------------
-  // Vacuum
+  // Silicon
   //--------------------------------------------------
 
   fNistMan->FindOrBuildMaterial("G4_Si");
