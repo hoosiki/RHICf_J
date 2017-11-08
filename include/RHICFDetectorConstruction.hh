@@ -47,17 +47,16 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         void DefineDimension();
         void ConstructMaterials();
         void DestructMaterials();
+        void PHENIXPIPE();
         std::vector<G4VisAttributes*>fVisAttributes;
 
 
         G4VisAttributes*            visAttributes;
                                     
-        G4VPhysicalVolume*          HODOSCOPE(G4VPhysicalVolume*, G4RotationMatrix*);
-        G4VPhysicalVolume*          LOCALPOL(G4VPhysicalVolume*, G4ThreeVector,  G4RotationMatrix*);
+        G4VPhysicalVolume*          PHENIXZDC(G4VPhysicalVolume*, G4ThreeVector,  G4RotationMatrix*);
         G4VPhysicalVolume*          BBC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
-        G4VPhysicalVolume*          PIPE();
         G4VPhysicalVolume*          ARM1(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
-        G4VPhysicalVolume*          STARPIPE(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
+        G4VPhysicalVolume*          STARPIPE(G4ThreeVector);
         G4VPhysicalVolume*          STARZDC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
                                     
         static G4ThreadLocal        MagneticField* fMagneticField;
@@ -66,9 +65,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4OpticalSurface*           fOpsurface;
         RHICFMaterials*             fMaterials;
         G4VSolid*                   fWorldSolid;
-        G4VSolid*                   fHODOSolid;
-        G4VSolid*                   fSCINSolid;
-        G4VSolid*                   fLOCALPOLSolid;
+        G4VSolid*                   fPHENIXZDCSolid;
         G4VSolid*                   fZDCSolid;
         G4VSolid*                   fSTARZDCSolid;
         G4VSolid*                   fGAPFSolid;
@@ -133,11 +130,9 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
 
         G4LogicalVolume*            fSMDLogical;//Logical volumes for ZDC
         G4LogicalVolume*            fZDCLogical;
-        G4LogicalVolume*            fLOCALPOLLogical;
+        G4LogicalVolume*            fPHENIXZDCLogical;
         G4LogicalVolume*            fSTARZDCLogical;
-        G4LogicalVolume*            fSCINLogical;
         G4LogicalVolume*            fWorldLogical;
-        G4LogicalVolume*            fHODOLogical;
         G4LogicalVolume*            fGAPF_1Logical;
         G4LogicalVolume*            fGAPF_2Logical;
         G4LogicalVolume*            fGAPF_3Logical;
@@ -149,8 +144,6 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            fW_PL_1Logical;
         G4LogicalVolume*            fW_PL_2Logical;
         G4LogicalVolume*            fW_PL_3Logical;
-        G4LogicalVolume*            fBBCRLogical;
-        G4LogicalVolume*            fBBCPLogical;
         G4LogicalVolume*            fBlockerLogical;
         G4LogicalVolume*            fI_PLLogical;
         G4LogicalVolume*            fFEPLLogical;
@@ -243,7 +236,6 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          fBlockerPhysical;
         G4VPhysicalVolume*          fFIBRPhysical;
         G4VPhysicalVolume*          fWorldPhysical;
-        G4VPhysicalVolume*          fHODOPhysical;
         G4VPhysicalVolume*          fGAPF_1Physical;
         G4VPhysicalVolume*          fGAPF_2Physical;
         G4VPhysicalVolume*          fGAPF_3Physical;
@@ -255,23 +247,12 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          fW_PL_2Physical;
         G4VPhysicalVolume*          fW_PL_3Physical;
         G4VPhysicalVolume*          fFIBPhysical;
-        G4VPhysicalVolume*          fLOCALPOLPhysical;
+        G4VPhysicalVolume*          fPHENIXZDCPhysical;
         G4VPhysicalVolume*          fSTARZDCPhysical;
-        G4VPhysicalVolume*          fBBCMPhysical;
-        G4VPhysicalVolume*          HODOINSTALL;
-        G4VPhysicalVolume*          LOCALPOLINSTALL;
+        G4VPhysicalVolume*          PHENIXZDCINSTALL;
         G4VPhysicalVolume*          STARZDCINSTALL;
         G4VPhysicalVolume*          PIPEINSTALL;
-        G4VPhysicalVolume*          BBCINSTALL;
         G4VPhysicalVolume*          ARM1INSTALL;
-        G4VPhysicalVolume*          fBBCCPhysical;
-        G4VPhysicalVolume*          fBBCBPhysical;
-        G4VPhysicalVolume*          fBBCFPhysical;
-        G4VPhysicalVolume*          fBBCEPhysical;
-        G4VPhysicalVolume*          fBBCSPhysical;
-        G4VPhysicalVolume*          fBBCHPhysical;
-        G4VPhysicalVolume*          fBBCQPhysical;
-        G4VPhysicalVolume*          fBBCAPhysical;
         G4VPhysicalVolume*          fARM1Physical;
         G4VPhysicalVolume*          fWHolderPhysical;
         G4VPhysicalVolume*          fSTARPIPEPhysical;
@@ -284,11 +265,9 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
 
 
         // Define RotationMatrix
-        //
         G4RotationMatrix*           PipeRotation1;
         G4RotationMatrix*           PipeRotation2;
         G4RotationMatrix*           INVERSERotation;
-        G4RotationMatrix*           HODORotation;
         G4RotationMatrix*           GAPFRotation;
         G4RotationMatrix*           MagRotation;
         G4RotationMatrix*           fNonRotation;
@@ -301,15 +280,11 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4RotationMatrix*           fRotationZ90;
         G4RotationMatrix*           fRotationY180;
 
-
-        G4int iron; 
-
         G4double                    worX, worY, worZ;
         G4double                    interval, zpos, ypos;
         G4double                    putFx, pos;
         G4double                    pipeInr, pipeOutr, pipeLength;
         G4double                    Lmod;
-        G4double                    ivolu, judgeNS;
         G4double                    basez;
         G4double                    dz;
 
@@ -324,7 +299,6 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4double                    rcPar[3];
         G4double                    wcntPar[3];
         G4double                    fibPar[3];
-        G4double                    hodoPar[3];
         G4double                    scinPar[3];
         G4double                    smdPar[3];
         G4double                    smdHeight;
@@ -335,34 +309,9 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4double                    sin, cos, tan;
         G4double                    zdcPar1, zdcPar2;
         G4double                    xpos;
-
-//      Parameter for BBC
-
-
-        G4double                    kBBAbsorb[3];
-        G4double                    kBBAttach[10];
-        G4double                    kBBBackBD[3];
-        G4double                    kBBBreede[3];
-        G4double                    kBBCovert;
-        G4double                    kBBFrontb[3];
-        G4double                    kBBPMTSiz[3];
-        G4double                    kBBQuartz[10];
-        G4double                    kBBShithi;
-        G4double                    kBBSpacin;
-        G4double                    kBBStruct[3];
-        G4double                    kBBZPosit[2];
-                                    
-        G4double                    kBBBCover[3];
-        G4double                    kBBDetect[10];
-        G4double                    kBBMother[3];
-        G4double                    kBBShield[10];
-                                    
-        G4double                    kXSTP, kYSTP, kRrad, kRRMA, kRRMI, kRmax, kRmin;
-        G4int                       kMrow, kMcol, kNrow, kNcol, kNdet, kMaxPMT, kLrow, kLcol;
-
         G4bool                      checkOverlaps;
 
-        // bool variables for setting Sensitive detector
+        // BOOL VARIABLES FOR SETTING SENSITIVE DETECTOR
         G4bool                      SDforWInZDC;
         G4bool                      SDforI_PL;
         G4bool                      SDforPMMA;    
@@ -385,8 +334,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
 
 
 
-        // Parameter for ARM1
-        //
+        // PARAMETER FOR ARM1
 
 
         G4double                    kARM1par[3];
