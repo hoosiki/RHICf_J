@@ -2225,26 +2225,26 @@ G4VPhysicalVolume* RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
     G4VSolid* fSTARPIPESolid = new G4Box("STARPIPESolid", kSize[0]*cm, kSize[1]*cm, kSize[2]*cm);
     G4LogicalVolume* fSTARPIPELogical = new G4LogicalVolume(fSTARPIPESolid, FindMaterial("G4_Galactic"), "STARPIPELogical");
     G4VPhysicalVolume* fSTARPIPEPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(vector.getX()*cm, vector.getY()*cm, vector.getZ()*cm), fSTARPIPELogical, "STARPIPEPhysical", fWorldLogical, false, 0, checkOverlaps);
-    //Junsang****//DEFINE SOLID VOLUME
-    //Junsang****G4double starpar[5] = {3.54, 3.81, 75.002, 0, 360};
-    //Junsang****G4VSolid* f3InchShortSolid = new G4Tubs("3InchShortPipeSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
-    //Junsang****G4LogicalVolume* f3InchShortLogical = new G4LogicalVolume(f3InchShortSolid, FindMaterial("G4_Be"), "3InchShortLogical");
-    //Junsang****G4VPhysicalVolume* f3InchshortPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -194.7955*cm), f3InchShortLogical, "3InchshortPhysical", fSTARPIPELogical, 0, false, checkOverlaps);
-    //Junsang****starpar[0] = 3.54;
-    //Junsang****starpar[1] = 3.81;
-    //Junsang****starpar[2] = 362.337;
-    //Junsang****starpar[3] = 0;
-    //Junsang****starpar[4] = 360;
-    //Junsang****G4VSolid* f3InchLongSolid = new G4Tubs("3InchLongSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
-    //Junsang****G4LogicalVolume* f3InchLongLogical = new G4LogicalVolume(f3InchLongSolid, FindMaterial("G4_Fe"), "3InchLongLogical");
-    //Junsang****G4VPhysicalVolume* f3InchLongPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 23.874*cm), f3InchLongLogical, "3InchLongPhysical", fSTARPIPELogical, 0, false, checkOverlaps);
-//Junsang****
-    //Junsang****starpar[0] = 0.0381;
-    //Junsang****starpar[1] = 0.058675;
-    //Junsang****starpar[2] = 0.04115;
-    //Junsang****starpar[3] = 0;
-    //Junsang****starpar[4] = 369;
-    //Junsang****G4VSolid* f3InchFlangeSolid = new G4Tubs("3InchFlangeSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
+    //DEFINE SOLID VOLUME
+    G4double starpar[5] = {3.54, 3.81, 75.002, 0, 360};
+    G4VSolid* f3InchShortSolid = new G4Tubs("3InchShortPipeSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
+    G4LogicalVolume* f3InchShortLogical = new G4LogicalVolume(f3InchShortSolid, FindMaterial("G4_Be"), "3InchShortLogical");
+    G4VPhysicalVolume* f3InchshortPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -194.7955*cm), f3InchShortLogical, "3InchshortPhysical", fSTARPIPELogical, 0, false, checkOverlaps);
+    starpar[0] = 3.54;
+    starpar[1] = 3.81;
+    starpar[2] = 362.337;
+    starpar[3] = 0;
+    starpar[4] = 360;
+    G4VSolid* f3InchLongSolid = new G4Tubs("3InchLongSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
+    G4LogicalVolume* f3InchLongLogical = new G4LogicalVolume(f3InchLongSolid, FindMaterial("G4_Fe"), "3InchLongLogical");
+    G4VPhysicalVolume* f3InchLongPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 23.874*cm), f3InchLongLogical, "3InchLongPhysical", fSTARPIPELogical, 0, false, checkOverlaps);
+
+    starpar[0] = 0.0381;
+    starpar[1] = 0.058675;
+    starpar[2] = 0.04115;
+    starpar[3] = 0;
+    starpar[4] = 369;
+    G4VSolid* f3InchFlangeSolid = new G4Tubs("3InchFlangeSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
     
     return fSTARPIPEPhysical;
 }
