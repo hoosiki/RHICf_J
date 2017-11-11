@@ -56,7 +56,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          PHENIXZDC(G4VPhysicalVolume*, G4ThreeVector,  G4RotationMatrix*);
         G4VPhysicalVolume*          BBC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
         G4VPhysicalVolume*          ARM1(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
-        G4VPhysicalVolume*          STARPIPE(G4ThreeVector);
+        void          STARPIPE(G4ThreeVector);
         G4VPhysicalVolume*          STARZDC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
                                     
         static G4ThreadLocal        MagneticField* fMagneticField;
