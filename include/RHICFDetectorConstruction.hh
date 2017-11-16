@@ -53,11 +53,11 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
 
         G4VisAttributes*            visAttributes;
                                     
-        G4VPhysicalVolume*          PHENIXZDC(G4VPhysicalVolume*, G4ThreeVector,  G4RotationMatrix*);
-        G4VPhysicalVolume*          BBC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
-        G4VPhysicalVolume*          ARM1(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
-        void          STARPIPE(G4ThreeVector);
-        G4VPhysicalVolume*          STARZDC(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
+        void          PHENIXZDCINSTALL(G4VPhysicalVolume*, G4ThreeVector,  G4RotationMatrix*);
+        void          BBCINSTALL(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
+        void          ARM1INSTALL(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
+        void          STARPIPEINSTALL(G4ThreeVector);
+        void          STARZDCINSTALL(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
                                     
         static G4ThreadLocal        MagneticField* fMagneticField;
         static G4ThreadLocal        G4FieldManager* fFieldMgr;
@@ -249,13 +249,8 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4VPhysicalVolume*          fFIBPhysical;
         G4VPhysicalVolume*          fPHENIXZDCPhysical;
         G4VPhysicalVolume*          fSTARZDCPhysical;
-        G4VPhysicalVolume*          PHENIXZDCINSTALL;
-        G4VPhysicalVolume*          STARZDCINSTALL;
-        G4VPhysicalVolume*          PIPEINSTALL;
-        G4VPhysicalVolume*          ARM1INSTALL;
-        G4VPhysicalVolume*          fARM1Physical;
         G4VPhysicalVolume*          fWHolderPhysical;
-        G4VPhysicalVolume*          fSTARPIPEPhysical;
+        G4VPhysicalVolume*          fARM1Physical;
 
         G4MaterialPropertiesTable* fBlack;
 

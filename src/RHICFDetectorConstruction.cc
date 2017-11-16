@@ -132,13 +132,15 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     //Junsang****STARZDCINSTALL         = STARZDC(fWorldPhysical, b, fNonRotation);
 
     //Junsang****ARM1INSTALL              = ARM1(fWorldPhysical, G4ThreeVector(), fNonRotation);
+    ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1800.*cm), fRotationY180);
+    STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1880*cm), fRotationY180);
 
     //BBCINSTALL              = BBC(fWorldPhysical, a, fNonRotation);
 
     //Junsang****PIPE();
     
     //Junsang****G4VPhysicalVolume* STARPIPEINSTALL;
-    STARPIPE(G4ThreeVector());
+    STARPIPEINSTALL(G4ThreeVector());
 
 
     return                  fWorldPhysical;
@@ -494,7 +496,7 @@ G4Material* RHICFDetectorConstruction::FindMaterial(G4String name)
 //
 //
 //
-G4VPhysicalVolume* RHICFDetectorConstruction::PHENIXZDC(G4VPhysicalVolume* world_phys, G4ThreeVector vector, G4RotationMatrix* mat)
+void RHICFDetectorConstruction::PHENIXZDCINSTALL(G4VPhysicalVolume* world_phys, G4ThreeVector vector, G4RotationMatrix* mat)
 {
 
     /*-*/fPHENIXZDCSolid              = new G4Box("PHENIXZDCSolid", wcntPar[0]*cm, wcntPar[1]*cm, wcntPar[2]*3.6/5*cm);
@@ -682,11 +684,9 @@ G4VPhysicalVolume* RHICFDetectorConstruction::PHENIXZDC(G4VPhysicalVolume* world
     /*-*/fSMDHLogical            -> SetVisAttributes(visAttributes);
     /*-*/fSMDVLogical            -> SetVisAttributes(visAttributes);
     /*-*/fVisAttributes.push_back(visAttributes);
-
-    return                  fPHENIXZDCPhysical;
 }
 
-G4VPhysicalVolume* RHICFDetectorConstruction::STARZDC(G4VPhysicalVolume* world_phys, G4ThreeVector vector, G4RotationMatrix* mat)
+void RHICFDetectorConstruction::STARZDCINSTALL(G4VPhysicalVolume* world_phys, G4ThreeVector vector, G4RotationMatrix* mat)
 {
     /*-*/fSTARZDCSolid              = new G4Box("STARZDCSolid", wcntPar[0]*cm, wcntPar[1]*cm, wcntPar[2]*3.6/5*cm);
     /*-*/fSTARZDCLogical            = new G4LogicalVolume(fSTARZDCSolid, FindMaterial("G4_AIR"), "STARZDCLogical");
@@ -926,18 +926,10 @@ G4VPhysicalVolume* RHICFDetectorConstruction::STARZDC(G4VPhysicalVolume* world_p
     /*-*/fSMDHLogical            -> SetVisAttributes(visAttributes);
     /*-*/fSMDVLogical            -> SetVisAttributes(visAttributes);
     /*-*/fVisAttributes.push_back(visAttributes);
-
-
-
-    return                  fSTARZDCPhysical;
-
-
 }
 
 void RHICFDetectorConstruction::PHENIXPIPE()
 {
-
-
     /*-*///----------------------------------------------BEAM PIPE----------------------------------------------------
     /*-*/par[0] = 0.0;
     /*-*/par[1] = 0.1;
@@ -1328,10 +1320,8 @@ void RHICFDetectorConstruction::PHENIXPIPE()
 }
 
 
-G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys, G4ThreeVector vector, G4RotationMatrix* mat)
+void RHICFDetectorConstruction::ARM1INSTALL(G4VPhysicalVolume* world_phys, G4ThreeVector vector, G4RotationMatrix* mat)
 {
-
-
     /*-*/// Define ARM1
     /*-*/fARM1Solid          = new G4Box("ARM1Solid", kARM1par[0]*cm, kARM1par[1]*cm, kARM1par[2]*cm); 
     /*-*/fARM1Logical        = new G4LogicalVolume(fARM1Solid, FindMaterial("G4_Galactic"), "ARM1Logical");
@@ -2214,14 +2204,10 @@ G4VPhysicalVolume* RHICFDetectorConstruction::ARM1(G4VPhysicalVolume* world_phys
     /*-*/fSidePanelLogical               -> SetVisAttributes(visAttributes);
     /*-*/fFrontPanelLogical               -> SetVisAttributes(visAttributes);
     /*-*/fVisAttributes.push_back(visAttributes);
-
-    /*-*/return fARM1Physical;
 }
 
-void RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
+void RHICFDetectorConstruction::STARPIPEINSTALL(G4ThreeVector vector)
 {
-
-
     //------------------------------------------------UPSTREAM SECTION---------------------------------------
     G4double starpar[5] = {0., 35., 1472.709/2, 0., 360.};
     auto fUpstreamSectionSolid = new G4Tubs("UpstreamSectionSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
@@ -2870,9 +2856,5 @@ void RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
     fPantsPipeVacuumLogical -> SetVisAttributes(visAttributes);
     fDXMagnetSectionLogical -> SetVisAttributes(visAttributes);
     fEndPipeVacuumLogical -> SetVisAttributes(visAttributes);
-
-
-
-
 }
 
