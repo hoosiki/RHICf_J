@@ -95,7 +95,7 @@ void B5PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
     G4ThreeVector position = G4ThreeVector((fX+fSigmaRange*(G4UniformRand()-0.5))*mm, (fY+fSigmaRange*(G4UniformRand()-0.5)+4.05/sqrt(2.))*mm, (fZ+500)*mm);
 
     fParticleGun->SetParticlePosition(position);
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(std::sin(angle),7.,std::cos(angle)));
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(std::sin(angle),0.,std::cos(angle)));
 
 
 

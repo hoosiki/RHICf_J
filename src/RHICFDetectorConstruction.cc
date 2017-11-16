@@ -2222,12 +2222,11 @@ void RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
 {
 
 
-    //UPSTREAM SECTION
+    //------------------------------------------------UPSTREAM SECTION---------------------------------------
     G4double starpar[5] = {0., 35., 1472.709/2, 0., 360.};
     auto fUpstreamSectionSolid = new G4Tubs("UpstreamSectionSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
     auto fUpstreamSectionLogical = new G4LogicalVolume(fUpstreamSectionSolid, FindMaterial("G4_AIR"), "UpstreamSectionLogical");
-    //Junsang****auto fUpstreamSectionPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 736.3545*cm), fUpstreamSectionLogical, "UpstreamSectionPhysical", fWorldLogical, 0, false, checkOverlaps);
-
+    auto fUpstreamSectionPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 736.3545*cm), fUpstreamSectionLogical, "UpstreamSectionPhysical", fWorldLogical, 0, false, checkOverlaps);
     //3INCH SECTION
     starpar[0] = 0;
     starpar[1] = 100;
@@ -2366,6 +2365,31 @@ void RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
     auto fDXMagnetSectionSolid = new G4Tubs("DXMagnetSectionSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
     auto fDXMagnetSectionLogical = new G4LogicalVolume(fDXMagnetSectionSolid, FindMaterial("G4_AIR"), "DXMagnetSectionLogical");
     auto fDXMagnetSectionPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 430.7195*cm), fDXMagnetSectionLogical, "DXMagnetSectionPhysical", fUpstreamSectionLogical, 0, false, checkOverlaps);
+
+    starpar[0] = 6.833;
+    starpar[1] = 6.985;
+    starpar[2] = 467.004/2;
+    starpar[3] = 0;
+    starpar[4] = 360;
+    auto f55InchPipeSolid = new G4Tubs("55InchPipeSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
+    auto f55InchPipeLogical = new G4LogicalVolume(f55InchPipeSolid, FindMaterial("G4_Fe"), "55InchPipeLogical");
+    auto f55InchPipePhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -21.918*cm), f55InchPipeLogical, "55InchPipePhysical", fDXMagnetSectionLogical, 0, false, checkOverlaps);
+    starpar[0] = 0;
+    starpar[1] = 6.833;
+    starpar[2] = 467.004/2;
+    starpar[3] = 0;
+    starpar[4] = 360;
+    auto f55InchPipeVacuumSolid = new G4Tubs("55InchPipeVacuumSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
+    auto f55InchPipeVacuumLogical = new G4LogicalVolume(f55InchPipeVacuumSolid, FindMaterial("G4_Galactic"), "55InchPipeVacuumLogical");
+    auto f55InchPipeVacuumPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -21.918*cm), f55InchPipeVacuumLogical, "55InchPipeVacuumPhysical", fDXMagnetSectionLogical, 0, false, checkOverlaps);
+
+    auto fDX5InchConeSolid = new G4Cons("DX5InchConeSolid", 6.07*cm, 6.35*cm, 6.833*cm, 6.985*cm, 5.73/2*cm, 0.*deg, 360.*deg);
+    auto fDX5InchConeLogical = new G4LogicalVolume(fDX5InchConeSolid, FindMaterial("G4_Fe"), "DX5InchConeLogical");
+    auto fDX5InchConePhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -258.285*cm), fDX5InchConeLogical, "DX5InchConePhysical", fDXMagnetSectionLogical, 0, false, checkOverlaps);
+    auto fDX5InchConeVacuumSolid = new G4Cons("DX5InchConeVacuumSolid", 0.*cm, 6.07*cm, 0.*cm, 6.833*cm, 5.73/2*cm, 0.*deg, 360.*deg);
+    auto fDX5InchConeVacuumLogical = new G4LogicalVolume(fDX5InchConeVacuumSolid, FindMaterial("G4_Galactic"), "DX5InchConeVacuumLogical");
+    auto fDX5InchConeVacuumPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -258.285*cm), fDX5InchConeVacuumLogical, "DX5InchConeVacuumPhysical", fDXMagnetSectionLogical, 0, false, checkOverlaps);
+
     starpar[0] = 0.;
     starpar[1] = 6.07;
     starpar[2] = 20.32/2;
@@ -2390,7 +2414,7 @@ void RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
     auto fDX5InchVacuum3Solid = new G4Tubs("DX5InchVacuum3Solid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
     auto fDX5InchVacuum3Logical = new G4LogicalVolume(fDX5InchVacuum3Solid, FindMaterial("G4_Galactic"), "DX5InchVacuum3Logical");
     auto fDX5InchVacuum3Physical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -265.5365*cm), fDX5InchVacuum3Logical, "DX5InchVacuum3Physical", fDXMagnetSectionLogical, 0, false, checkOverlaps);
-    auto fDX55InchConeVacuumSolid = new G4Cons("DX55InchConeVacuumSolid", 0.*cm, 6.833*cm, 0.*cm, 15.6845*cm, 40.691*cm, 0.*deg, 360.*deg);
+    auto fDX55InchConeVacuumSolid = new G4Cons("DX55InchConeVacuumSolid", 0.*cm, 6.833*cm, 0.*cm, 15.6845*cm, 40.691/2*cm, 0.*deg, 360.*deg);
     auto fDX55InchConeVacuumLogical = new G4LogicalVolume(fDX55InchConeVacuumSolid, FindMaterial("G4_Galactic"), "DX55InchConeVacuumLogical");
     auto fDX55InchConeVacuumPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 231.9295*cm), fDX55InchConeVacuumLogical, "DX55InchConeVacuumPhysical", fDXMagnetSectionLogical, 0, false, checkOverlaps);
     starpar[0] = 0;
@@ -2425,7 +2449,7 @@ void RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
     auto fDX5InchPipe3Solid = new G4Tubs("DX5InchPipe3Solid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
     auto fDX5InchPipe3Logical = new G4LogicalVolume(fDX5InchPipe3Solid, FindMaterial("G4_Fe"), "DX5InchPipe3Logical");
     auto fDX5InchPipe3Physical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -265.5365*cm), fDX5InchPipe3Logical, "DX5InchPipe3Physical", fDXMagnetSectionLogical, 0, false, checkOverlaps);
-    auto fDX55InchConeSolid = new G4Cons("DX55InchConeSolid", 6.833*cm, 6.985*cm, 15.6845*cm, 16.4465*cm, 40.691*cm, 0.*deg, 360.*deg);
+    auto fDX55InchConeSolid = new G4Cons("DX55InchConeSolid", 6.833*cm, 6.985*cm, 15.6845*cm, 16.4465*cm, 40.691/2*cm, 0.*deg, 360.*deg);
     auto fDX55InchConeLogical = new G4LogicalVolume(fDX55InchConeSolid, FindMaterial("G4_Fe"), "DX55InchConeLogical");
     auto fDX55InchConePhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm,231.9295*cm), fDX55InchConeLogical, "DX55InchConePhysical", fDXMagnetSectionLogical, 0, false, checkOverlaps);
     starpar[0] = 14.605;
@@ -2571,13 +2595,72 @@ void RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
     auto fBellowsFlange2Logical = new G4LogicalVolume(fBellowsFlange2Solid, FindMaterial("G4_Fe"), "BellowsFlange2Logical");
     auto fBellowsFlange2Physical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -179.6065*cm), fBellowsFlange2Logical, "BellowsFlange2Physical", fDownStreamSectionLogical, 0, false, checkOverlaps);
 
-    auto fDownStreamBox1Solid = new G4Trd("DownStreamBox1Solid", 17.253*cm, 17.81*cm, 17.5*cm, 17.49*cm, 9.46*cm);
-    auto fDownStreamBox2Solid = new G4Trd("DownStreamBox2Solid", 17.81*cm, 19.22*cm, 17.5*cm, 9.309*cm, 10.657*cm);
-    auto fDownStreamBox3Solid = new G4Trd("DownStreamBox3Solid", 19.22*cm, 24.5*cm, 9.31*cm, 9.326*cm, 101.658*cm);
-    //Junsang****auto fDownStreamBox4Solid = new G4UnionSolid("DownStreamBox4Solid", fDownStreamBox1Solid, fDownStreamBox2Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 20.1169*cm));
-    //Junsang****auto fDownStreamBox5Solid = new G4UnionSolid("DownStreamBox5Solid", fDownStreamBox4Solid, fDownStreamBox3Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 132.4318*cm));
-    //
-    //
+    
+    size[0] = 40.269/2;
+    size[1] = 40.005/2;
+    size[2] = 2.54/2;
+    auto fDownStreamBoxFlange1Solid = new G4Box("DownStreamBoxFlange1Solid", size[0]*cm, size[1]*cm, size[2]*cm);
+    size[0] = 41.492/2;
+    size[1] = 25.683/2;
+    size[2] = 2.54/2;
+    auto fDownStreamBoxFlange2Solid = new G4Box("DownStreamBoxFlange2Solid", size[0]*cm, size[1]*cm, size[2]*cm);
+    size[0] = 43.226/2;
+    size[1] = 31.354/2;
+    size[2] = 2.54/2;
+    auto fDownStreamBoxFlange3Solid = new G4Box("DownStreamBoxFlange3Solid", size[0]*cm, size[1]*cm, size[2]*cm);
+    size[0] = 44.041/2;
+    size[1] = 23.734/2;
+    size[2] = 2.54/2;
+    auto fDownStreamBoxFlange4Solid = new G4Box("DownStreamBoxFlange4Solid", size[0]*cm, size[1]*cm, size[2]*cm);
+    size[0] = 45.269/2;
+    size[1] = 23.734/2;
+    size[2] = 2.54/2;
+    auto fDownStreamBoxFlange5Solid = new G4Box("DownStreamBoxFlange5Solid", size[0]*cm, size[1]*cm, size[2]*cm);
+    size[0] = 45.269/2;
+    size[1] = 23.734/2;
+    size[2] = 2.54/2;
+    auto fDownStreamBoxFlange6Solid = new G4Box("DownStreamBoxFlange6Solid", size[0]*cm, size[1]*cm, size[2]*cm);
+    size[0] = 47.762/2;
+    size[1] = 23.734/2;
+    size[2] = 2.54/2;
+    auto fDownStreamBoxFlange7Solid = new G4Box("DownStreamBoxFlange7Solid", size[0]*cm, size[1]*cm, size[2]*cm);
+    size[0] = 48.632/2;
+    size[1] = 23.734/2;
+    size[2] = 2.54/2;
+    auto fDownStreamBoxFlange8Solid = new G4Box("DownStreamBoxFlange8Solid", size[0]*cm, size[1]*cm, size[2]*cm);
+    size[0] = 49.491/2;
+    size[1] = 23.734/2;
+    size[2] = 2.54/2;
+    auto fDownStreamBoxFlange9Solid = new G4Box("DownStreamBoxFlange9Solid", size[0]*cm, size[1]*cm, size[2]*cm);
+    size[0] = 50.330/2;
+    size[1] = 23.734/2;
+    size[2] = 2.54/2;
+    auto fDownStreamBoxFlange10Solid = new G4Box("DownStreamBoxFlange10Solid", size[0]*cm, size[1]*cm, size[2]*cm);
+    size[0] = 51.604/2;
+    size[1] = 23.734/2;
+    size[2] = 2.54/2;
+    auto fDownStreamBoxFlange11Solid = new G4Box("DownStreamBoxFlange11Solid", size[0]*cm, size[1]*cm, size[2]*cm);
+    size[0] = 52.565/2;
+    size[1] = 31.354/2;
+    size[2] = 2.54/2;
+    auto fDownStreamBoxFlange12Solid = new G4Box("DownStreamBoxFlange12Solid", size[0]*cm, size[1]*cm, size[2]*cm);
+
+    auto fDownStreamBox11Solid = new G4Trd("DownStreamBox11Solid", 17.253*cm, 17.81*cm, 17.5*cm, 17.49*cm, 9.46*cm);
+    auto fDownStreamBox1Solid = new G4UnionSolid("DownStreamBox1Solid", fDownStreamBox11Solid, fDownStreamBoxFlange1Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 16.0/2*cm));
+    auto fDownStreamBox21Solid = new G4Trd("DownStreamBox21Solid", 17.81*cm, 19.22*cm, 17.5*cm, 9.309*cm, 10.657*cm);
+    auto fDownStreamBox22Solid = new G4UnionSolid("DownStreamBox22Solid", fDownStreamBox21Solid, fDownStreamBoxFlange2Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (18.127-10.657)*cm));
+
+    auto fDownStreamBox31Solid = new G4Trd("DownStreamBox31Solid", 19.22*cm, 24.5*cm, 9.31*cm, 9.326*cm, 101.658*cm);
+    auto fDownStreamBox32Solid = new G4UnionSolid("DownStreamBox32Solid", fDownStreamBox31Solid, fDownStreamBoxFlange3Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (65.165-141.892)*cm));
+    auto fDownStreamBox33Solid = new G4UnionSolid("DownStreamBox33Solid", fDownStreamBox32Solid, fDownStreamBoxFlange4Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (78.5-141.892)*cm));
+    auto fDownStreamBox34Solid = new G4UnionSolid("DownStreamBox34Solid", fDownStreamBox33Solid, fDownStreamBoxFlange5Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (98.82-141.892)*cm));
+    auto fDownStreamBox35Solid = new G4UnionSolid("DownStreamBox35Solid", fDownStreamBox34Solid, fDownStreamBoxFlange6Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (118.84-141.892)*cm));
+    auto fDownStreamBox36Solid = new G4UnionSolid("DownStreamBox36Solid", fDownStreamBox35Solid, fDownStreamBoxFlange7Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (140.095-141.892)*cm));
+    auto fDownStreamBox37Solid = new G4UnionSolid("DownStreamBox37Solid", fDownStreamBox36Solid, fDownStreamBoxFlange8Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (154.659-141.892)*cm));
+    auto fDownStreamBox38Solid = new G4UnionSolid("DownStreamBox38Solid", fDownStreamBox37Solid, fDownStreamBoxFlange9Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (168.873-141.892)*cm));
+    auto fDownStreamBox39Solid = new G4UnionSolid("DownStreamBox39Solid", fDownStreamBox38Solid, fDownStreamBoxFlange10Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (182.741-141.892)*cm));
+    auto fDownStreamBox310Solid = new G4UnionSolid("DownStreamBox310Solid", fDownStreamBox39Solid, fDownStreamBoxFlange11Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (203.696-141.892)*cm));
+    auto fDownStreamBox311Solid = new G4UnionSolid("DownStreamBox311Solid", fDownStreamBox310Solid, fDownStreamBoxFlange12Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (219.47-141.892)*cm));
     //FRONT HOLE
     size[0] = 17.253;
     size[1] = 17.5;
@@ -2590,21 +2673,19 @@ void RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
     starpar[4] = 360.;
     auto fNegativeDownStreamBoxFront1Solid = new G4Tubs("NegativeDownStreamBoxFront1Solid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
     auto fDownStreamBoxFrontSolid = new G4SubtractionSolid("DownStreamBoxFrontSolid", fDownStreamBoxFront1Solid, fNegativeDownStreamBoxFront1Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 0.*cm));
-    
     //REAR HOLES
-
     size[0] = 24.5;
     size[1] = 9.326;
     size[2] = 0.44;
     auto fDownStreamBoxRear1Solid = new G4Box("DownStreamBoxRear1Solid", size[0]*cm, size[1]*cm, size[2]*cm);
     starpar[0] = 0.;
-    starpar[1] = 7.;
+    starpar[1] = 7.2;
     starpar[2] = 0.45;
     starpar[3] = 0.;
     starpar[4] = 360.;
     auto fNegativeDownStreamBoxRear1Solid = new G4Tubs("NegativeDownStreamBoxRear1Solid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
-    auto fDownStreamBoxRear2Solid = new G4SubtractionSolid("DownStreamBoxRear2Solid", fDownStreamBoxRear1Solid, fNegativeDownStreamBoxRear1Solid, fNonRotation, G4ThreeVector(12.558*cm, 0.*cm, 0.*cm));
-    auto fDownStreamBoxRearSolid = new G4SubtractionSolid("DownStreamBoxRearSolid", fDownStreamBoxRear2Solid, fNegativeDownStreamBoxRear1Solid, fNonRotation, G4ThreeVector(-12.558*cm, 0.*cm, 0.*cm));
+    auto fDownStreamBoxRear2Solid = new G4SubtractionSolid("DownStreamBoxRear2Solid", fDownStreamBoxRear1Solid, fNegativeDownStreamBoxRear1Solid, fNonRotation, G4ThreeVector(13.758*cm, 0.*cm, 0.*cm));
+    auto fDownStreamBoxRearSolid = new G4SubtractionSolid("DownStreamBoxRearSolid", fDownStreamBoxRear2Solid, fNegativeDownStreamBoxRear1Solid, fNonRotation, G4ThreeVector(-13.758*cm, 0.*cm, 0.*cm));
     
     auto fNegativeDownStreamBox1Solid = new G4Trd("NegativeDownStreamBox1Solid", 17.171*cm, 17.729*cm, 16.485*cm, 16.485*cm, 9.463*cm);
     auto fNegativeDownStreamBox2Solid = new G4Trd("NegativeDownStreamBox2Solid", 17.729*cm, 18.372*cm, 16.485*cm, 8.35*cm, 10.658*cm);
@@ -2613,26 +2694,24 @@ void RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
     auto fNegativeDownStreamBoxSolid = new G4UnionSolid("NegativeDownStreamBoxSolid", fNegativeDownStreamBox4Solid, fNegativeDownStreamBox3Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 132.4318*cm));
 
     auto fDownStreamBoxPart1Solid = new G4SubtractionSolid("DownStreamBoxPart1Solid", fDownStreamBox1Solid, fNegativeDownStreamBox1Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 0*cm));
-    auto fDownStreamBoxPart2Solid = new G4SubtractionSolid("DownStreamBoxPart2Solid", fDownStreamBox2Solid, fNegativeDownStreamBox2Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 0*cm));
-    auto fDownStreamBoxPart3Solid = new G4SubtractionSolid("DownStreamBoxPart3Solid", fDownStreamBox3Solid, fNegativeDownStreamBox3Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 0*cm));
+    auto fDownStreamBoxPart2Solid = new G4SubtractionSolid("DownStreamBoxPart2Solid", fDownStreamBox22Solid, fNegativeDownStreamBox2Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 0*cm));
+    auto fDownStreamBoxPart3Solid = new G4SubtractionSolid("DownStreamBoxPart3Solid", fDownStreamBox311Solid, fNegativeDownStreamBox3Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 0*cm));
 
     
     auto fDownStreamBox4Solid = new G4UnionSolid("DownStreamBox4Solid", fDownStreamBoxPart1Solid, fDownStreamBoxPart2Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 20.1169*cm));
     auto fDownStreamBox5Solid = new G4UnionSolid("DownStreamBox5Solid", fDownStreamBox4Solid, fDownStreamBoxPart3Solid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 132.4318*cm));
-    //Junsang****auto fDownStreamBox6Solid = new G4UnionSolid("DownStreamBox6Solid", fDownStreamBox5Solid, fDownStreamBoxFrontSolid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -9.8*cm));
-    //Junsang****auto fDownStreamBox6Solid = new G4UnionSolid("DownStreamBox6Solid", fDownStreamBox5Solid, fDownStreamBoxFrontSolid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 234.53*cm));
-    //Junsang****auto fDownStreamBoxFront1Solid = new G4Box("DownStreamBoxFront1Solid", size[0]*cm, size[1]*cm, size[2]*cm);
 
-    //Junsang****auto fDownStreamBoxSolid = new G4SubtractionSolid("DownStreamBoxSolid", fDownStreamBox5Solid, fNegativeDownStreamBoxSolid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 0.*cm));
-    G4double kBoxCoverPosition = -163.3;
-    auto fNegativeDownStreamBoxLogical = new G4LogicalVolume(fDownStreamBox5Solid, FindMaterial("G4_Fe"), "NegativeDownStreamBoxLogical");
-    //Junsang****auto fNegativeDownStreamBoxPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, kBoxCoverPosition.*cm), fNegativeDownStreamBoxLogical, "NegativeDownStreamBoxPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
+    //PUT BOX COVER
+    //
+    G4double kBoxCoverPosition = -164.;
+    auto fDownStreamBoxLogical = new G4LogicalVolume(fDownStreamBox5Solid, FindMaterial("G4_Fe"), "DownStreamBoxLogical");
+    auto fDownStreamBoxPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, kBoxCoverPosition*cm), fDownStreamBoxLogical, "DownStreamBoxPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
     //FRONT
     auto fDownStreamBoxFrontLogical = new G4LogicalVolume(fDownStreamBoxFrontSolid, FindMaterial("G4_Fe"), "DownStreamBoxFrontLogical");
-    auto fDownStreamBoxFrontPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (-9.8+kBoxCoverPosition)*cm), fDownStreamBoxFrontLogical, "DownStreamBoxFrontPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
+    auto fDownStreamBoxFrontPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (-9.+kBoxCoverPosition)*cm), fDownStreamBoxFrontLogical, "DownStreamBoxFrontPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
     //REAR
     auto fDownStreamBoxRearLogical = new G4LogicalVolume(fDownStreamBoxRearSolid, FindMaterial("G4_Fe"), "DownStreamBoxRearLogical");
-    auto fDownStreamBoxRearPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (234.53+kBoxCoverPosition)*cm), fDownStreamBoxRearLogical, "DownStreamBoxRearPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
+    auto fDownStreamBoxRearPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, (234.5+kBoxCoverPosition)*cm), fDownStreamBoxRearLogical, "DownStreamBoxRearPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
 
 
     // PANTS STRUCTURE
@@ -2708,12 +2787,12 @@ void RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
     auto fPantsOutgoTubeRPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(7.671*cm, 0.*cm, (IncomePosition+35.312)*cm), fPantsOutgoTubeLogical, "PantsOutgoTubeRPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
 
     
-    size[0] = 10;
+    size[0] = 15.342/2;
     size[1] = 15.238/2;
     size[2] = 27.7/2;
     auto fPantsSideBoxSolid = new G4Box("PantsSideBoxSolid", size[0]*cm, size[1]*cm, size[2]*cm);
     auto fPantsSideBoxLogical = new G4LogicalVolume(fPantsSideBoxSolid, FindMaterial("G4_Fe"), "PantsSideBoxLogical");
-    size[0] = 10.01;
+    size[0] = 15.36/2;
     size[1] = 15.183/2;
     size[2] = 27.71/2;
     auto fPantsSideBoxVacuumSolid = new G4Box("PantsSideBoxVacuumSolid", size[0]*cm, size[1]*cm, size[2]*cm);
@@ -2750,7 +2829,31 @@ void RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
     G4RotationMatrix* fPantsPipeRRotation = new G4RotationMatrix();
     fPantsPipeRRotation -> rotateY(1.74*deg);
     auto fPantsPipeRPhysical = new G4PVPlacement(fPantsPipeRRotation, G4ThreeVector(-10.691*cm, 0.*cm, (IncomePosition+136.847)*cm), fPantsPipeLogical, "PantsPipeRPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
-    
+
+    starpar[0] = 6.2115;
+    starpar[1] = 6.35;
+    starpar[2] = 153.391/2;
+    starpar[3] = 0;
+    starpar[4] = 360;
+    auto fEndPipeSolid = new G4Tubs("EndPipeSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
+    auto fEndPipeLogical = new G4LogicalVolume(fEndPipeSolid, FindMaterial("G4_Fe"), "EndPipeLogical");
+    G4RotationMatrix* fEndPipeLRotation = new G4RotationMatrix();
+    fEndPipeLRotation -> rotateY(-0.9*deg);
+    auto fEndPipeLPhysical = new G4PVPlacement(fEndPipeLRotation, G4ThreeVector(13.75825*cm, 0.*cm, 148.422*cm), fEndPipeLogical, "EndPipeLPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
+    G4RotationMatrix* fEndPipeRRotation = new G4RotationMatrix();
+    fEndPipeRRotation -> rotateY(0.9*deg);
+    auto fEndPipeRPhysical = new G4PVPlacement(fEndPipeRRotation, G4ThreeVector(-13.75825*cm, 0.*cm, 148.422*cm), fEndPipeLogical, "EndPipeRPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
+
+    starpar[0] = 0.;
+    starpar[1] = 6.2115;
+    starpar[2] = 153.391/2;
+    starpar[3] = 0;
+    starpar[4] = 360;
+    auto fEndPipeVacuumSolid = new G4Tubs("EndPipeVacuumSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
+    auto fEndPipeVacuumLogical = new G4LogicalVolume(fEndPipeVacuumSolid, FindMaterial("G4_Fe"), "EndPipeVacuumLogical");
+    auto fEndPipeVacuumLPhysical = new G4PVPlacement(fEndPipeLRotation, G4ThreeVector(13.75825*cm, 0.*cm, 148.422*cm), fEndPipeVacuumLogical, "EndPipeVacuumLPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
+    auto fEndPipeVacuumRPhysical = new G4PVPlacement(fEndPipeRRotation, G4ThreeVector(-13.75825*cm, 0.*cm, 148.422*cm), fEndPipeVacuumLogical, "EndPipeVacuumRPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
+
     
             
 
@@ -2765,6 +2868,9 @@ void RHICFDetectorConstruction::STARPIPE(G4ThreeVector vector)
     fPantsIncomeVacuumLogical -> SetVisAttributes(visAttributes);
     f3InchSectionLogical -> SetVisAttributes(visAttributes);
     fPantsPipeVacuumLogical -> SetVisAttributes(visAttributes);
+    fDXMagnetSectionLogical -> SetVisAttributes(visAttributes);
+    fEndPipeVacuumLogical -> SetVisAttributes(visAttributes);
+
 
 
 
