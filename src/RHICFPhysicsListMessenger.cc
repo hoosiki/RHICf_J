@@ -50,14 +50,14 @@ RHICFPhysicsListMessenger::RHICFPhysicsListMessenger(RHICFPhysicsList* pPhys)
   : fPhysicsList(pPhys)
 {
 
-    fDirectory = new G4UIdirectory("/RHICF/phys/");
+    fDirectory = new G4UIdirectory("/RHICf/phys/");
     fDirectory->SetGuidance("RHICFPhysicsList control");
  
-    fSetAbsorptionCMD = new G4UIcmdWithABool("/RHICF/setAbsorption", this);
+    fSetAbsorptionCMD = new G4UIcmdWithABool("/RHICf/setAbsorption", this);
     fSetAbsorptionCMD->SetGuidance("Turn on or off absorption process");
     fSetAbsorptionCMD->AvailableForStates(G4State_Idle);
 
-    fVerboseCmd = new G4UIcmdWithAnInteger("/RHICF/phys/verbose",this);
+    fVerboseCmd = new G4UIcmdWithAnInteger("/RHICf/phys/verbose",this);
     fVerboseCmd->SetGuidance("set verbose for physics processes");
     fVerboseCmd->SetParameterName("verbose",true);
     fVerboseCmd->SetDefaultValue(1);
@@ -65,13 +65,13 @@ RHICFPhysicsListMessenger::RHICFPhysicsListMessenger(RHICFPhysicsList* pPhys)
     fVerboseCmd->AvailableForStates(G4State_Idle);
  
     fCerenkovCmd =
-                new G4UIcmdWithAnInteger("/RHICF/phys/cerenkovMaxPhotons",this);
+                new G4UIcmdWithAnInteger("/RHICf/phys/cerenkovMaxPhotons",this);
     fCerenkovCmd->SetGuidance("set max nb of photons per step");
     fCerenkovCmd->SetParameterName("MaxNumber",false);
     fCerenkovCmd->SetRange("MaxNumber>=0");
     fCerenkovCmd->AvailableForStates(G4State_Idle);
 
-    fGammaCutCMD = new G4UIcmdWithADoubleAndUnit("/RHICF/phys/gammaCut",this);
+    fGammaCutCMD = new G4UIcmdWithADoubleAndUnit("/RHICf/phys/gammaCut",this);
     fGammaCutCMD->SetGuidance("Set gamma cut");
     fGammaCutCMD->SetParameterName("Gcut",false);
     fGammaCutCMD->SetUnitCategory("Length");
@@ -79,7 +79,7 @@ RHICFPhysicsListMessenger::RHICFPhysicsListMessenger(RHICFPhysicsList* pPhys)
     fGammaCutCMD->SetDefaultUnit("mm");
     fGammaCutCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-    fElectCutCMD = new G4UIcmdWithADoubleAndUnit("/RHICF/phys/electronCut",this);
+    fElectCutCMD = new G4UIcmdWithADoubleAndUnit("/RHICf/phys/electronCut",this);
     fElectCutCMD->SetGuidance("Set electron cut");
     fElectCutCMD->SetParameterName("Ecut",false);
     fElectCutCMD->SetUnitCategory("Length");
@@ -87,7 +87,7 @@ RHICFPhysicsListMessenger::RHICFPhysicsListMessenger(RHICFPhysicsList* pPhys)
     fElectCutCMD->SetDefaultUnit("mm");
     fElectCutCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-    fPosCutCMD = new G4UIcmdWithADoubleAndUnit("/RHICF/phys/positronCut",this);
+    fPosCutCMD = new G4UIcmdWithADoubleAndUnit("/RHICf/phys/positronCut",this);
     fPosCutCMD->SetGuidance("Set positron cut");
     fPosCutCMD->SetParameterName("Pcut",false);
     fPosCutCMD->SetUnitCategory("Length");
@@ -95,7 +95,7 @@ RHICFPhysicsListMessenger::RHICFPhysicsListMessenger(RHICFPhysicsList* pPhys)
     fPosCutCMD->SetDefaultUnit("mm");
     fPosCutCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-    fAllCutCMD = new G4UIcmdWithADoubleAndUnit("/RHICF/phys/allCuts",this);
+    fAllCutCMD = new G4UIcmdWithADoubleAndUnit("/RHICf/phys/allCuts",this);
     fAllCutCMD->SetGuidance("Set cut for all");
     fAllCutCMD->SetParameterName("cut",false);
     fAllCutCMD->SetUnitCategory("Length");
@@ -103,7 +103,7 @@ RHICFPhysicsListMessenger::RHICFPhysicsListMessenger(RHICFPhysicsList* pPhys)
     fAllCutCMD->SetDefaultUnit("mm");
     fAllCutCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-    fStepMaxCMD = new G4UIcmdWithADoubleAndUnit("/RHICF/phys/stepMax",this);
+    fStepMaxCMD = new G4UIcmdWithADoubleAndUnit("/RHICf/phys/stepMax",this);
     fStepMaxCMD->SetGuidance("Set max. step length in the detector");
     fStepMaxCMD->SetParameterName("mxStep",false);
     fStepMaxCMD->SetUnitCategory("Length");
@@ -112,17 +112,17 @@ RHICFPhysicsListMessenger::RHICFPhysicsListMessenger(RHICFPhysicsList* pPhys)
     fStepMaxCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
     fClearPhysicsCMD =
-                  new G4UIcmdWithoutParameter("/RHICF/phys/clearPhysics",this);
+                  new G4UIcmdWithoutParameter("/RHICf/phys/clearPhysics",this);
     fClearPhysicsCMD->SetGuidance("Clear the physics list");
     fClearPhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-    fRemovePhysicsCMD = new G4UIcmdWithAString("/RHICF/phys/removePhysics",this);
+    fRemovePhysicsCMD = new G4UIcmdWithAString("/RHICf/phys/removePhysics",this);
     fRemovePhysicsCMD->
                      SetGuidance("Remove a physics process from Physics List");
     fRemovePhysicsCMD->SetParameterName("PList",false);
     fRemovePhysicsCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-    fListCMD = new G4UIcmdWithoutParameter("/RHICF/phys/list",this);
+    fListCMD = new G4UIcmdWithoutParameter("/RHICf/phys/list",this);
     fListCMD->SetGuidance("Available Physics Lists");
     fListCMD->AvailableForStates(G4State_Idle);
 

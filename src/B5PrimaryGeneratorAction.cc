@@ -14,7 +14,7 @@ B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),     
   fParticleGun(0), fMessenger(0), 
   fElectron(0), fNeutron(0), fPion(0), fProton(0),
-  fMomentum(100.*GeV),
+  fMomentum(250.*GeV),
   fSigmaMomentum(0.*MeV),
   fSigmaAngle(0.*deg),
   fSigmaRange(1.*mm),
@@ -35,7 +35,7 @@ B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
     // default particle kinematics
     fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,50*cm,50.*cm));
     //Junsang****fParticleGun->SetParticleDefinition(fElectron);
-    fParticleGun->SetParticleDefinition(fNeutron);
+    fParticleGun->SetParticleDefinition(fProton);
     
     //G4cout << "***********************" << (fParticleGun -> GetMomentum())/GeV << "*****************"<< G4endl;
     // define commands for this class
@@ -92,10 +92,13 @@ void B5PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
     
    
     G4double angle = (G4UniformRand()-0.5)*fSigmaAngle;
-    G4ThreeVector position = G4ThreeVector((fX+fSigmaRange*(G4UniformRand()-0.5))*mm, (fY+fSigmaRange*(G4UniformRand()-0.5)+4.05/sqrt(2.))*mm, (fZ+500)*mm);
+    //Junsang****G4ThreeVector position = G4ThreeVector((fX+fSigmaRange*(G4UniformRand()-0.5))*mm, (fY+fSigmaRange*(G4UniformRand()-0.5)+4.05/sqrt(2.))*mm, (fZ+500)*mm);
+    G4ThreeVector position = G4ThreeVector(0.*mm, 0.*mm, 0.*mm);
 
     fParticleGun->SetParticlePosition(position);
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(std::sin(angle),0.,std::cos(angle)));
+    //Junsang****fParticleGun->SetParticleMomentumDirection(G4ThreeVector(std::sin(angle),0.,std::cos(angle)));
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+
 
 
 

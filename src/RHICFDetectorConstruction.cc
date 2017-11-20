@@ -74,7 +74,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     /*-*/checkOverlaps           = false;
 
     /*-*/// DEFINE WORLD VOLUME
-    /*-*/fWorldSolid             = new G4Box("WorldSolid", 10*worX*cm, 10*worY*cm, 10*worZ*cm);
+    /*-*/fWorldSolid             = new G4Box("WorldSolid", 50*cm, 80*cm, 2000*cm);
     /*-*/fWorldLogical           = new G4LogicalVolume(fWorldSolid, FindMaterial("G4_AIR"), "WorldLogical");
     /*-*/fWorldPhysical          = new G4PVPlacement(0, G4ThreeVector(), fWorldLogical, "WorldPhysical", 0, false, checkOverlaps);
     /*-*/// SETTING FOR COLOR OF WORLD VOLUME
@@ -110,39 +110,16 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     /*-*/fRotationZ90            = new G4RotationMatrix();
     /*-*/fRotationZ90            -> rotateZ(90*deg);
 
+    /*-*///SET GEOMETRY
+    //Junsang****PHENIXPIPE();
+    /*-*/STARPIPEINSTALL(G4ThreeVector());
+    //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1867.59*cm), fRotationY180);
+    //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 7.16*cm, 1792.*cm), fRotationY180);//TOP CENTER
+    //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 4.76*cm, 1792.*cm), fRotationY180);//TS CENTER
+    //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1792.*cm), fRotationY180);//TL CENTER
 
 
-
-
-
-
-
-
-
-
-    //G4ThreeVector a         = G4ThreeVector(towposX[1]-4.5*mm,-towposY[1]-12.5*mm,0);
-    //G4ThreeVector a         = G4ThreeVector(towposX[1]-4.5*mm,-towposY[1]-12.5*mm+25*mm,0);
-    //G4ThreeVector a         = G4ThreeVector(towposX[1]-4.5*mm,-towposY[1]-12.5*mm+42.5*mm,0);
-    //G4ThreeVector a         = G4ThreeVector(towposX[1]-4.5*mm,-towposY[1]-12.5*mm+57.5*mm,0);
-    //G4ThreeVector a         = G4ThreeVector(towposX[1]-4.5*mm,-towposY[1]-12.5*mm+72.5*mm,0);
-
-    //Junsang****G4ThreeVector b         = G4ThreeVector(0,-4.05/sqrt(2.)*mm,-1860*cm);
-    G4ThreeVector b         = G4ThreeVector(0*cm,-4.05/sqrt(2.)*mm,-90*cm);
-    //Junsang****PHENIXZDCINSTALL         = PHENIXZDC(fWorldPhysical, b, fNonRotation);
-    //Junsang****STARZDCINSTALL         = STARZDC(fWorldPhysical, b, fNonRotation);
-
-    //Junsang****ARM1INSTALL              = ARM1(fWorldPhysical, G4ThreeVector(), fNonRotation);
-    ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1800.*cm), fRotationY180);
-    STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1880*cm), fRotationY180);
-
-    //BBCINSTALL              = BBC(fWorldPhysical, a, fNonRotation);
-
-    //Junsang****PIPE();
     
-    //Junsang****G4VPhysicalVolume* STARPIPEINSTALL;
-    STARPIPEINSTALL(G4ThreeVector());
-
-
     return                  fWorldPhysical;
 
 }
@@ -224,7 +201,7 @@ void RHICFDetectorConstruction::DefineDimension()
     /*-*/// Parameters for ARM1
     /*-*/kARM1par[0] = 4.5;
     /*-*/kARM1par[1] = 12.65;
-    /*-*/kARM1par[2] = 14;
+    /*-*/kARM1par[2] = 17;
     /*-*/kNegativeLargeWpar[0] = 4.012/2;
     /*-*/kNegativeLargeWpar[1] = 4.012/2;
     /*-*/kNegativeLargeWpar[2] = 7.2/2;
@@ -452,8 +429,9 @@ void RHICFDetectorConstruction::ConstructSDandField()
     /*-*/fFieldMgr               = new G4FieldManager();
     /*-*/fFieldMgr               -> SetDetectorField(fMagneticField);
     /*-*/fFieldMgr               -> CreateChordFinder(fMagneticField);
-    /*-*///G4bool forceToAllDaughters = true;
-    /*-*///fMagneticLogical -> SetFieldManager(fFieldMgr, forceToAllDaughters);
+    /*-*/G4bool forceToAllDaughters = true;
+    /*-*///fMagneticLogical -> SetFieldManager(fFieldMgr, forceToAllDaughters);//PHENIXPIPE
+    f55InchPipeVacuumLogical-> SetFieldManager(fFieldMgr, forceToAllDaughters);//STARPIPE
 
     /*-*/G4AutoDelete::Register(fMagneticField);
     /*-*/G4AutoDelete::Register(fFieldMgr);
@@ -897,10 +875,8 @@ void RHICFDetectorConstruction::STARZDCINSTALL(G4VPhysicalVolume* world_phys, G4
     /*-*/visAttributes           -> SetVisibility(false);
     /*-*///-fZDC_1Logical -> SetVisAttributes(visAttributes);
     /*-*///Junsang****fSMDLogical             -> SetVisAttributes(visAttributes);
-    /*
        fMagneticLogical -> SetVisAttributes(visAttributes);
        fVisAttributes.push_back(visAttributes);
-       */
     /*-*/visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));
     /*-*/visAttributes           -> SetVisibility(false);
     /*-*/fVisAttributes.push_back(visAttributes);
@@ -1327,6 +1303,26 @@ void RHICFDetectorConstruction::ARM1INSTALL(G4VPhysicalVolume* world_phys, G4Thr
     /*-*/fARM1Logical        = new G4LogicalVolume(fARM1Solid, FindMaterial("G4_Galactic"), "ARM1Logical");
     /*-*/fARM1Physical       = new G4PVPlacement(mat, vector, "ARM1Physical", fARM1Logical, world_phys, false, 0, checkOverlaps);
 
+    //-------------------------------------FRONT COUNTER-----------------------
+    //SCINTILLATOR
+    auto fFrontCounterLargeSolid = new G4Box("FrontCounterLargeSolid", 2.*cm, 2.*cm, 0.15*cm);
+    auto fFrontCounterLargeLogical = new G4LogicalVolume(fFrontCounterLargeSolid, FindMaterial("Scintillator"), "FrontCounterLargeLogical");
+    auto fFrontCounterLargePhysical = new G4PVPlacement(fRotationZ45, G4ThreeVector(0.*cm, 0.*cm, 14.15*cm), fFrontCounterLargeLogical, "FrontCounterLargePhysical", fARM1Logical, 0, false, checkOverlaps);
+    auto fFrontCounterSmallSolid = new G4Box("FrontCounterSmallSolid", 1.*cm, 1.*cm, 0.05*cm);
+    auto fFrontCounterSmallLogical = new G4LogicalVolume(fFrontCounterSmallSolid, FindMaterial("Scintillator"), "FrontCounterSmallLogical");
+    auto fFrontCounterSmallPhysical = new G4PVPlacement(fRotationZ45, G4ThreeVector(0.*cm, -(30.1*sqrt(2)+5)/10*cm, 14.15*cm), fFrontCounterSmallLogical, "FrontCounterSmallPhysical", fARM1Logical, 0, false, checkOverlaps);
+    //ALUMINUM
+    auto fFrontCounterCoverFrontSolid = new G4Box("FrontCounterCoverFrontSolid", 4.5*cm, 12.15*cm, 0.05*cm);
+    auto fFrontCounterCoverFrontLogical = new G4LogicalVolume(fFrontCounterCoverFrontSolid, FindMaterial("G4_Al"), "fFrontCounterCoverFrontLogical");
+    auto fFrontCounterCoverFrontPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 3.*cm, 16.45*cm), fFrontCounterCoverFrontLogical, "FrontCounterCoverFrontPhysical", fARM1Logical, 0, false, checkOverlaps);
+    auto fFrontCounterCoverSideSolid = new G4Box("FrontCounterCoverSideSolid", 0.05*cm, 12.15*cm, 1.15*cm);
+    auto fFrontCounterCoverSideLogical = new G4LogicalVolume(fFrontCounterCoverSideSolid, FindMaterial("G4_Al"), "FrontCounterCoverSideLogical");
+    auto fFrontCounterCoverSideRPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(-4.45*cm, 3.*cm, 15.25*cm), fFrontCounterCoverSideLogical, "FrontCounterCoverSideRPhysical", fARM1Logical, 0, false, checkOverlaps);
+    auto fFrontCounterCoverSideLPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(4.45*cm, 3.*cm, 15.25*cm), fFrontCounterCoverSideLogical, "FrontCounterCoverSideLPhysical", fARM1Logical, 0, false, checkOverlaps);
+    
+
+
+    //--------------------------------------ARM1-------------------------------
     /* Define Holders-W_PLHolder1,2 GSO_PLHolder, GSOBarHolder */
 
     /*-*/// Define 'Tunsten Plate Holder1'- First type of tungsten plate holder
@@ -2366,7 +2362,7 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4ThreeVector vector)
     starpar[3] = 0;
     starpar[4] = 360;
     auto f55InchPipeVacuumSolid = new G4Tubs("55InchPipeVacuumSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
-    auto f55InchPipeVacuumLogical = new G4LogicalVolume(f55InchPipeVacuumSolid, FindMaterial("G4_Galactic"), "55InchPipeVacuumLogical");
+    f55InchPipeVacuumLogical = new G4LogicalVolume(f55InchPipeVacuumSolid, FindMaterial("G4_Galactic"), "55InchPipeVacuumLogical");
     auto f55InchPipeVacuumPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -21.918*cm), f55InchPipeVacuumLogical, "55InchPipeVacuumPhysical", fDXMagnetSectionLogical, 0, false, checkOverlaps);
 
     auto fDX5InchConeSolid = new G4Cons("DX5InchConeSolid", 6.07*cm, 6.35*cm, 6.833*cm, 6.985*cm, 5.73/2*cm, 0.*deg, 360.*deg);
@@ -2836,7 +2832,7 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4ThreeVector vector)
     starpar[3] = 0;
     starpar[4] = 360;
     auto fEndPipeVacuumSolid = new G4Tubs("EndPipeVacuumSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
-    auto fEndPipeVacuumLogical = new G4LogicalVolume(fEndPipeVacuumSolid, FindMaterial("G4_Fe"), "EndPipeVacuumLogical");
+    auto fEndPipeVacuumLogical = new G4LogicalVolume(fEndPipeVacuumSolid, FindMaterial("G4_Galactic"), "EndPipeVacuumLogical");
     auto fEndPipeVacuumLPhysical = new G4PVPlacement(fEndPipeLRotation, G4ThreeVector(13.75825*cm, 0.*cm, 148.422*cm), fEndPipeVacuumLogical, "EndPipeVacuumLPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
     auto fEndPipeVacuumRPhysical = new G4PVPlacement(fEndPipeRRotation, G4ThreeVector(-13.75825*cm, 0.*cm, 148.422*cm), fEndPipeVacuumLogical, "EndPipeVacuumRPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
 

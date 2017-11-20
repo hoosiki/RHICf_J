@@ -190,6 +190,21 @@ void RHICFMaterials::CreateMaterials()
   natoms.clear();
 
   //--------------------------------------------------
+  // Scintillator
+  //--------------------------------------------------
+
+  elements.push_back("H");     natoms.push_back(10);
+  elements.push_back("C");     natoms.push_back(9);
+
+  density = 1.023*g/cm3;
+
+  fScintillator = fNistMan->
+          ConstructNewMaterial("Scintillator", elements, natoms, density);
+
+  elements.clear();
+  natoms.clear();
+
+  //--------------------------------------------------
   // Aacrylic
   //--------------------------------------------------
 

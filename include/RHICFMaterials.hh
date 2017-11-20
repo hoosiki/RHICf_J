@@ -44,6 +44,7 @@ class RHICFMaterials
     G4Material*         fG10;
     G4Material*         fDuralumin;
     G4Material*         fAcrylic;
+    G4Material*         fScintillator;
 
 
 };

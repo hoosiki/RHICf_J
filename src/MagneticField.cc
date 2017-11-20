@@ -9,9 +9,9 @@
 MagneticField::MagneticField()
 //: G4MagneticField(), fMessenger(0), fBy(7.6*tesla)
 //: G4MagneticField(), fMessenger(0), fBy(1.7578*tesla)// momentum = 100 GeV
-: G4MagneticField(), fMessenger(0), fBy(2.*tesla)// momentum = 150 GeV
+//: G4MagneticField(), fMessenger(0), fBy(2.*tesla)// momentum = 150 GeV
 //: G4MagneticField(), fMessenger(0), fBy(3.*tesla)// momentum = 200 GeV
-//: G4MagneticField(), fMessenger(0), fBy(3.5*tesla)// momentum = 250 GeV
+: G4MagneticField(), fMessenger(0), fBy(-4.255*tesla)// momentum = 250 GeV
 {
     // define commands for this class
     DefineCommands();
@@ -37,7 +37,7 @@ void MagneticField::DefineCommands()
 {
     // Define /B5/field command directory using generic messenger class
     fMessenger = new G4GenericMessenger(this, 
-                                        "/example/field/", 
+                                        "/RHICf/field/", 
                                         "Field control");
 
     // fieldValue command 

@@ -231,6 +231,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4LogicalVolume*            fAlFrame2Logical;
         G4LogicalVolume*            fSidePanelLogical;
         G4LogicalVolume*            fFrontPanelLogical;
+        G4LogicalVolume*            f55InchPipeVacuumLogical;
 
 
         G4VPhysicalVolume*          fBlockerPhysical;
