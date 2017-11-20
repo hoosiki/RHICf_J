@@ -2,6 +2,7 @@
 #include "B5PrimaryGeneratorAction.hh"
 #include "RHICFEventAction.hh"
 #include "RHICFRunAction.hh"
+#include "ARCSteppingAction.hh"
 #include "ExN04PrimaryGeneratorAction.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -37,6 +38,7 @@ void RHICFActionInitialization::Build() const
 //Junsang****
     //Junsang****RHICFRunAction* runAction = new RHICFRunAction(eventAction);
     //Junsang****SetUserAction(runAction);
+    SetUserAction(new ARCSteppingAction);
 
 
 
