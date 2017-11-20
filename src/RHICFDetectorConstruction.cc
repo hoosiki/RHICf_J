@@ -2218,6 +2218,10 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4ThreeVector vector)
     auto f3InchSectionSolid = new G4Tubs("3InchSectionSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
     auto f3InchSectionLogical = new G4LogicalVolume(f3InchSectionSolid, FindMaterial("G4_AIR"), "3InchSectionLogical");
     auto f3InchSectionPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -504.058*cm), f3InchSectionLogical, "3InchSectionPhysical", fUpstreamSectionLogical, 0, false, checkOverlaps);
+
+
+
+
     starpar[0] = 0.;
     starpar[1] = 3.54;
     starpar[2] = 437.339/2;
@@ -2225,7 +2229,13 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4ThreeVector vector)
     starpar[4] = 360.;
     auto f3InchVacuumSolid = new G4Tubs("3InchVacuumSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
     auto f3InchVacuumLogical = new G4LogicalVolume(f3InchVacuumSolid, FindMaterial("G4_Galactic"), "3InchVacuumLogical");
+
+    G4double tes[3] = {2., 2., 0.01};
+    auto ftestSolid = new G4Box("testSolid", tes[0]*cm, tes[1]*cm, tes[2]*cm);
+    auto ftestLogical = new G4LogicalVolume(ftestSolid, FindMaterial("G4_Galactic"), "testLogical");
+    auto ftestPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -200*cm), ftestLogical, "testPhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
     auto f3InchVacuumPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -13.627*cm), f3InchVacuumLogical, "3InchVacuumPhysical", f3InchSectionLogical, 0, false, checkOverlaps);
+
     auto f3InchConeVacuumSolid = new G4Cons("3InchConeVacuumSolid", 0.*cm, 3.54*cm, 0.*cm, 6.07*cm, 27.254*cm, 0.*deg, 360.*deg);
     auto f3InchConeVacuumLogical = new G4LogicalVolume(f3InchConeVacuumSolid, FindMaterial("G4_Galactic"), "3InchConeVacuumLogical");
     auto f3InchConeVacuumPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 218.6695*cm), f3InchConeVacuumLogical, "3InchConeVacuumPhysical", f3InchSectionLogical, 0, false, checkOverlaps);
