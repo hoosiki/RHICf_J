@@ -2,7 +2,6 @@
 #include "RHICFEventAction.hh"
 #include "RHICFRunAction.hh"
 #include "RHICFDetectorConstruction.hh"
-//Junsang****#include "RHICFDetectorConstruction.hh"
 #include "B5PrimaryGeneratorAction.hh"
 ///////////////////////////////////////////////////////////////////////////////
 #include "G4Event.hh"
@@ -95,8 +94,11 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
         //Junsang****}
         //Junsang****if(fConstruction->GetSDforWInARM1())
         //Junsang****{
+    //Junsang****/*-*/G4String calNameForARM1[19] = {"LargeW_PLLogical", "SmallW_PLLogical", "WHolder_1Logical", "WHolder_2Logical", "GSO_PLHolderLogical", "GSOBarHolderLogical", "AlFrame1Logical", "AlFrame2Logical", "SidePanelLogical", "FrontPanelLogical", "LargeGSO_PLLogical", "SmallGSO_PLLogical", "LightGuideLargeLogical", "LightGuideSmallLogical", "GSORightSmallBarLogical", "GSOLeftSmallBarLogical", "GSORightLargeBarLogical", "GSOLeftLargeBarLogical", "ARM1Logical"};
             //Junsang****NbLargeW_PL     = fSDManager -> GetCollectionID("LargeW_PLLogical/DE");
             //Junsang****NbSmallW_PL     = fSDManager -> GetCollectionID("SmallW_PLLogical/DE");
+            //Junsang****G4cout << "NLW_PL:" << NbLargeW_PL << G4endl;
+            //Junsang****G4cout << "NSW_PL:" << NbSmallW_PL << G4endl;
         //Junsang****}
         //Junsang****if(fConstruction->GetSDforHolder())
         //Junsang****{
@@ -104,6 +106,10 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
             //Junsang****NbW_2Holder     = fSDManager -> GetCollectionID("WHolder_2Logical/DE");
             //Junsang****NbGSO_PLHolder  = fSDManager -> GetCollectionID("GSO_PLHolderLogical/DE");
             //Junsang****NbGSOBarHolder  = fSDManager -> GetCollectionID("GSOBarHolderLogical/DE");
+            //Junsang****NbGSOBarHolder  = fSDManager -> GetCollectionID("LargeGSO_PLLogical/NOP");
+            //Junsang****G4cout << "holder1: " << NbW_1Holder << G4endl;
+            //Junsang****G4cout << "holder2: " << NbW_1Holder << G4endl;
+//Junsang****G4cout << "NOP: " << NbGSOBarHolder << G4endl;
         //Junsang****}
         //Junsang****if(fConstruction->GetSDforFrame())
         //Junsang****{
@@ -115,12 +121,53 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
 
 }     
 
+G4double RHICFEventAction::GetDEValue(G4HCofThisEvent* hc, G4String detectorname, int channel)
+{
+    G4THitsMap<G4double>* tmpHitMap = (G4THitsMap<G4double>*)(hc->GetHC(G4SDManager::GetSDMpointer()->GetCollectionID(detectorname)));
+    //Junsang****G4cout << "Num " << G4SDManager::GetSDMpointer()->GetCollectionID(detectorname) << G4endl;
+    G4double* tmpDE = (*tmpHitMap)[channel];
+    if(!tmpDE) tmpDE = new G4double(0.0);
+    return (G4double)*tmpDE;
+}
+G4double RHICFEventAction::GetNOPValue(G4HCofThisEvent* hc, G4String detectorname, int channel)
+{
+    G4THitsMap<G4double>* tmpHitMap = (G4THitsMap<G4double>*)(hc->GetHC(G4SDManager::GetSDMpointer()->GetCollectionID(detectorname)));
+    //Junsang****G4cout << "Num " << G4SDManager::GetSDMpointer()->GetCollectionID(detectorname) << G4endl;
+    G4double* tmpDE = (*tmpHitMap)[channel];
+    if(!tmpDE) tmpDE = new G4double(0.0);
+    return (G4double)*tmpDE;
+}
 
-///////////////////////////////////////////////////////////////////////////////
 void RHICFEventAction::EndOfEventAction(const G4Event* event)
-///////////////////////////////////////////////////////////////////////////////
 {
    
+    G4HCofThisEvent* fHCE = event -> GetHCofThisEvent();
+    //Junsang****G4cout << "DET: " << GetDEValue(fHCE, "ARM1Logical/DE", 0)/MeV << G4endl;
+    //Junsang****G4cout << "DE0: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 0)/MeV << G4endl;
+    //Junsang****G4cout << "DE1: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 1)/MeV << G4endl;
+    //Junsang****G4cout << "DE2: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 2)/MeV << G4endl;
+    //Junsang****G4cout << "DE3: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 3)/MeV << G4endl;
+    //Junsang****G4cout << "DE4: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 4)/MeV << G4endl;
+    //Junsang****G4cout << "DE5: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 5)/MeV << G4endl;
+    //Junsang****G4cout << "DE6: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 6)/MeV << G4endl;
+    //Junsang****G4cout << "DE7: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 7)/MeV << G4endl;
+    //Junsang****G4cout << "DE8: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 8)/MeV << G4endl;
+    //Junsang****G4cout << "DE9: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 9)/MeV << G4endl;
+    //Junsang****G4cout << "DE9: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 9)/MeV << G4endl;
+    //Junsang****G4cout << "NOP0: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 0) << G4endl;
+    //Junsang****G4cout << "NOP1: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 1) << G4endl;
+    //Junsang****G4cout << "NOP2: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 2) << G4endl;
+    //Junsang****G4cout << "NOP3: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 3) << G4endl;
+    //Junsang****G4cout << "NOP4: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 4) << G4endl;
+    //Junsang****G4cout << "NOP5: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 5) << G4endl;
+    //Junsang****G4cout << "NOP6: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 6) << G4endl;
+    //Junsang****G4cout << "NOP7: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 7) << G4endl;
+    //Junsang****G4cout << "NOP8: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 8) << G4endl;
+    //Junsang****G4cout << "NOP9: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 9) << G4endl;
+    //Junsang****G4cout << "NOP10: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 10) << G4endl;
+    //Junsang****G4cout << "NOP11: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 11) << G4endl;
+    //Junsang****G4cout << "DE: " << GetDEValue(fHCE, "LargeGSO_PLLogical/DE", 0)/MeV << G4endl;
+    //Junsang****G4cout << "ALDE: " << GetDEValue(fHCE, "AlFrame1Logical/DE", 0)/MeV << G4endl;
     //Junsang****RHICFDetectorConstruction* fConstruction = new RHICFDetectorConstruction();
     //Junsang****//Variables for total energy and #of Photon
     //Junsang****G4double TDE_ZDC=0;//TDE:Total deposit energy
@@ -144,7 +191,6 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 //Junsang****
 //Junsang****
     //Junsang****//Total HitCollection in each event
-    //Junsang****G4HCofThisEvent* fHCE = event -> GetHCofThisEvent();
 //Junsang****
 //Junsang****
 //Junsang****

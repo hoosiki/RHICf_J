@@ -39,6 +39,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4bool GetSDforPanels(){ return SDforPanels; };
 
 
+
         virtual void ConstructSDandField();
 
         G4Material* FindMaterial(G4String);
@@ -48,6 +49,13 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         void ConstructMaterials();
         void DestructMaterials();
         void PHENIXPIPE();
+        void SetMagneticField(G4LogicalVolume*);
+        void SetSDForFrontCounter();
+        void SetSDForARM1();
+        void SetSDForSTARZDC();
+        void SetDEScorer(G4String);
+        void SetDENOPScorer(G4String);
+        
         std::vector<G4VisAttributes*>fVisAttributes;
 
 

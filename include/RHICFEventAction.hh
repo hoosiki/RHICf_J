@@ -7,6 +7,7 @@
 #include "G4THitsMap.hh"
 #include <vector>
 #include "B5PrimaryGeneratorAction.hh"
+#include "G4HCofThisEvent.hh"
 
 /// Event action
 class RHICFRunAction;
@@ -19,6 +20,8 @@ public:
     
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
+    G4double GetDEValue(G4HCofThisEvent*, G4String, int );
+    G4double GetNOPValue(G4HCofThisEvent*, G4String, int );
     
 private:
 

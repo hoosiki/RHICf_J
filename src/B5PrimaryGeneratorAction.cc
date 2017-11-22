@@ -14,7 +14,7 @@ B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),     
   fParticleGun(0), fMessenger(0), 
   fElectron(0), fNeutron(0), fPion(0), fProton(0),
-  fMomentum(0.1*GeV),
+  fMomentum(250.*GeV),
   fSigmaMomentum(0.*MeV),
   fSigmaAngle(0.*deg),
   fSigmaRange(1.*mm),

@@ -33,8 +33,8 @@ void RHICFActionInitialization::Build() const
     SetUserAction(Primary);
 
     
-    //Junsang****RHICFEventAction* eventAction = new RHICFEventAction(Primary);
-    //Junsang****SetUserAction(eventAction);
+    RHICFEventAction* eventAction = new RHICFEventAction(Primary);
+    SetUserAction(eventAction);
 //Junsang****
     //Junsang****RHICFRunAction* runAction = new RHICFRunAction(eventAction);
     //Junsang****SetUserAction(runAction);

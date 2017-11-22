@@ -112,11 +112,12 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
 
     /*-*///SET GEOMETRY
     //Junsang****PHENIXPIPE();
-    /*-*/STARPIPEINSTALL(G4ThreeVector());
+    //Junsang****/*-*/STARPIPEINSTALL(G4ThreeVector());
     //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1867.59*cm), fRotationY180);
     //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 7.16*cm, 1792.*cm), fRotationY180);//TOP CENTER
     //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 4.76*cm, 1792.*cm), fRotationY180);//TS CENTER
     //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1792.*cm), fRotationY180);//TL CENTER
+    /*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 50.*cm), fRotationY180);//TL CENTER
 
 
     
@@ -127,19 +128,6 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
 
 void RHICFDetectorConstruction::DefineDimension()
 {
-    /*-*/// SETTING FOR SENSITIVE DETECTORS
-    /*-*/// ZDC
-    /*-*/SDforWInZDC         = false;
-    /*-*/SDforI_PL           = false;
-    /*-*/SDforPMMA           = false;
-    /*-*/SDforSMD            = false;
-    // ARM1
-    /*-*/SDforWInARM1        = true;
-    /*-*/SDforHolder        = true;
-    /*-*/SDforGSOBar         = true;
-    /*-*/SDforGSOPlate       = true;
-    /*-*/SDforFrame        = true;
-    /*-*/SDforPanels         = true;
     /*-*/// DEFINE PARAMETERS FOR GEOMETRY
     /*-*/smdHeight           = smdPar[2];
     /*-*/sin                 = std::sqrt(2.0)/2.0;
@@ -214,230 +202,21 @@ void RHICFDetectorConstruction::DefineDimension()
 }
 
 
-void RHICFDetectorConstruction::ConstructSDandField()
+void RHICFDetectorConstruction::SetMagneticField(G4LogicalVolume* logical )
 {
-    //Junsang****G4SDManager::GetSDMpointer() -> SetVerboseLevel(1);
-    //Junsang****G4SDParticleFilter* OPFilter = new G4SDParticleFilter("NOP", "opticalphoton");
-    //Junsang****
-    //Junsang****G4String detName;
-    //Junsang****
-    //Junsang****/*-*/// Setting for sensitive detector of ZDC
-    //Junsang****/*-*/G4String calNameForZDC[9] = {"W_PL_1Logical", "W_PL_2Logical", "W_PL_3Logical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical", "SMDHLogical", "SMDVLogical"}; 
-    //Junsang****/*-*/// Set sensitive detectors for ZDC
-    //Junsang****/*-*/for(G4int i=0; i<9; i++)
-    //Junsang****/*-*/{
-    //Junsang****/*-*/
-    //Junsang****/*-*/
-    //Junsang****/*-*/
-    //Junsang****/*-*/    if(i<3)
-    //Junsang****/*-*/    {
-    //Junsang****/*-*/        if(SDforWInZDC==true)
-    //Junsang****/*-*/        {
-    //Junsang****/*-*/            // Sensitive detector for deposit energy
-    //Junsang****/*-*/            G4cout << "detector:" << calNameForZDC[i] << G4endl;
-    //Junsang****/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            G4VPrimitiveScorer* PriDEL0;
-    //Junsang****/*-*/
-    //Junsang****/*-*/            PriDEL0 = new G4PSEnergyDeposit("DE",0);
-    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEL0);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            SetSensitiveDetector(calNameForZDC[i], SDforDE);
-    //Junsang****/*-*/        }
-    //Junsang****/*-*/
-    //Junsang****/*-*/
-    //Junsang****/*-*/
-    //Junsang****/*-*/    }
-    //Junsang****/*-*/
-    //Junsang****/*-*/    if(i==3)
-    //Junsang****/*-*/    {
-    //Junsang****/*-*/        if(SDforI_PL==true)
-    //Junsang****/*-*/        {
-    //Junsang****/*-*/            // Sensitive detector for deposit energy
-    //Junsang****/*-*/            G4cout << "detector:" << calNameForZDC[i] << G4endl;
-    //Junsang****/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            G4VPrimitiveScorer* PriDEL0;
-    //Junsang****/*-*/
-    //Junsang****/*-*/            PriDEL0 = new G4PSEnergyDeposit("DE",0);
-    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEL0);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            SetSensitiveDetector(calNameForZDC[i], SDforDE);
-    //Junsang****/*-*/
-    //Junsang****/*-*/        }
-    //Junsang****/*-*/
-    //Junsang****/*-*/    }
-    //Junsang****/*-*/
-    //Junsang****/*-*/    if(i<7 && i>3)
-    //Junsang****/*-*/    {
-    //Junsang****/*-*/
-    //Junsang****/*-*/            // Sensitive detector for deposit energy and number of optical photon generated
-    //Junsang****/*-*/            G4cout << "detector:" << calNameForZDC[i] << G4endl;
-    //Junsang****/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            G4VPrimitiveScorer* PriDEandNoP;
-    //Junsang****/*-*/
-    //Junsang****/*-*/            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
-    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
-    //Junsang****/*-*/            PriDEandNoP = new G4PSNofSecondary("NOP",0);
-    //Junsang****/*-*/            PriDEandNoP -> SetFilter(OPFilter);
-    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            SetSensitiveDetector(calNameForZDC[i], SDforDE);
-    //Junsang****/*-*/    }
-    //Junsang****/*-*/
-    //Junsang****/*-*/
-    //Junsang****/*-*/    if(i>6)
-    //Junsang****/*-*/    {
-    //Junsang****/*-*/
-    //Junsang****/*-*/            // Sensitive detector for deposit energy and number of optical photon generated
-    //Junsang****/*-*/            G4cout << "detector:" << calNameForZDC[i] << G4endl;
-    //Junsang****/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            G4VPrimitiveScorer* PriDEandNoP;
-    //Junsang****/*-*/
-    //Junsang****/*-*/            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
-    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
-    //Junsang****/*-*/            PriDEandNoP = new G4PSNofSecondary("NOP",0);
-    //Junsang****/*-*/            PriDEandNoP -> SetFilter(OPFilter);
-    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            SetSensitiveDetector(calNameForZDC[i], SDforDE);
-    //Junsang****/*-*/    }
-    //Junsang****/*-*/
-    //Junsang****/*-*/
-    //Junsang****/*-*/}
-    //Junsang****
-    //Junsang****/*-*/// Setting for sensitive detector of ARM1
-    //Junsang****/*-*/G4String calNameForARM1[18] = {"LargeW_PLLogical", "SmallW_PLLogical", "WHolder_1Logical", "WHolder_2Logical", "GSO_PLHolderLogical", "GSOBarHolderLogical", "AlFrame1Logical", "AlFrame2Logical", "SidePanelLogical", "FrontPanelLogical", "LargeGSO_PLLogical", "SmallGSO_PLLogical", "LightGuideLargeLogical", "LightGuideSmallLogical", "GSORightSmallBarLogical", "GSOLeftSmallBarLogical", "GSORightLargeBarLogical", "GSOLeftLargeBarLogical"};
-    //Junsang****/*-*/// Set sensitive detectors for tungsten plate
-    //Junsang****/*-*/if(SDforWInARM1==true)
-    //Junsang****/*-*/{
-    //Junsang****/*-*/   for(G4int i=0; i<2; i++)
-    //Junsang****/*-*/   {
-    //Junsang****/*-*/        // Sensitive detector for deposit energy
-    //Junsang****/*-*/        G4cout << "detector:" << calNameForARM1[i] << G4endl;
-    //Junsang****/*-*/        G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForARM1[i]);
-    //Junsang****/*-*/
-    //Junsang****/*-*/        G4VPrimitiveScorer* PriDEL0;
-    //Junsang****/*-*/
-    //Junsang****/*-*/        PriDEL0 = new G4PSEnergyDeposit("DE",0);
-    //Junsang****/*-*/        SDforDE -> RegisterPrimitive(PriDEL0);
-    //Junsang****/*-*/
-    //Junsang****/*-*/        SetSensitiveDetector(calNameForARM1[i], SDforDE);
-    //Junsang****/*-*/   }
-    //Junsang****/*-*/}
-    //Junsang****/*-*/// Set sensitive detectors for holders
-    //Junsang****/*-*/if(SDforHolder==true)
-    //Junsang****/*-*/{
-    //Junsang****/*-*/   for(G4int i=2; i<6; i++)
-    //Junsang****/*-*/   {
-    //Junsang****/*-*/        // Sensitive detector for deposit energy
-    //Junsang****/*-*/        G4cout << "detector:" << calNameForARM1[i] << G4endl;
-    //Junsang****/*-*/        G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForARM1[i]);
-    //Junsang****/*-*/
-    //Junsang****/*-*/        G4VPrimitiveScorer* PriDEL0;
-    //Junsang****/*-*/
-    //Junsang****/*-*/        PriDEL0 = new G4PSEnergyDeposit("DE",0);
-    //Junsang****/*-*/        SDforDE -> RegisterPrimitive(PriDEL0);
-    //Junsang****/*-*/
-    //Junsang****/*-*/        SetSensitiveDetector(calNameForARM1[i], SDforDE);
-    //Junsang****/*-*/   }
-    //Junsang****/*-*/}
-    //Junsang****/*-*/// Set sensitive detectors for frame
-    //Junsang****/*-*/if(SDforFrame==true)
-    //Junsang****/*-*/{
-    //Junsang****/*-*/   for(G4int i=6; i<10; i++)
-    //Junsang****/*-*/   {
-    //Junsang****/*-*/        // Sensitive detector for deposit energy
-    //Junsang****/*-*/        G4cout << "detector:" << calNameForARM1[i] << G4endl;
-    //Junsang****/*-*/        G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForARM1[i]);
-    //Junsang****/*-*/
-    //Junsang****/*-*/        G4VPrimitiveScorer* PriDEL0;
-    //Junsang****/*-*/
-    //Junsang****/*-*/        PriDEL0 = new G4PSEnergyDeposit("DE",0);
-    //Junsang****/*-*/        SDforDE -> RegisterPrimitive(PriDEL0);
-    //Junsang****/*-*/
-    //Junsang****/*-*/        SetSensitiveDetector(calNameForARM1[i], SDforDE);
-    //Junsang****/*-*/   }
-    //Junsang****/*-*/}
-    //Junsang****/*-*/// Set sensitive detectors for GSO plate
-    //Junsang****/*-*/if(SDforGSOPlate==true)
-    //Junsang****/*-*/{
-    //Junsang****/*-*/   for(G4int i=10; i<12; i++)
-    //Junsang****/*-*/   {
-    //Junsang****/*-*/            // Sensitive detector for deposit energy and number of optical photon generated
-    //Junsang****/*-*/            G4cout << "detector:" << calNameForARM1[i] << G4endl;
-    //Junsang****/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForARM1[i]);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            G4VPrimitiveScorer* PriDEandNoP;
-    //Junsang****/*-*/
-    //Junsang****/*-*/            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
-    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
-    //Junsang****/*-*/            PriDEandNoP = new G4PSNofSecondary("NOP",0);
-    //Junsang****/*-*/            PriDEandNoP -> SetFilter(OPFilter);
-    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            SetSensitiveDetector(calNameForARM1[i], SDforDE);
-    //Junsang****/*-*/   }
-    //Junsang****/*-*/}
-    //Junsang****/*-*/// Set sensitive detectors for light guide
-    //Junsang****/*-*/if(SDforLightGuide==true)
-    //Junsang****/*-*/{
-    //Junsang****/*-*/   for(G4int i=12; i<14; i++)
-    //Junsang****/*-*/   {
-    //Junsang****/*-*/            // Sensitive detector for deposit energy and number of optical photon generated
-    //Junsang****/*-*/            G4cout << "detector:" << calNameForARM1[i] << G4endl;
-    //Junsang****/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForARM1[i]);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            G4VPrimitiveScorer* PriDEandNoP;
-    //Junsang****/*-*/
-    //Junsang****/*-*/            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
-    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
-    //Junsang****/*-*/            PriDEandNoP = new G4PSNofSecondary("NOP",0);
-    //Junsang****/*-*/            PriDEandNoP -> SetFilter(OPFilter);
-    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            SetSensitiveDetector(calNameForARM1[i], SDforDE);
-    //Junsang****/*-*/   }
-    //Junsang****/*-*/}
-    //Junsang****/*-*/// Set sensitive detectors for GSO bar
-    //Junsang****/*-*/if(SDforGSOBar==true)
-    //Junsang****/*-*/{
-    //Junsang****/*-*/   for(G4int i=14; i<18; i++)
-    //Junsang****/*-*/   {
-    //Junsang****/*-*/            // Sensitive detector for deposit energy and number of optical photon generated
-    //Junsang****/*-*/            G4cout << "detector:" << calNameForARM1[i] << G4endl;
-    //Junsang****/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForARM1[i]);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            G4VPrimitiveScorer* PriDEandNoP;
-    //Junsang****/*-*/
-    //Junsang****/*-*/            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
-    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
-    //Junsang****/*-*/            PriDEandNoP = new G4PSNofSecondary("NOP",0);
-    //Junsang****/*-*/            PriDEandNoP -> SetFilter(OPFilter);
-    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
-    //Junsang****/*-*/
-    //Junsang****/*-*/            SetSensitiveDetector(calNameForARM1[i], SDforDE);
-    //Junsang****/*-*/   }
-    //Junsang****/*-*/}
-
-
     /*-*/// Set Magnetic Field
-    /*-*///
     /*-*/fMagneticField          = new MagneticField();
     /*-*/fFieldMgr               = new G4FieldManager();
     /*-*/fFieldMgr               -> SetDetectorField(fMagneticField);
     /*-*/fFieldMgr               -> CreateChordFinder(fMagneticField);
     /*-*/G4bool forceToAllDaughters = true;
     /*-*///fMagneticLogical -> SetFieldManager(fFieldMgr, forceToAllDaughters);//PHENIXPIPE
-    f55InchPipeVacuumLogical-> SetFieldManager(fFieldMgr, forceToAllDaughters);//STARPIPE
+    //Junsang****f55InchPipeVacuumLogical-> SetFieldManager(fFieldMgr, forceToAllDaughters);//STARPIPE
+    logical -> SetFieldManager(fFieldMgr, forceToAllDaughters);//STARPIPE
 
     /*-*/G4AutoDelete::Register(fMagneticField);
     /*-*/G4AutoDelete::Register(fFieldMgr);
 
-
-    /*-*/G4SDManager::GetSDMpointer() -> SetVerboseLevel(0); //Related to what level of information of geometry you want to save
 
 }
 
@@ -1773,8 +1552,8 @@ void RHICFDetectorConstruction::ARM1INSTALL(G4VPhysicalVolume* world_phys, G4Thr
     /*-*/fFrontPanelLogical            = new G4LogicalVolume(fFrontPanelSolid, FindMaterial("Duralumin"), "FrontPanelLogical");
 
     /*-*/// DEFINE LOGICAL VOLUME FOR TUNGSTEN PLATE
-    /*-*/fLargeW_PLLogical                     = new G4LogicalVolume(fLargeW_PLSolid, FindMaterial("G4_AIR"), "LargeW_PLLogical");
-    /*-*/fSmallW_PLLogical                     = new G4LogicalVolume(fSmallW_PLSolid, FindMaterial("G4_AIR"), "SmallW_PLLogical");
+    /*-*/fLargeW_PLLogical                     = new G4LogicalVolume(fLargeW_PLSolid, FindMaterial("G4_W"), "LargeW_PLLogical");
+    /*-*/fSmallW_PLLogical                     = new G4LogicalVolume(fSmallW_PLSolid, FindMaterial("G4_W"), "SmallW_PLLogical");
 
     /*-*/// DEFINE LOGICAL VOLUMES FOR GSO PLATE
     /*-*/fLargeGSO_PLLogical                   = new G4LogicalVolume(fLargeGSO_PLSolid, FindMaterial("GSO"), "LargeGSO_PLLogical");
@@ -2849,18 +2628,216 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4ThreeVector vector)
     
             
 
-    //COLOR
-
-    visAttributes = new G4VisAttributes(G4Colour(0., 0., 0.));
-    visAttributes -> SetVisibility(false);
-    //Junsang****fPantsShrinkLogical -> SetVisAttributes(visAttributes);
-    fUpstreamSectionLogical -> SetVisAttributes(visAttributes);
-    fDownStreamSectionLogical -> SetVisAttributes(visAttributes);
-    fPantsShrinkVacuumLogical -> SetVisAttributes(visAttributes);
-    fPantsIncomeVacuumLogical -> SetVisAttributes(visAttributes);
-    f3InchSectionLogical -> SetVisAttributes(visAttributes);
-    fPantsPipeVacuumLogical -> SetVisAttributes(visAttributes);
-    fDXMagnetSectionLogical -> SetVisAttributes(visAttributes);
-    fEndPipeVacuumLogical -> SetVisAttributes(visAttributes);
+/*-*///COLOR
+/*-*/visAttributes = new G4VisAttributes(G4Colour(0., 0., 0.));
+/*-*/visAttributes -> SetVisibility(false);
+/*-*///Junsang****fPantsShrinkLogical -> SetVisAttributes(visAttributes);
+/*-*/fUpstreamSectionLogical -> SetVisAttributes(visAttributes);
+/*-*/fDownStreamSectionLogical -> SetVisAttributes(visAttributes);
+/*-*/fPantsShrinkVacuumLogical -> SetVisAttributes(visAttributes);
+/*-*/fPantsIncomeVacuumLogical -> SetVisAttributes(visAttributes);
+/*-*/f3InchSectionLogical -> SetVisAttributes(visAttributes);
+/*-*/fPantsPipeVacuumLogical -> SetVisAttributes(visAttributes);
+/*-*/fDXMagnetSectionLogical -> SetVisAttributes(visAttributes);
+/*-*/fEndPipeVacuumLogical -> SetVisAttributes(visAttributes);
 }
 
+void RHICFDetectorConstruction::SetDEScorer(G4String string)
+{
+    /*-*///DEFINE SD FOR STORING DE(Deposit energy)
+    /*-*/G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(string);
+    /*-*/G4SDManager::GetSDMpointer()->AddNewDetector(SDforDE);
+    /*-*/G4VPrimitiveScorer* PriDEL0;
+    /*-*/PriDEL0 = new G4PSEnergyDeposit("DE",0);//DE: Deposit Energy
+    /*-*/SDforDE -> RegisterPrimitive(PriDEL0);
+    /*-*/SetSensitiveDetector(string, SDforDE);
+}
+
+void RHICFDetectorConstruction::SetDENOPScorer(G4String string)
+{
+    /*-*///DEFINE SD FOR STORING DE AND NOP(Number of photon)
+    /*-*/G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(string);
+    /*-*/G4SDParticleFilter* OPFilter = new G4SDParticleFilter("NOP", "opticalphoton");
+    /*-*/G4SDManager::GetSDMpointer()->AddNewDetector(SDforDE);
+    /*-*/G4VPrimitiveScorer* PriDEandNoP;
+    /*-*/PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+    /*-*/SDforDE -> RegisterPrimitive(PriDEandNoP);
+    /*-*/PriDEandNoP = new G4PSNofSecondary("NOP",0);
+    /*-*/PriDEandNoP -> SetFilter(OPFilter);
+    /*-*/SDforDE -> RegisterPrimitive(PriDEandNoP);
+    /*-*/SetSensitiveDetector(string, SDforDE);
+}
+
+void RHICFDetectorConstruction::SetSDForFrontCounter()
+{
+    /*-*/// SETTING FOR SENSITIVE DETECTOR OF FRONT COUNTER
+    /*-*/SetDENOPScorer("FrontCounterSmallLogical");
+    /*-*/SetDENOPScorer("FrontCounterLargeLogical");
+}
+
+void RHICFDetectorConstruction::SetSDForARM1()
+{
+    
+        SetDEScorer("LargeW_PLLogical");
+        SetDEScorer("SmallW_PLLogical");
+        SetDEScorer("WHolder_1Logical");
+        SetDEScorer("WHolder_2Logical");
+        SetDE
+
+    /*-*/// SETTING FOR SENSITIVE DETECTOR OF ARM1
+    /*-*/G4String calNameForARM1[19] = {"LargeW_PLLogical", "SmallW_PLLogical", "WHolder_1Logical", "WHolder_2Logical", "GSO_PLHolderLogical", "GSOBarHolderLogical", "AlFrame1Logical", "AlFrame2Logical", "SidePanelLogical", "FrontPanelLogical", "LargeGSO_PLLogical", "SmallGSO_PLLogical", "LightGuideLargeLogical", "LightGuideSmallLogical", "GSORightSmallBarLogical", "GSOLeftSmallBarLogical", "GSORightLargeBarLogical", "GSOLeftLargeBarLogical", "ARM1Logical"};
+
+    /*-*/// Set sensitive detectors for tungsten plate
+    /*-*/for(G4int i=0; i<2; i++)
+    /*-*/{
+        SetDEScorer(calNameForARM1[i]);
+    /*-*/}
+    /*-*/// Set sensitive detectors for holders
+    /*-*/for(G4int i=2; i<6; i++)
+    /*-*/{
+        SetDEScorer(calNameForARM1[i]);
+    /*-*/}
+    /*-*/// Set sensitive detectors for frame
+    /*-*/   for(G4int i=6; i<10; i++)
+    /*-*/   {
+        SetDEScorer(calNameForARM1[i]);
+    /*-*/   }
+    /*-*/// Set sensitive detectors for GSO plate
+    /*-*/   for(G4int i=10; i<12; i++)
+    /*-*/   {
+        SetDENOPScorer(calNameForARM1[i]);
+    /*-*/   }
+    /*-*/// Set sensitive detectors for light guide
+    /*-*/   for(G4int i=12; i<14; i++)
+    /*-*/   {
+        SetDENOPScorer(calNameForARM1[i]);
+    /*-*/   }
+    /*-*/// Set sensitive detectors for GSO bar
+    /*-*/   for(G4int i=14; i<18; i++)
+    /*-*/   {
+        SetDENOPScorer(calNameForARM1[i]);
+    /*-*/   }
+    /*-*/   for(G4int i=18; i<19; i++)
+    /*-*/   {
+        SetDEScorer(calNameForARM1[i]);
+    /*-*/   }
+}
+
+void RHICFDetectorConstruction::SetSDForSTARZDC()
+{
+}
+
+void RHICFDetectorConstruction::ConstructSDandField()
+{
+    G4SDManager::GetSDMpointer() -> SetVerboseLevel(0);
+    
+    if(G4PhysicalVolumeStore::GetInstance()->GetVolume("ARM1Physical",false))
+    {
+        SetSDForARM1();
+    }
+    if(G4PhysicalVolumeStore::GetInstance()->GetVolume("STARZDCPhysical",false))
+    {
+        SetSDForSTARZDC();
+    }
+    //Junsang****if(G4PhysicalVolumeStore::GetInstance()->GetVolume("55InchPipeVacuumPhysical",true))
+    //Junsang****{
+        //Junsang****SetMagneticField(f55InchPipeVacuumLogical);
+    //Junsang****}
+    //Junsang****for(int i=0; i<10 ;i++)
+    //Junsang****{
+        //Junsang****G4cout << "SD list: " << i << ": " << G4SDManager::GetSD
+    //Junsang****}
+
+    //Junsang****G4String detName;
+    //Junsang****
+    //Junsang****/*-*/// Setting for sensitive detector of ZDC
+    //Junsang****/*-*/G4String calNameForZDC[9] = {"W_PL_1Logical", "W_PL_2Logical", "W_PL_3Logical", "I_PLLogical", "GAPF_1Logical", "GAPF_2Logical", "GAPF_3Logical", "SMDHLogical", "SMDVLogical"}; 
+    //Junsang****/*-*/// Set sensitive detectors for ZDC
+    //Junsang****/*-*/for(G4int i=0; i<9; i++)
+    //Junsang****/*-*/{
+    //Junsang****/*-*/
+    //Junsang****/*-*/
+    //Junsang****/*-*/
+    //Junsang****/*-*/    if(i<3)
+    //Junsang****/*-*/    {
+    //Junsang****/*-*/        if(SDforWInZDC==true)
+    //Junsang****/*-*/        {
+    //Junsang****/*-*/            // Sensitive detector for deposit energy
+    //Junsang****/*-*/            G4cout << "detector:" << calNameForZDC[i] << G4endl;
+    //Junsang****/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
+    //Junsang****/*-*/
+    //Junsang****/*-*/            G4VPrimitiveScorer* PriDEL0;
+    //Junsang****/*-*/
+    //Junsang****/*-*/            PriDEL0 = new G4PSEnergyDeposit("DE",0);
+    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEL0);
+    //Junsang****/*-*/
+    //Junsang****/*-*/            SetSensitiveDetector(calNameForZDC[i], SDforDE);
+    //Junsang****/*-*/        }
+    //Junsang****/*-*/
+    //Junsang****/*-*/
+    //Junsang****/*-*/
+    //Junsang****/*-*/    }
+    //Junsang****/*-*/
+    //Junsang****/*-*/    if(i==3)
+    //Junsang****/*-*/    {
+    //Junsang****/*-*/        if(SDforI_PL==true)
+    //Junsang****/*-*/        {
+    //Junsang****/*-*/            // Sensitive detector for deposit energy
+    //Junsang****/*-*/            G4cout << "detector:" << calNameForZDC[i] << G4endl;
+    //Junsang****/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
+    //Junsang****/*-*/
+    //Junsang****/*-*/            G4VPrimitiveScorer* PriDEL0;
+    //Junsang****/*-*/
+    //Junsang****/*-*/            PriDEL0 = new G4PSEnergyDeposit("DE",0);
+    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEL0);
+    //Junsang****/*-*/
+    //Junsang****/*-*/            SetSensitiveDetector(calNameForZDC[i], SDforDE);
+    //Junsang****/*-*/
+    //Junsang****/*-*/        }
+    //Junsang****/*-*/
+    //Junsang****/*-*/    }
+    //Junsang****/*-*/
+    //Junsang****/*-*/    if(i<7 && i>3)
+    //Junsang****/*-*/    {
+    //Junsang****/*-*/
+    //Junsang****/*-*/            // Sensitive detector for deposit energy and number of optical photon generated
+    //Junsang****/*-*/            G4cout << "detector:" << calNameForZDC[i] << G4endl;
+    //Junsang****/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
+    //Junsang****/*-*/
+    //Junsang****/*-*/            G4VPrimitiveScorer* PriDEandNoP;
+    //Junsang****/*-*/
+    //Junsang****/*-*/            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+    //Junsang****/*-*/            PriDEandNoP = new G4PSNofSecondary("NOP",0);
+    //Junsang****/*-*/            PriDEandNoP -> SetFilter(OPFilter);
+    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+    //Junsang****/*-*/
+    //Junsang****/*-*/            SetSensitiveDetector(calNameForZDC[i], SDforDE);
+    //Junsang****/*-*/    }
+    //Junsang****/*-*/
+    //Junsang****/*-*/
+    //Junsang****/*-*/    if(i>6)
+    //Junsang****/*-*/    {
+    //Junsang****/*-*/
+    //Junsang****/*-*/            // Sensitive detector for deposit energy and number of optical photon generated
+    //Junsang****/*-*/            G4cout << "detector:" << calNameForZDC[i] << G4endl;
+    //Junsang****/*-*/            G4MultiFunctionalDetector* SDforDE = new G4MultiFunctionalDetector(calNameForZDC[i]);
+    //Junsang****/*-*/
+    //Junsang****/*-*/            G4VPrimitiveScorer* PriDEandNoP;
+    //Junsang****/*-*/
+    //Junsang****/*-*/            PriDEandNoP = new G4PSEnergyDeposit("DE",0);
+    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+    //Junsang****/*-*/            PriDEandNoP = new G4PSNofSecondary("NOP",0);
+    //Junsang****/*-*/            PriDEandNoP -> SetFilter(OPFilter);
+    //Junsang****/*-*/            SDforDE -> RegisterPrimitive(PriDEandNoP);
+    //Junsang****/*-*/
+    //Junsang****/*-*/            SetSensitiveDetector(calNameForZDC[i], SDforDE);
+    //Junsang****/*-*/    }
+    //Junsang****/*-*/
+    //Junsang****/*-*/
+    //Junsang****/*-*/}
+    //Junsang****
+
+    /*-*/G4SDManager::GetSDMpointer() -> SetVerboseLevel(0); //Related to what level of information of geometry you want to save
+
+}

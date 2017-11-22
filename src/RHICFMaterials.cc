@@ -443,8 +443,10 @@ void RHICFMaterials::CreateMaterials()
   mptRHICFfiber->AddProperty("RHICFCOMPONENT",photonEnergy,emissionFib,nEntries);
   mptRHICFfiber->AddConstProperty("RHICFTIMECONSTANT", 0.5*ns);
 
+  fGSO->SetMaterialPropertiesTable(mptRHICFfiber);
   fPMMA->SetMaterialPropertiesTable(mptRHICFfiber);
   fAcrylic->SetMaterialPropertiesTable(mptRHICFfiber);
+  fGSO->SetMaterialPropertiesTable(mptRHICFfiber);
 
   //--------------------------------------------------
   //  Polyethylene
