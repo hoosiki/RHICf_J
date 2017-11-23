@@ -18,8 +18,8 @@ RHICFActionInitialization::~RHICFActionInitialization()
 
 void RHICFActionInitialization::BuildForMaster() const
 {
-    //Junsang****RHICFEventAction* eventAction = 0;
-    //Junsang****SetUserAction(new RHICFRunAction(eventAction));
+    RHICFEventAction* eventAction = 0;
+    SetUserAction(new RHICFRunAction(eventAction));
 }
 
 void RHICFActionInitialization::Build() const
@@ -35,10 +35,9 @@ void RHICFActionInitialization::Build() const
     
     RHICFEventAction* eventAction = new RHICFEventAction(Primary);
     SetUserAction(eventAction);
-//Junsang****
-    //Junsang****RHICFRunAction* runAction = new RHICFRunAction(eventAction);
-    //Junsang****SetUserAction(runAction);
-    SetUserAction(new RHICFSteppingAction);
+    RHICFRunAction* runAction = new RHICFRunAction(eventAction);
+    SetUserAction(runAction);
+    //Junsang****SetUserAction(new RHICFSteppingAction);
 
 
 

@@ -64,7 +64,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         void          PHENIXZDCINSTALL(G4VPhysicalVolume*, G4ThreeVector,  G4RotationMatrix*);
         void          BBCINSTALL(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
         void          ARM1INSTALL(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
-        void          STARPIPEINSTALL(G4ThreeVector);
+        void          STARPIPEINSTALL(G4double, G4double);
         void          STARZDCINSTALL(G4VPhysicalVolume*, G4ThreeVector, G4RotationMatrix*);
                                     
         static G4ThreadLocal        MagneticField* fMagneticField;
@@ -284,6 +284,7 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4RotationMatrix*           fRotationZ90;
         G4RotationMatrix*           fRotationY180;
 
+        G4double                    kARM1YPosition, kARM1ZPosition;
         G4double                    worX, worY, worZ;
         G4double                    interval, zpos, ypos;
         G4double                    putFx, pos;

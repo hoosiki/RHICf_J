@@ -141,7 +141,7 @@ G4double RHICFEventAction::GetNOPValue(G4HCofThisEvent* hc, G4String detectornam
 void RHICFEventAction::EndOfEventAction(const G4Event* event)
 {
    
-    G4HCofThisEvent* fHCE = event -> GetHCofThisEvent();
+    //Junsang****G4HCofThisEvent* fHCE = event -> GetHCofThisEvent();
     //Junsang****G4cout << "DET: " << GetDEValue(fHCE, "ARM1Logical/DE", 0)/MeV << G4endl;
     //Junsang****G4cout << "DE0: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 0)/MeV << G4endl;
     //Junsang****G4cout << "DE1: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 1)/MeV << G4endl;

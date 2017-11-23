@@ -1,4 +1,3 @@
-// Edited by Junsang Park. 2014.12.10
 #include "RHICFDetectorConstruction.hh"
 #include "RHICFActionInitialization.hh"
 #include "RHICFPhysicsList.hh"
@@ -11,7 +10,6 @@
 #endif
 #include "G4UImanager.hh"
 #include "G4ParallelWorldPhysics.hh"
-//Junsang****#include "G4UICommand.hh"
 #include "QGSP_BERT.hh"
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -20,24 +18,9 @@
 #include "G4UIExecutive.hh"
 #endif
 #include <ctime>
-/////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char** argv)
-/////////////////////////////////////////////////////////////////////////////////
 {
-
-    G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
-    time_t systime = time(NULL);
-
-    G4long myseed = systime*G4UniformRand();
-
-
 #ifdef G4MULTITHREADED
     G4MTRunManager *runManager = new G4MTRunManager;
     //Junsang****runManager -> SetNumberOfThreads(4);
@@ -45,14 +28,7 @@ int main(int argc, char** argv)
     G4RunManager* runManager = new G4RunManager;
 #endif
 
-    G4Random::setTheSeed(myseed);
-
     G4VUserDetectorConstruction* RHICFDC = new RHICFDetectorConstruction();
-
-
-    
-
-
     runManager -> SetUserInitialization(RHICFDC);
 
     G4VModularPhysicsList* physicsList = new RHICFPhysicsList("QGSP_BERT");
@@ -74,14 +50,9 @@ int main(int argc, char** argv)
 
     if(argc!=1) // batch mode
     {
-        
         G4String command = "/control/execute ";
         G4String macro = argv[1];
         UImanager -> ApplyCommand(command+macro);
-
-        
-        
-
     }else
     {
         // interactive mode : define UI session
@@ -97,16 +68,10 @@ int main(int argc, char** argv)
         ui -> SessionStart();
         delete ui;
 #endif
-       
-        
-
     }
-    
 #ifdef G4VIS_USE
     delete visManager;
 #endif
-
- 
     delete runManager;
 
     return 0;

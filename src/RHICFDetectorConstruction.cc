@@ -112,12 +112,16 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
 
     /*-*///SET GEOMETRY
     //Junsang****PHENIXPIPE();
-    //Junsang****/*-*/STARPIPEINSTALL(G4ThreeVector());
     //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1867.59*cm), fRotationY180);
+    kARM1YPosition = 7.16;//TOP CENTER
+    kARM1YPosition = 4.76;//TS CENTER
+    kARM1YPosition = 0.;//TL CENTER
+    kARM1ZPosition = 1778;
+    /*-*/STARPIPEINSTALL(kARM1YPosition, kARM1ZPosition);
     //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 7.16*cm, 1792.*cm), fRotationY180);//TOP CENTER
     //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 4.76*cm, 1792.*cm), fRotationY180);//TS CENTER
-    //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1792.*cm), fRotationY180);//TL CENTER
-    /*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 50.*cm), fRotationY180);//TL CENTER
+    //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, kARM1YPosition*cm, kARM1ZPosition*cm), fRotationY180);//TL CENTER
+    /*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, kARM1YPosition*cm, kARM1ZPosition*cm), fRotationY180);//TL CENTER
 
 
     
@@ -125,6 +129,23 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
 
 }
 
+void RHICFDetectorConstruction::ConstructSDandField()
+{
+    G4SDManager::GetSDMpointer() -> SetVerboseLevel(0);
+    if(G4PhysicalVolumeStore::GetInstance()->GetVolume("FrontCounterSmallPhysical",false))
+    {
+        SetSDForFrontCounter();
+    }
+    if(G4PhysicalVolumeStore::GetInstance()->GetVolume("ARM1Physical",false))
+    {
+        SetSDForARM1();
+    }
+    if(G4PhysicalVolumeStore::GetInstance()->GetVolume("STARZDCPhysical",false))
+    {
+        SetSDForSTARZDC();
+    }
+
+}
 
 void RHICFDetectorConstruction::DefineDimension()
 {
@@ -196,6 +217,7 @@ void RHICFDetectorConstruction::DefineDimension()
     /*-*/kNegativeSmallWpar[0] = 2.012/2;
     /*-*/kNegativeSmallWpar[1] = 2.012/2;
     /*-*/kNegativeSmallWpar[2] = 7.2/2;
+    
 
     /*-*/basez = 116.75;
     /*-*/dz  = 0;
@@ -1981,7 +2003,7 @@ void RHICFDetectorConstruction::ARM1INSTALL(G4VPhysicalVolume* world_phys, G4Thr
     /*-*/fVisAttributes.push_back(visAttributes);
 }
 
-void RHICFDetectorConstruction::STARPIPEINSTALL(G4ThreeVector vector)
+void RHICFDetectorConstruction::STARPIPEINSTALL(G4double arm1y, G4double arm1z)
 {
     //------------------------------------------------UPSTREAM SECTION---------------------------------------
     G4double starpar[5] = {0., 35., 1472.709/2, 0., 360.};
@@ -2009,10 +2031,19 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4ThreeVector vector)
     auto f3InchVacuumSolid = new G4Tubs("3InchVacuumSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
     auto f3InchVacuumLogical = new G4LogicalVolume(f3InchVacuumSolid, FindMaterial("G4_Galactic"), "3InchVacuumLogical");
 
-    G4double tes[3] = {2., 2., 0.01};
-    auto ftestSolid = new G4Box("testSolid", tes[0]*cm, tes[1]*cm, tes[2]*cm);
-    auto ftestLogical = new G4LogicalVolume(ftestSolid, FindMaterial("G4_Galactic"), "testLogical");
-    auto ftestPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -200*cm), ftestLogical, "testPhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
+    /*-*///IMPLEMENT OF GHOST VULUME
+    /*-*/G4double ghostsize[3] = {2.*5/arm1z, 2.*5/arm1z, 0.0005};
+    /*-*/auto fGhostCenterLargeSolid = new G4Box("GhostCenterLargeSolid", ghostsize[0]*cm, ghostsize[1]*cm, ghostsize[2]*cm);
+    /*-*/auto fGhostCenterLargeLogical = new G4LogicalVolume(fGhostCenterLargeSolid, FindMaterial("G4_Galactic"), "GhostCenterLargeLogical");
+    /*-*/auto fGhostCenterLargePhysical = new G4PVPlacement(fRotationZ45, G4ThreeVector(0.*cm, 5./arm1z*arm1y*cm, -213.6695*cm), fGhostCenterLargeLogical, "GhostCenterLargePhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
+    /*-*/ghostsize[0] = 1.*5/arm1z;
+    /*-*/ghostsize[1] = 1.*5/arm1z;
+    /*-*/ghostsize[2] = 0.0005;
+    /*-*/auto fGhostCenterSmallSolid = new G4Box("GhostCenterSmallSolid", ghostsize[0]*cm, ghostsize[1]*cm, ghostsize[2]*cm);
+    /*-*/auto fGhostCenterSmallLogical = new G4LogicalVolume(fGhostCenterSmallSolid, FindMaterial("G4_Galactic"), "GhostCenterSmallLogical");
+    /*-*/auto fGhostCenterSmallPhysical = new G4PVPlacement(fRotationZ45, G4ThreeVector(0.*cm, 5./arm1z*(arm1y-4.76)*cm, -213.6695*cm), fGhostCenterSmallLogical, "GhostCenterSmallPhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
+
+
     auto f3InchVacuumPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -13.627*cm), f3InchVacuumLogical, "3InchVacuumPhysical", f3InchSectionLogical, 0, false, checkOverlaps);
 
     auto f3InchConeVacuumSolid = new G4Cons("3InchConeVacuumSolid", 0.*cm, 3.54*cm, 0.*cm, 6.07*cm, 27.254*cm, 0.*deg, 360.*deg);
@@ -2628,18 +2659,18 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4ThreeVector vector)
     
             
 
-/*-*///COLOR
-/*-*/visAttributes = new G4VisAttributes(G4Colour(0., 0., 0.));
-/*-*/visAttributes -> SetVisibility(false);
-/*-*///Junsang****fPantsShrinkLogical -> SetVisAttributes(visAttributes);
-/*-*/fUpstreamSectionLogical -> SetVisAttributes(visAttributes);
-/*-*/fDownStreamSectionLogical -> SetVisAttributes(visAttributes);
-/*-*/fPantsShrinkVacuumLogical -> SetVisAttributes(visAttributes);
-/*-*/fPantsIncomeVacuumLogical -> SetVisAttributes(visAttributes);
-/*-*/f3InchSectionLogical -> SetVisAttributes(visAttributes);
-/*-*/fPantsPipeVacuumLogical -> SetVisAttributes(visAttributes);
-/*-*/fDXMagnetSectionLogical -> SetVisAttributes(visAttributes);
-/*-*/fEndPipeVacuumLogical -> SetVisAttributes(visAttributes);
+    /*-*///COLOR
+    /*-*/visAttributes = new G4VisAttributes(G4Colour(0., 0., 0.));
+    /*-*/visAttributes -> SetVisibility(false);
+    /*-*///Junsang****fPantsShrinkLogical -> SetVisAttributes(visAttributes);
+    /*-*/fUpstreamSectionLogical -> SetVisAttributes(visAttributes);
+    /*-*/fDownStreamSectionLogical -> SetVisAttributes(visAttributes);
+    /*-*/fPantsShrinkVacuumLogical -> SetVisAttributes(visAttributes);
+    /*-*/fPantsIncomeVacuumLogical -> SetVisAttributes(visAttributes);
+    /*-*/f3InchSectionLogical -> SetVisAttributes(visAttributes);
+    /*-*/fPantsPipeVacuumLogical -> SetVisAttributes(visAttributes);
+    /*-*/fDXMagnetSectionLogical -> SetVisAttributes(visAttributes);
+    /*-*/fEndPipeVacuumLogical -> SetVisAttributes(visAttributes);
 }
 
 void RHICFDetectorConstruction::SetDEScorer(G4String string)
@@ -2675,70 +2706,30 @@ void RHICFDetectorConstruction::SetSDForFrontCounter()
     /*-*/SetDENOPScorer("FrontCounterLargeLogical");
 }
 
-void RHICFDetectorConstruction::SetSDForARM1()
+void RHICFDetectorConstruction::SetSDForARM1() //FUNCTION FOR SETTING SD OF ARM1
 {
-    
-        SetDEScorer("LargeW_PLLogical");
-        SetDEScorer("SmallW_PLLogical");
-        SetDEScorer("WHolder_1Logical");
-        SetDEScorer("WHolder_2Logical");
-        SetDE
-
-    /*-*/// SETTING FOR SENSITIVE DETECTOR OF ARM1
-    /*-*/G4String calNameForARM1[19] = {"LargeW_PLLogical", "SmallW_PLLogical", "WHolder_1Logical", "WHolder_2Logical", "GSO_PLHolderLogical", "GSOBarHolderLogical", "AlFrame1Logical", "AlFrame2Logical", "SidePanelLogical", "FrontPanelLogical", "LargeGSO_PLLogical", "SmallGSO_PLLogical", "LightGuideLargeLogical", "LightGuideSmallLogical", "GSORightSmallBarLogical", "GSOLeftSmallBarLogical", "GSORightLargeBarLogical", "GSOLeftLargeBarLogical", "ARM1Logical"};
-
-    /*-*/// Set sensitive detectors for tungsten plate
-    /*-*/for(G4int i=0; i<2; i++)
-    /*-*/{
-        SetDEScorer(calNameForARM1[i]);
-    /*-*/}
-    /*-*/// Set sensitive detectors for holders
-    /*-*/for(G4int i=2; i<6; i++)
-    /*-*/{
-        SetDEScorer(calNameForARM1[i]);
-    /*-*/}
-    /*-*/// Set sensitive detectors for frame
-    /*-*/   for(G4int i=6; i<10; i++)
-    /*-*/   {
-        SetDEScorer(calNameForARM1[i]);
-    /*-*/   }
-    /*-*/// Set sensitive detectors for GSO plate
-    /*-*/   for(G4int i=10; i<12; i++)
-    /*-*/   {
-        SetDENOPScorer(calNameForARM1[i]);
-    /*-*/   }
-    /*-*/// Set sensitive detectors for light guide
-    /*-*/   for(G4int i=12; i<14; i++)
-    /*-*/   {
-        SetDENOPScorer(calNameForARM1[i]);
-    /*-*/   }
-    /*-*/// Set sensitive detectors for GSO bar
-    /*-*/   for(G4int i=14; i<18; i++)
-    /*-*/   {
-        SetDENOPScorer(calNameForARM1[i]);
-    /*-*/   }
-    /*-*/   for(G4int i=18; i<19; i++)
-    /*-*/   {
-        SetDEScorer(calNameForARM1[i]);
-    /*-*/   }
+    /*-*/// FOR DEPOSIT ENERGY
+    /*-*/SetDEScorer("LargeW_PLLogical");
+    /*-*/SetDEScorer("SmallW_PLLogical");
+    /*-*/SetDEScorer("WHolder_1Logical");
+    /*-*/SetDEScorer("WHolder_2Logical");
+    /*-*/SetDEScorer("GSO_PLHolderLogical");
+    /*-*/SetDEScorer("GSOBarHolderLogical");
+    /*-*/SetDEScorer("AlFrame1Logical");
+    /*-*/SetDEScorer("AlFrame2Logical");
+    /*-*/SetDEScorer("LightGuideLargeLogical");
+    /*-*/SetDEScorer("LightGuideSmallLogical");
+    /*-*/// FOR DEPOSIT ENERGY & NUMBER OF PHOTON
+    /*-*/SetDENOPScorer("LargeGSO_PLLogical");
+    /*-*/SetDENOPScorer("SmallGSO_PLLogical");
+    /*-*/SetDENOPScorer("GSORightLargeBarLogical");
+    /*-*/SetDENOPScorer("GSORightSmallBarLogical");
+    /*-*/SetDENOPScorer("GSOLeftLargeBarLogical");
+    /*-*/SetDENOPScorer("GSOLeftSmallBarLogical");
 }
 
-void RHICFDetectorConstruction::SetSDForSTARZDC()
+void RHICFDetectorConstruction::SetSDForSTARZDC() //FUNCTION FOR SETTING SD FOR STARZDC
 {
-}
-
-void RHICFDetectorConstruction::ConstructSDandField()
-{
-    G4SDManager::GetSDMpointer() -> SetVerboseLevel(0);
-    
-    if(G4PhysicalVolumeStore::GetInstance()->GetVolume("ARM1Physical",false))
-    {
-        SetSDForARM1();
-    }
-    if(G4PhysicalVolumeStore::GetInstance()->GetVolume("STARZDCPhysical",false))
-    {
-        SetSDForSTARZDC();
-    }
     //Junsang****if(G4PhysicalVolumeStore::GetInstance()->GetVolume("55InchPipeVacuumPhysical",true))
     //Junsang****{
         //Junsang****SetMagneticField(f55InchPipeVacuumLogical);
@@ -2837,7 +2828,6 @@ void RHICFDetectorConstruction::ConstructSDandField()
     //Junsang****/*-*/
     //Junsang****/*-*/}
     //Junsang****
-
-    /*-*/G4SDManager::GetSDMpointer() -> SetVerboseLevel(0); //Related to what level of information of geometry you want to save
-
+    //Junsang****/*-*/G4SDManager::GetSDMpointer() -> SetVerboseLevel(0); //Related to what level of information of geometry you want to save
 }
+
