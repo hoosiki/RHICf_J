@@ -119,10 +119,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     kARM1ZPosition = 1787;
     //Junsang****kARM1ZPosition = 50;
     /*-*/STARPIPEINSTALL(kARM1YPosition, kARM1ZPosition);
-    //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 7.16*cm, 1792.*cm), fRotationY180);//TOP CENTER
-    //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 4.76*cm, 1792.*cm), fRotationY180);//TS CENTER
-    //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, kARM1YPosition*cm, kARM1ZPosition*cm), fRotationY180);//TL CENTER
-    /*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, kARM1YPosition*cm, kARM1ZPosition*cm), fRotationY180);//TL CENTER
+    /*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, kARM1YPosition*cm, kARM1ZPosition*cm), fRotationY180);
 
 
     
@@ -144,6 +141,10 @@ void RHICFDetectorConstruction::ConstructSDandField()
     if(G4PhysicalVolumeStore::GetInstance()->GetVolume("STARZDCPhysical",false))
     {
         SetSDForSTARZDC();
+    }
+    if(G4PhysicalVolumeStore::GetInstance()->GetVolume("55InchPipeVacuumPhysical", false))
+    {
+        SetMagneticField(f55InchPipeVacuumLogical);
     }
 
 }

@@ -76,6 +76,7 @@ void RHICFRunAction::NtupleForARM1()
     {
         G4AnalysisManager::Instance()->CreateNtupleIColumn(0,"TLGSOPLNOP"+std::to_string(i));
     }
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(0, "TotalEnergy");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(0,"RunNumber");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(0,"EventNumber");
     G4AnalysisManager::Instance()->FinishNtuple(0);
@@ -104,7 +105,7 @@ void RHICFRunAction::NtupleForARM1()
     G4AnalysisManager::Instance()->CreateNtupleIColumn(1,"EventNumber");
     G4AnalysisManager::Instance()->FinishNtuple(1);
 
-    G4AnalysisManager::Instance()->CreateNtuple("FrontCounter", "Hits");
+    G4AnalysisManager::Instance()->CreateNtuple("FrontCounter", "DENOP");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(2, "TSFCDE");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(2, "TLFCDE");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(2, "TSFCNOP");

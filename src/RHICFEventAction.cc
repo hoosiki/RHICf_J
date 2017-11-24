@@ -1,4 +1,3 @@
-// Edited by Junsang Park. 2014.12.10
 #include "RHICFEventAction.hh"
 #include "RHICFRunAction.hh"
 #include "RHICFDetectorConstruction.hh"
@@ -14,6 +13,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
+#include "FileManager.hh"
 #include "Randomize.hh"
 #include <fstream>
 #include <cstdlib>
@@ -32,26 +32,21 @@ using namespace std;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
 RHICFEventAction::RHICFEventAction(B5PrimaryGeneratorAction* B5G): G4UserEventAction(), NbW_1(-1), NbW_2(-1), NbW_3(-1), NbSMDH(-1), NbSMDV(-1), NbI_PL(-1), NbNOPSMDH(-1), NbNOPSMDV(-1), NbLargeW_PL(-1), NbSmallW_PL(-1), NbW_1Holder(-1), NbW_2Holder(-1), NbLargeGSO_PL(-1), NbSmallGSO_PL(-1), NbLargeLightGuide(-1), NbSmallLightGuide(-1), NbGSO_PLHolder(-1), NbGSOBarHolder(-1), NbGSOSmallRightBar(-1), NbGSOLargeRightBar(-1), NbGSOSmallLeftBar(-1), NbGSOLargeLeftBar(-1), NbAlFrame(-1), NbSidePanels(-1), NbFrontPanels(-1), fB5Primary(B5G)
-///////////////////////////////////////////////////////////////////////////////
 {
 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
 RHICFEventAction::~RHICFEventAction()
-///////////////////////////////////////////////////////////////////////////////
 {
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
 void RHICFEventAction::BeginOfEventAction(const G4Event*)
-///////////////////////////////////////////////////////////////////////////////
 {
+
 
 
     //Junsang****RHICFDetectorConstruction* fConstruction = new RHICFDetectorConstruction();// Detector construction for get information about SD
@@ -121,27 +116,15 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
 
 }     
 
-G4double RHICFEventAction::GetDEValue(G4HCofThisEvent* hc, G4String detectorname, int channel)
-{
-    G4THitsMap<G4double>* tmpHitMap = (G4THitsMap<G4double>*)(hc->GetHC(G4SDManager::GetSDMpointer()->GetCollectionID(detectorname)));
-    //Junsang****G4cout << "Num " << G4SDManager::GetSDMpointer()->GetCollectionID(detectorname) << G4endl;
-    G4double* tmpDE = (*tmpHitMap)[channel];
-    if(!tmpDE) tmpDE = new G4double(0.0);
-    return (G4double)*tmpDE;
-}
-G4double RHICFEventAction::GetNOPValue(G4HCofThisEvent* hc, G4String detectorname, int channel)
-{
-    G4THitsMap<G4double>* tmpHitMap = (G4THitsMap<G4double>*)(hc->GetHC(G4SDManager::GetSDMpointer()->GetCollectionID(detectorname)));
-    //Junsang****G4cout << "Num " << G4SDManager::GetSDMpointer()->GetCollectionID(detectorname) << G4endl;
-    G4double* tmpDE = (*tmpHitMap)[channel];
-    if(!tmpDE) tmpDE = new G4double(0.0);
-    return (G4double)*tmpDE;
-}
 
 void RHICFEventAction::EndOfEventAction(const G4Event* event)
 {
+
+    G4HCofThisEvent* fHCE = event -> GetHCofThisEvent();
+    ExtractDEValue(fHCE, event);
+    ExtractNOPValue(fHCE, event);
    
-    //Junsang****G4HCofThisEvent* fHCE = event -> GetHCofThisEvent();
+
     //Junsang****G4cout << "DET: " << GetDEValue(fHCE, "ARM1Logical/DE", 0)/MeV << G4endl;
     //Junsang****G4cout << "DE0: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 0)/MeV << G4endl;
     //Junsang****G4cout << "DE1: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 1)/MeV << G4endl;
@@ -154,7 +137,6 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     //Junsang****G4cout << "DE8: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 8)/MeV << G4endl;
     //Junsang****G4cout << "DE9: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 9)/MeV << G4endl;
     //Junsang****G4cout << "DE9: " << GetDEValue(fHCE, "LargeW_PLLogical/DE", 9)/MeV << G4endl;
-    //Junsang****G4cout << "NOP0: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 0) << G4endl;
     //Junsang****G4cout << "NOP1: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 1) << G4endl;
     //Junsang****G4cout << "NOP2: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 2) << G4endl;
     //Junsang****G4cout << "NOP3: " << GetDEValue(fHCE, "LargeGSO_PLLogical/NOP", 3) << G4endl;
@@ -564,4 +546,99 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 
     //Junsang****fAnalysisManager -> AddNtupleRow();
 
+    G4AnalysisManager::Instance()->AddNtupleRow();
 }
+
+G4double RHICFEventAction::GetDEValue(G4HCofThisEvent* hc, G4String detectorname, int channel)
+{
+
+    G4THitsMap<G4double>* tmpHitMap = (G4THitsMap<G4double>*)(hc->GetHC(G4SDManager::GetSDMpointer()->GetCollectionID(detectorname+"/DE")));
+    //Junsang****G4cout << "Num " << G4SDManager::GetSDMpointer()->GetCollectionID(detectorname) << G4endl;
+    G4double* tmpDE = (*tmpHitMap)[channel];
+    if(!tmpDE) tmpDE = new G4double(0.0);
+    return (G4double)*tmpDE;
+}
+
+G4int RHICFEventAction::GetNOPValue(G4HCofThisEvent* hc, G4String detectorname, int channel)
+{
+    G4THitsMap<G4double>* tmpHitMap = (G4THitsMap<G4double>*)(hc->GetHC(G4SDManager::GetSDMpointer()->GetCollectionID(detectorname+"/NOP")));
+    //Junsang****G4cout << "Num " << G4SDManager::GetSDMpointer()->GetCollectionID(detectorname) << G4endl;
+    G4double* tmpDE = (*tmpHitMap)[channel];
+    if(!tmpDE) tmpDE = new G4double(0.0);
+    return (G4double)*tmpDE;
+}
+
+void RHICFEventAction::ExtractDEValue(G4HCofThisEvent* hc, const G4Event* event)
+{
+    //ARM1 GSO_PL
+    for (int i = 0; i < 16; i++) 
+    {
+        G4AnalysisManager::Instance()->FillNtupleDColumn(0, i, GetDEValue(hc, "SmallGSO_PLLogical", i)/GeV);
+    } 
+    for (int i = 16; i < 32; i++) 
+    {
+        G4AnalysisManager::Instance()->FillNtupleDColumn(0, i, GetDEValue(hc, "LargeGSO_PLLogical", i)/GeV);
+    } 
+
+    G4double tmpDE = 0.;
+    for (int i = 0; i < 16; i++) 
+    {
+        tmpDE += GetDEValue(hc, "GSO_PLHolderLogical", i);
+        tmpDE += GetDEValue(hc, "LightGuideLargeLogical", i);
+        tmpDE += GetDEValue(hc, "LightGuideSmallLogical", i);
+    }
+    for (int i = 0; i < 80; i++) 
+    {
+        tmpDE += GetDEValue(hc, "GSORightSmallBarLogical", i);
+        tmpDE += GetDEValue(hc, "GSOLeftSmallBarLogical", i);
+    }
+    for (int i = 0; i < 160; i++) 
+    {
+        tmpDE += GetDEValue(hc, "GSORightLargeBarLogical", i);
+        tmpDE += GetDEValue(hc, "GSOLeftLargeBarLogical", i);
+    }
+    for (int i = 0; i < 18; i++) 
+    {
+        tmpDE += GetDEValue(hc, "LargeW_PLLogical", i);
+        tmpDE += GetDEValue(hc, "SmallW_PLLogical", i);
+        tmpDE += GetDEValue(hc, "WHolder_1Logical", i);
+    }
+    for (int i = 0; i < 4; i++) 
+    {
+        tmpDE += GetDEValue(hc, "WHolder_2Logical", i);
+        tmpDE += GetDEValue(hc, "GSOBarHolderLogical", i);
+    }
+    tmpDE += GetDEValue(hc, "AlFrame1Logical", 0);
+    tmpDE += GetDEValue(hc, "AlFrame2Logical", 0);
+
+    G4AnalysisManager::Instance()->FillNtupleDColumn(0, 64, tmpDE/GeV); 
+    G4AnalysisManager::Instance()->FillNtupleIColumn(0, 65, stoi(FileManager::GetInstance()->GetTime()+FileManager::GetInstance()->GetPID())); 
+    G4AnalysisManager::Instance()->FillNtupleIColumn(0, 66, event->GetEventID()); 
+
+
+
+    //Junsang****for (int i = 0; i < 16; i++) 
+    //Junsang****{
+        //Junsang****G4AnalysisManager::Instance()->FillNtupleDColumn(1, i, GetDEValue(hc, "GSOLeftSmallBarLogical", i)/GeV);
+    //Junsang****} 
+    //Junsang****for (int i = 16; i < 32; i++) 
+    //Junsang****{
+        //Junsang****G4AnalysisManager::Instance()->FillNtupleDColumn(1, i, GetDEValue(hc, "GSOLeftLargeBarLogical", i)/GeV);
+    //Junsang****} 
+
+
+}
+
+void RHICFEventAction::ExtractNOPValue(G4HCofThisEvent* hc, const G4Event* event)
+{
+    for (int i = 32; i < 48; i++) 
+    {
+        G4AnalysisManager::Instance()->FillNtupleIColumn(0, i, GetNOPValue(hc, "SmallGSO_PLLogical", i)/GeV);
+    } 
+    for (int i = 48; i < 64; i++) 
+    {
+        G4AnalysisManager::Instance()->FillNtupleIColumn(0, i, GetNOPValue(hc, "SmallGSO_PLLogical", i)/GeV);
+    } 
+
+}
+
