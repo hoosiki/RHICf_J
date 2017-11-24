@@ -10,26 +10,19 @@ class RHICFMaterials
   public:
 
     virtual ~RHICFMaterials();
- 
     static RHICFMaterials* GetInstance();
-
     G4Material* GetMaterial(const G4String);
- 
+
   private:
-
- 
+    
     RHICFMaterials();
-
     void CreateMaterials();
 
   private:
 
     static RHICFMaterials* fInstance;
-
     G4NistManager*      fNistMan;
-
     G4Material*         fAir;
-
     G4Material*         fPMMA;
     G4Material*         fPethylene;
     G4Material*         fFPethylene;
@@ -45,8 +38,6 @@ class RHICFMaterials
     G4Material*         fDuralumin;
     G4Material*         fAcrylic;
     G4Material*         fScintillator;
-
-
 };
 
 #endif /*RHICFMaterials_h*/

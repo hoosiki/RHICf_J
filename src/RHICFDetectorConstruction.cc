@@ -116,7 +116,8 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     kARM1YPosition = 7.16;//TOP CENTER
     kARM1YPosition = 4.76;//TS CENTER
     kARM1YPosition = 0.;//TL CENTER
-    kARM1ZPosition = 1778;
+    kARM1ZPosition = 1787;
+    //Junsang****kARM1ZPosition = 50;
     /*-*/STARPIPEINSTALL(kARM1YPosition, kARM1ZPosition);
     //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 7.16*cm, 1792.*cm), fRotationY180);//TOP CENTER
     //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 4.76*cm, 1792.*cm), fRotationY180);//TS CENTER
@@ -2361,7 +2362,7 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4double arm1y, G4double arm1z)
     size[1] = 81./2;
     size[2] = 160.025/2;
     auto fNegativeDownStreamSectionSolid = new G4Box("NegativeDownStreamSectionSolid", size[0]*cm, size[1]*cm, size[2]*cm);
-    auto fDownStreamSectionSolid = new G4SubtractionSolid("DownStreamSectionSolidSolid", fDownStreamSection0Solid, fNegativeDownStreamSectionSolid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 295.*cm));
+    auto fDownStreamSectionSolid = new G4SubtractionSolid("DownStreamSectionSolidSolid", fDownStreamSection0Solid, fNegativeDownStreamSectionSolid, fNonRotation, G4ThreeVector(0.*cm, 0.*cm,(295./2+4.)*cm));
     auto fDownStreamSectionLogical = new G4LogicalVolume(fDownStreamSectionSolid, FindMaterial("G4_AIR"), "DownStreamSectionLogical");
     auto fDownStreamSectionPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, 1698.0355*cm), fDownStreamSectionLogical, "DownStreamSectionPhysical", fWorldLogical, 0, false, checkOverlaps);
     starpar[0] = 14.6175;
@@ -2641,10 +2642,10 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4double arm1y, G4double arm1z)
     auto fEndPipeLogical = new G4LogicalVolume(fEndPipeSolid, FindMaterial("G4_Fe"), "EndPipeLogical");
     G4RotationMatrix* fEndPipeLRotation = new G4RotationMatrix();
     fEndPipeLRotation -> rotateY(-0.9*deg);
-    auto fEndPipeLPhysical = new G4PVPlacement(fEndPipeLRotation, G4ThreeVector(13.75825*cm, 0.*cm, 148.422*cm), fEndPipeLogical, "EndPipeLPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
+    auto fEndPipeLPhysical = new G4PVPlacement(fEndPipeLRotation, G4ThreeVector(13.75825*cm, 0.*cm, 148.*cm), fEndPipeLogical, "EndPipeLPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
     G4RotationMatrix* fEndPipeRRotation = new G4RotationMatrix();
     fEndPipeRRotation -> rotateY(0.9*deg);
-    auto fEndPipeRPhysical = new G4PVPlacement(fEndPipeRRotation, G4ThreeVector(-13.75825*cm, 0.*cm, 148.422*cm), fEndPipeLogical, "EndPipeRPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
+    auto fEndPipeRPhysical = new G4PVPlacement(fEndPipeRRotation, G4ThreeVector(-13.75825*cm, 0.*cm, 148.*cm), fEndPipeLogical, "EndPipeRPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
 
     starpar[0] = 0.;
     starpar[1] = 6.2115;
@@ -2653,8 +2654,8 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4double arm1y, G4double arm1z)
     starpar[4] = 360;
     auto fEndPipeVacuumSolid = new G4Tubs("EndPipeVacuumSolid", starpar[0]*cm, starpar[1]*cm, starpar[2]*cm, starpar[3]*deg, starpar[4]*deg);
     auto fEndPipeVacuumLogical = new G4LogicalVolume(fEndPipeVacuumSolid, FindMaterial("G4_Galactic"), "EndPipeVacuumLogical");
-    auto fEndPipeVacuumLPhysical = new G4PVPlacement(fEndPipeLRotation, G4ThreeVector(13.75825*cm, 0.*cm, 148.422*cm), fEndPipeVacuumLogical, "EndPipeVacuumLPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
-    auto fEndPipeVacuumRPhysical = new G4PVPlacement(fEndPipeRRotation, G4ThreeVector(-13.75825*cm, 0.*cm, 148.422*cm), fEndPipeVacuumLogical, "EndPipeVacuumRPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
+    auto fEndPipeVacuumLPhysical = new G4PVPlacement(fEndPipeLRotation, G4ThreeVector(13.75825*cm, 0.*cm, 148.*cm), fEndPipeVacuumLogical, "EndPipeVacuumLPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
+    auto fEndPipeVacuumRPhysical = new G4PVPlacement(fEndPipeRRotation, G4ThreeVector(-13.75825*cm, 0.*cm, 148.*cm), fEndPipeVacuumLogical, "EndPipeVacuumRPhysical", fDownStreamSectionLogical, 0, false, checkOverlaps);
 
     
             
@@ -2662,7 +2663,6 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4double arm1y, G4double arm1z)
     /*-*///COLOR
     /*-*/visAttributes = new G4VisAttributes(G4Colour(0., 0., 0.));
     /*-*/visAttributes -> SetVisibility(false);
-    /*-*///Junsang****fPantsShrinkLogical -> SetVisAttributes(visAttributes);
     /*-*/fUpstreamSectionLogical -> SetVisAttributes(visAttributes);
     /*-*/fDownStreamSectionLogical -> SetVisAttributes(visAttributes);
     /*-*/fPantsShrinkVacuumLogical -> SetVisAttributes(visAttributes);

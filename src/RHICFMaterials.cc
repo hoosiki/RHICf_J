@@ -3,19 +3,11 @@
 #include "G4SystemOfUnits.hh"
 
 RHICFMaterials* RHICFMaterials::fInstance = 0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 RHICFMaterials::RHICFMaterials()
 {
   fNistMan = G4NistManager::Instance();
-
-  fNistMan->SetVerbose(2);
-
   CreateMaterials();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RHICFMaterials::~RHICFMaterials()
 {
@@ -25,6 +17,7 @@ RHICFMaterials::~RHICFMaterials()
   delete    fPolystyrene;
   delete    fSilicone;
   delete    fFPMMA;
+  delete    fScintillator;
   delete    fGSO;
   delete    fGten;
   delete    fAcrylic;
@@ -135,7 +128,26 @@ void RHICFMaterials::CreateMaterials()
 
   elements.clear();
   natoms.clear();
-
+  const G4int NUMENTRIES = 3;
+  G4double GSO_PP[NUMENTRIES]    = { 7.0*eV , 7.07*eV, 7.14*eV };
+  G4double GSO_SCINT[NUMENTRIES] = { 0.1, 1.0, 0.1 };
+  G4double GSO_RIND[NUMENTRIES]  = { 1.59 , 1.57, 1.54 };
+  G4double GSO_ABSL[NUMENTRIES]  = { 35.*cm, 35.*cm, 35.*cm}; //atten length
+  G4MaterialPropertiesTable* GSO_mt = new G4MaterialPropertiesTable();
+  GSO_mt->AddProperty("FASTCOMPONENT", GSO_PP, GSO_SCINT, NUMENTRIES);
+  GSO_mt->AddProperty("SLOWCOMPONENT", GSO_PP, GSO_SCINT, NUMENTRIES);
+  GSO_mt->AddProperty("RINDEX",        GSO_PP, GSO_RIND,  NUMENTRIES);
+  GSO_mt->AddProperty("ABSLENGTH",     GSO_PP, GSO_ABSL,  NUMENTRIES);
+  GSO_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV); // include QE 20%
+  // and 13eV creation energy for photons - may be 15eV?
+  // Fano factor assumed 1; should be much less for Xe ~ 0.13
+  // but the Fano factor is already partially included in the correlated
+  // electron production - therefore not the absolute Fano factor here:
+  GSO_mt->AddConstProperty("RESOLUTIONSCALE",1.0);
+  GSO_mt->AddConstProperty("FASTTIMECONSTANT",20.*ns);
+  GSO_mt->AddConstProperty("SLOWTIMECONSTANT",45.*ns);
+  GSO_mt->AddConstProperty("YIELDRATIO",1.0);
+  fGSO->SetMaterialPropertiesTable(GSO_mt);
   //--------------------------------------------------
   // Gten
   //--------------------------------------------------
@@ -203,6 +215,25 @@ void RHICFMaterials::CreateMaterials()
 
   elements.clear();
   natoms.clear();
+  G4double Scintillator_PP[NUMENTRIES]    = { 7.0*eV , 7.07*eV, 7.14*eV };
+  G4double Scintillator_SCINT[NUMENTRIES] = { 0.1, 1.0, 0.1 };
+  G4double Scintillator_RIND[NUMENTRIES]  = { 1.59 , 1.57, 1.54 };
+  G4double Scintillator_ABSL[NUMENTRIES]  = { 35.*cm, 35.*cm, 35.*cm}; //atten length
+  G4MaterialPropertiesTable* Scintillator_mt = new G4MaterialPropertiesTable();
+  Scintillator_mt->AddProperty("FASTCOMPONENT", Scintillator_PP, Scintillator_SCINT, NUMENTRIES);
+  Scintillator_mt->AddProperty("SLOWCOMPONENT", Scintillator_PP, Scintillator_SCINT, NUMENTRIES);
+  Scintillator_mt->AddProperty("RINDEX",        Scintillator_PP, Scintillator_RIND,  NUMENTRIES);
+  Scintillator_mt->AddProperty("ABSLENGTH",     Scintillator_PP, Scintillator_ABSL,  NUMENTRIES);
+  Scintillator_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV); // include QE 20%
+  // and 13eV creation energy for photons - may be 15eV?
+  // Fano factor assumed 1; should be much less for Xe ~ 0.13
+  // but the Fano factor is already partially included in the correlated
+  // electron production - therefore not the absolute Fano factor here:
+  Scintillator_mt->AddConstProperty("RESOLUTIONSCALE",1.0);
+  Scintillator_mt->AddConstProperty("FASTTIMECONSTANT",20.*ns);
+  Scintillator_mt->AddConstProperty("SLOWTIMECONSTANT",45.*ns);
+  Scintillator_mt->AddConstProperty("YIELDRATIO",1.0);
+  fScintillator->SetMaterialPropertiesTable(Scintillator_mt);
 
   //--------------------------------------------------
   // Aacrylic
@@ -443,10 +474,8 @@ void RHICFMaterials::CreateMaterials()
   mptRHICFfiber->AddProperty("RHICFCOMPONENT",photonEnergy,emissionFib,nEntries);
   mptRHICFfiber->AddConstProperty("RHICFTIMECONSTANT", 0.5*ns);
 
-  fGSO->SetMaterialPropertiesTable(mptRHICFfiber);
   fPMMA->SetMaterialPropertiesTable(mptRHICFfiber);
   fAcrylic->SetMaterialPropertiesTable(mptRHICFfiber);
-  fGSO->SetMaterialPropertiesTable(mptRHICFfiber);
 
   //--------------------------------------------------
   //  Polyethylene
