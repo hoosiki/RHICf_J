@@ -121,6 +121,8 @@ void RHICFRunAction::NtupleForARM1()
     G4AnalysisManager::Instance()->CreateNtupleDColumn(2, "TLFCDE");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(2, "TSFCNOP");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(2, "TLFCNOP");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(2, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(2, "EventNumber");
 
     G4AnalysisManager::Instance()->FinishNtuple(2);
 

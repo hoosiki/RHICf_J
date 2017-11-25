@@ -23,6 +23,7 @@
 
 int main(int argc, char** argv)
 {
+    system("date");
 #ifdef G4MULTITHREADED
     G4MTRunManager *runManager = new G4MTRunManager;
     //Junsang****runManager -> SetNumberOfThreads(4);
@@ -82,5 +83,6 @@ int main(int argc, char** argv)
 #endif
     delete runManager;
 
+    system("date");
     return 0;
 }

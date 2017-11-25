@@ -627,6 +627,10 @@ void RHICFEventAction::ExtractDEValue(G4HCofThisEvent* hc, const G4Event* event)
     G4AnalysisManager::Instance()->FillNtupleIColumn(1, 481, event->GetEventID()); 
 
     //FC
+    G4AnalysisManager::Instance()->FillNtupleDColumn(2, 0, GetDEValue(hc, "FrontCounterSmallLogical", 0)/MeV);
+    G4AnalysisManager::Instance()->FillNtupleDColumn(2, 1, GetDEValue(hc, "FrontCounterLargeLogical", 0)/MeV);
+    G4AnalysisManager::Instance()->FillNtupleIColumn(2, 4, stoi(FileManager::GetInstance()->GetTime()+FileManager::GetInstance()->GetPID())); 
+    G4AnalysisManager::Instance()->FillNtupleIColumn(2, 5, event->GetEventID()); 
 }
 
 void RHICFEventAction::ExtractNOPValue(G4HCofThisEvent* hc)
@@ -647,6 +651,9 @@ void RHICFEventAction::ExtractNOPValue(G4HCofThisEvent* hc)
     {
         G4AnalysisManager::Instance()->FillNtupleIColumn(1, i, GetNOPValue(hc, "SmallGSO_PLLogical", i));
     } 
+
+    G4AnalysisManager::Instance()->FillNtupleIColumn(2, 2, GetNOPValue(hc, "FrontCounterSmallLogical", 0));
+    G4AnalysisManager::Instance()->FillNtupleIColumn(2, 3, GetNOPValue(hc, "FrontCounterLargeLogical", 0));
 
 }
 
