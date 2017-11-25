@@ -6,7 +6,7 @@
 #include "globals.hh"
 #include "G4THitsMap.hh"
 #include <vector>
-#include "B5PrimaryGeneratorAction.hh"
+#include "RHICFPrimaryGeneratorAction.hh"
 #include "G4HCofThisEvent.hh"
 
 /// Event action
@@ -16,7 +16,7 @@ class RHICFEventAction : public G4UserEventAction
 {
     public:
 
-        RHICFEventAction(B5PrimaryGeneratorAction*);
+        RHICFEventAction(RHICFPrimaryGeneratorAction*);
         virtual ~RHICFEventAction();
         virtual void BeginOfEventAction(const G4Event*);
         virtual void EndOfEventAction(const G4Event*);
@@ -27,7 +27,7 @@ class RHICFEventAction : public G4UserEventAction
 
     private:
 
-        B5PrimaryGeneratorAction* fB5Primary;
+        RHICFPrimaryGeneratorAction* fRHICFPrimary;
         G4int fPrintModulo;
 };
 

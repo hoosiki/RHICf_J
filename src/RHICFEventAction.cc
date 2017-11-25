@@ -1,7 +1,7 @@
 #include "RHICFEventAction.hh"
 #include "RHICFRunAction.hh"
 #include "RHICFDetectorConstruction.hh"
-#include "B5PrimaryGeneratorAction.hh"
+#include "RHICFPrimaryGeneratorAction.hh"
 ///////////////////////////////////////////////////////////////////////////////
 #include "G4Event.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -23,7 +23,7 @@
 using namespace std;
 ///////////////////////////////////////////////////////////////////////////////
 
-RHICFEventAction::RHICFEventAction(B5PrimaryGeneratorAction* B5G): G4UserEventAction(),  fB5Primary(B5G)
+RHICFEventAction::RHICFEventAction(RHICFPrimaryGeneratorAction* RHICFG): G4UserEventAction(),  fRHICFPrimary(RHICFG)
 {
 
 }

@@ -1,5 +1,5 @@
 #include "RHICFActionInitialization.hh"
-#include "B5PrimaryGeneratorAction.hh"
+#include "RHICFPrimaryGeneratorAction.hh"
 #include "RHICFEventAction.hh"
 #include "RHICFRunAction.hh"
 #include "RHICFSteppingAction.hh"
@@ -27,7 +27,7 @@ void RHICFActionInitialization::Build() const
 
 
     //ExN04PrimaryGeneratorAction* Primary = new ExN04PrimaryGeneratorAction;
-    B5PrimaryGeneratorAction* Primary = new B5PrimaryGeneratorAction;
+    RHICFPrimaryGeneratorAction* Primary = new RHICFPrimaryGeneratorAction;
 
     //SetUserAction(new ExN04PrimaryGeneratorAction);
     SetUserAction(Primary);
