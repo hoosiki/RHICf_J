@@ -56,6 +56,14 @@ foreach(_script ${eRHICF_SCRIPTS})
 endforeach()
 
 #----------------------------------------------------------------------------
+# Compiler & Option setting for optimization
+# 
+#
+#set(CMAKE_C_COMPILER "/home/hoosiki/Packages/gcc/bin/gcc")
+#set(CMAKE_CXX_COMPILER "/home/hoosiki/Packages/gcc/bin/g++")
+#set(CMAKE_CXX_FLAGS "-g -O3")
+
+#----------------------------------------------------------------------------
 # Add program to the project targets
 # (this avoids the need of typing the program name after make)
 #

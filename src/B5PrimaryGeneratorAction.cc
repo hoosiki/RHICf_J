@@ -8,7 +8,6 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),     
@@ -19,7 +18,7 @@ B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
   fSigmaAngle(0.*deg),
   fSigmaRange(1.*mm),
   fX(0), fY(0), fZ(0),
-  fRandomizePrimary(false)
+  fRandomizePrimary(true)
 {
     G4int n_particle = 1;
     fParticleGun  = new G4ParticleGun(n_particle);
@@ -35,14 +34,13 @@ B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
     // default particle kinematics
     fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,50*cm,50.*cm));
     //Junsang****fParticleGun->SetParticleDefinition(fElectron);
-    fParticleGun->SetParticleDefinition(fProton);
+    fParticleGun->SetParticleDefinition(fNeutron);
     
     //G4cout << "***********************" << (fParticleGun -> GetMomentum())/GeV << "*****************"<< G4endl;
     // define commands for this class
     DefineCommands();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5PrimaryGeneratorAction::~B5PrimaryGeneratorAction()
 {
@@ -50,7 +48,6 @@ B5PrimaryGeneratorAction::~B5PrimaryGeneratorAction()
     delete fMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B5PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
@@ -91,7 +88,7 @@ void B5PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
     fParticleGun->SetParticleEnergy(Ekin);
     
    
-    G4double angle = (G4UniformRand()-0.5)*fSigmaAngle;
+    //Junsang****G4double angle = (G4UniformRand()-0.5)*fSigmaAngle;
     //Junsang****G4ThreeVector position = G4ThreeVector((fX+fSigmaRange*(G4UniformRand()-0.5))*mm, (fY+fSigmaRange*(G4UniformRand()-0.5)+4.05/sqrt(2.))*mm, (fZ+500)*mm);
     G4ThreeVector position = G4ThreeVector(0.*mm, 0.*mm, 0.*mm);
 
@@ -106,7 +103,6 @@ void B5PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
     fParticleGun->GeneratePrimaryVertex(event);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B5PrimaryGeneratorAction::DefineCommands()
 {
@@ -186,4 +182,3 @@ void B5PrimaryGeneratorAction::DefineCommands()
     randomCmd.SetDefaultValue("true");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

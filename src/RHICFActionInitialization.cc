@@ -37,7 +37,7 @@ void RHICFActionInitialization::Build() const
     SetUserAction(eventAction);
     RHICFRunAction* runAction = new RHICFRunAction(eventAction);
     SetUserAction(runAction);
-    //Junsang****SetUserAction(new RHICFSteppingAction);
+    SetUserAction(new RHICFSteppingAction);
 
 
 

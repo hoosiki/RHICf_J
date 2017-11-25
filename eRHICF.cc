@@ -18,6 +18,8 @@
 #include "G4UIExecutive.hh"
 #endif
 #include <ctime>
+#include <cstdlib>
+#include "FileManager.hh"
 
 int main(int argc, char** argv)
 {
@@ -69,6 +71,12 @@ int main(int argc, char** argv)
         delete ui;
 #endif
     }
+
+    FileManager* fFileManager = FileManager::GetInstance();
+    std::string Command1 = "mv " + fFileManager->GetPathFortmp()+"/"+fFileManager->GetFileName()+".root " +fFileManager->GetPathForSIMDATA()+"/"+fFileManager->GetFileName()+".root";
+    system(Command1.c_str());
+
+
 #ifdef G4VIS_USE
     delete visManager;
 #endif

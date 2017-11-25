@@ -34,7 +34,6 @@
 
 #include "G4SystemOfUnits.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RHICFPhysicsList::RHICFPhysicsList(G4String physName) : G4VModularPhysicsList()
 {
@@ -45,7 +44,7 @@ RHICFPhysicsList::RHICFPhysicsList(G4String physName) : G4VModularPhysicsList()
     fCutForElectron  = defaultCutValue;
     fCutForPositron  = defaultCutValue;
 
-//    G4PhysListFactory factory;
+//    G4PHYSLISTFACTORY FACTORY;
     G4VModularPhysicsList* phys = NULL;
     if (physName == "QGSP_BERT") {
        phys = new QGSP_BERT;
@@ -80,12 +79,11 @@ RHICFPhysicsList::RHICFPhysicsList(G4String physName) : G4VModularPhysicsList()
     fPhysicsVector->push_back(new RHICFExtraPhysics());
     fPhysicsVector->push_back(fOpticalPhysics = new RHICFOpticalPhysics(fAbsorptionOn));
 
-    //Junsang****fPhysicsVector->push_back(new G4RadioactiveDecayPhysics());
+    fPhysicsVector->push_back(new G4RadioactiveDecayPhysics());
 
     fStepMaxProcess = new RHICFStepMax();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RHICFPhysicsList::~RHICFPhysicsList()
 {
@@ -94,7 +92,6 @@ RHICFPhysicsList::~RHICFPhysicsList()
     delete fStepMaxProcess;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsList::ClearPhysics()
 {
@@ -105,7 +102,6 @@ void RHICFPhysicsList::ClearPhysics()
     fPhysicsVector->clear();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsList::ConstructParticle()
 {
@@ -127,13 +123,10 @@ void RHICFPhysicsList::ConstructParticle()
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsList::ConstructProcess()
 {
     G4VModularPhysicsList::ConstructProcess();
-
-    SetVerbose(0);
 
     G4DecayWithSpin* decayWithSpin = new G4DecayWithSpin();
 
@@ -195,7 +188,6 @@ void RHICFPhysicsList::ConstructProcess()
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsList::RemoveFromPhysicsList(const G4String& name)
 {
@@ -217,7 +209,6 @@ void RHICFPhysicsList::RemoveFromPhysicsList(const G4String& name)
     }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsList::SetAbsorption(G4bool toggle)
 {
@@ -228,7 +219,6 @@ void RHICFPhysicsList::SetAbsorption(G4bool toggle)
        fOpticalPhysics->ConstructProcess();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsList::SetCuts()
 {
@@ -247,7 +237,6 @@ void RHICFPhysicsList::SetCuts()
     if (verboseLevel>0) DumpCutValuesTable();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsList::SetCutForGamma(G4double cut)
 {
@@ -255,7 +244,6 @@ void RHICFPhysicsList::SetCutForGamma(G4double cut)
     SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsList::SetCutForElectron(G4double cut)
 {
@@ -263,7 +251,6 @@ void RHICFPhysicsList::SetCutForElectron(G4double cut)
     SetParticleCuts(fCutForElectron, G4Electron::Electron());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsList::SetCutForPositron(G4double cut)
 {
@@ -271,21 +258,18 @@ void RHICFPhysicsList::SetCutForPositron(G4double cut)
     SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsList::SetStepMax(G4double step)
 {
   fStepMaxProcess->SetStepMax(step);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RHICFStepMax* RHICFPhysicsList::GetStepMaxProcess()
 {
   return fStepMaxProcess;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsList::AddStepMax()
 {
@@ -303,21 +287,10 @@ void RHICFPhysicsList::AddStepMax()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsList::SetNbOfPhotonsCerenkov(G4int maxNumber)
 {
    fOpticalPhysics->SetNbOfPhotonsCerenkov(maxNumber);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RHICFPhysicsList::SetVerbose(G4int verbose)
-{
-   //Junsang****fOpticalPhysics->GetCerenkovProcess()->SetVerboseLevel(verbose);
-   //Junsang****fOpticalPhysics->GetScintillationProcess()->SetVerboseLevel(verbose);
-   //Junsang****fOpticalPhysics->GetAbsorptionProcess()->SetVerboseLevel(verbose);
-   //Junsang****fOpticalPhysics->GetRayleighScatteringProcess()->SetVerboseLevel(verbose);
-   //Junsang****fOpticalPhysics->GetMieHGScatteringProcess()->SetVerboseLevel(verbose);
-   //Junsang****fOpticalPhysics->GetBoundaryProcess()->SetVerboseLevel(verbose);
-}

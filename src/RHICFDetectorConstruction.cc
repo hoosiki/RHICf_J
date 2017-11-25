@@ -1,5 +1,6 @@
 //Kinds of Detector: ZDC(PHENIX), STARZDC, BBC, STARBBC, PHENIXPIPE, STARPIPE
 #include "RHICFDetectorConstruction.hh"
+#include "RHICFManager.hh"
 #include "MagneticField.hh"
 #include "RHICFMaterials.hh"
 #include "G4PVReplica.hh"
@@ -113,13 +114,13 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     /*-*///SET GEOMETRY
     //Junsang****PHENIXPIPE();
     //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1867.59*cm), fRotationY180);
-    kARM1YPosition = 7.16;//TOP CENTER
-    kARM1YPosition = 4.76;//TS CENTER
-    kARM1YPosition = 0.;//TL CENTER
-    kARM1ZPosition = 1787;
+    RHICFManager::GetInstance()->SetARM1Z(1787);
+    //Junsang****RHICFManager::GetInstance()->SetARM1Y(7.16);//TOP CENTER
+    //Junsang****RHICFManager::GetInstance()->SetARM1Y(4.76);//TS CENTER
+    RHICFManager::GetInstance()->SetARM1Y(0.);//TL CENTER
     //Junsang****kARM1ZPosition = 50;
-    /*-*/STARPIPEINSTALL(kARM1YPosition, kARM1ZPosition);
-    /*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, kARM1YPosition*cm, kARM1ZPosition*cm), fRotationY180);
+    /*-*/STARPIPEINSTALL(RHICFManager::GetInstance()->GetARM1Y(), (RHICFManager::GetInstance()->GetARM1Z()-14.15));
+    /*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, RHICFManager::GetInstance()->GetARM1Y()*cm, RHICFManager::GetInstance()->GetARM1Z()*cm), fRotationY180);
 
 
     
@@ -2037,13 +2038,13 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4double arm1y, G4double arm1z)
     /*-*/G4double ghostsize[3] = {2.*5/arm1z, 2.*5/arm1z, 0.0005};
     /*-*/auto fGhostCenterLargeSolid = new G4Box("GhostCenterLargeSolid", ghostsize[0]*cm, ghostsize[1]*cm, ghostsize[2]*cm);
     /*-*/auto fGhostCenterLargeLogical = new G4LogicalVolume(fGhostCenterLargeSolid, FindMaterial("G4_Galactic"), "GhostCenterLargeLogical");
-    /*-*/auto fGhostCenterLargePhysical = new G4PVPlacement(fRotationZ45, G4ThreeVector(0.*cm, 5./arm1z*arm1y*cm, -213.6695*cm), fGhostCenterLargeLogical, "GhostCenterLargePhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
+    /*-*/auto fGhostCenterLargePhysical = new G4PVPlacement(fRotationZ45, G4ThreeVector(0.*cm, 5./arm1z*arm1y*cm, -213.667*cm), fGhostCenterLargeLogical, "GhostCenterLargePhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
     /*-*/ghostsize[0] = 1.*5/arm1z;
     /*-*/ghostsize[1] = 1.*5/arm1z;
     /*-*/ghostsize[2] = 0.0005;
     /*-*/auto fGhostCenterSmallSolid = new G4Box("GhostCenterSmallSolid", ghostsize[0]*cm, ghostsize[1]*cm, ghostsize[2]*cm);
     /*-*/auto fGhostCenterSmallLogical = new G4LogicalVolume(fGhostCenterSmallSolid, FindMaterial("G4_Galactic"), "GhostCenterSmallLogical");
-    /*-*/auto fGhostCenterSmallPhysical = new G4PVPlacement(fRotationZ45, G4ThreeVector(0.*cm, 5./arm1z*(arm1y-4.76)*cm, -213.6695*cm), fGhostCenterSmallLogical, "GhostCenterSmallPhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
+    /*-*/auto fGhostCenterSmallPhysical = new G4PVPlacement(fRotationZ45, G4ThreeVector(0.*cm, 5./arm1z*(arm1y-4.76)*cm, -213.667*cm), fGhostCenterSmallLogical, "GhostCenterSmallPhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
 
 
     auto f3InchVacuumPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -13.627*cm), f3InchVacuumLogical, "3InchVacuumPhysical", f3InchSectionLogical, 0, false, checkOverlaps);

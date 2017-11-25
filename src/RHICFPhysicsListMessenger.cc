@@ -1,34 +1,3 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
-// $Id: RHICFPhysicsListMessenger.cc 69561 2013-05-08 12:25:56Z gcosmo $
-//
-/// \file optical/RHICF/src/RHICFPhysicsListMessenger.cc
-/// \brief Implementation of the RHICFPhysicsListMessenger class
-//
-//
 #include "globals.hh"
 
 #include "RHICFPhysicsListMessenger.hh"
@@ -44,7 +13,6 @@
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4PionRadiativeDecayChannel.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RHICFPhysicsListMessenger::RHICFPhysicsListMessenger(RHICFPhysicsList* pPhys)
   : fPhysicsList(pPhys)
@@ -137,7 +105,6 @@ RHICFPhysicsListMessenger::RHICFPhysicsListMessenger(RHICFPhysicsList* pPhys)
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RHICFPhysicsListMessenger::~RHICFPhysicsListMessenger()
 {
@@ -162,17 +129,12 @@ RHICFPhysicsListMessenger::~RHICFPhysicsListMessenger()
     delete fDirectory;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RHICFPhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {
     if( command == fSetAbsorptionCMD ) {
        fPhysicsList->SetAbsorption(G4UIcmdWithABool::GetNewBoolValue(newValue));
-    }
-
-    else if( command == fVerboseCmd ) {
-       fPhysicsList->SetVerbose(fVerboseCmd->GetNewIntValue(newValue));
     }
 
     else if( command == fCerenkovCmd ) {
@@ -187,8 +149,8 @@ void RHICFPhysicsListMessenger::SetNewValue(G4UIcommand* command,
                         new G4PhaseSpaceDecayChannel("pi+",1.0,2,"e+","nu_e");
        G4DecayTable* table = new G4DecayTable();
        table->Insert(mode);
-      // mode = new G4PionRadiativeDecayChannel("pi+",0.000017);
-      // table->Insert(mode);
+       mode = new G4PionRadiativeDecayChannel("pi+",0.000017);
+       table->Insert(mode);
        particleDef->SetDecayTable(table);
     }
 
