@@ -24,10 +24,8 @@ void RHICFSteppingAction::UserSteppingAction(const G4Step* step)
     track = step->GetTrack();
     fStepPoint = step -> GetPostStepPoint();
 
-    G4String volName; 
     G4String nextVolName;
     if (track->GetNextVolume()) nextVolName =  track->GetNextVolume()->GetName();
-    if (track->GetVolume()) volName =  track->GetVolume()->GetName(); 
     if(G4PhysicalVolumeStore::GetInstance()->GetVolume("GhostCenterSmallPhysical",false))
     {
         if (nextVolName=="GhostCenterSmallPhysical" || nextVolName=="GhostCenterLargePhysical") 
@@ -78,6 +76,8 @@ void RHICFSteppingAction::ExtractFCInfo()
 {
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 0, fStepPoint->GetPosition().x()/mm);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 1, fStepPoint->GetPosition().y()/mm);
+    RHICFManager::GetInstance()->SetVerboseSW(true);
+    RHICFManager::GetInstance()->ShowDInfo("z: ", fStepPoint->GetPosition().y()/mm);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 2, fStepPoint->GetMomentum().x()/GeV);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 3, fStepPoint->GetMomentum().y()/GeV);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 4, fStepPoint->GetMomentum().z()/GeV);

@@ -623,10 +623,10 @@ void RHICFEventAction::ExtractDEValue(G4HCofThisEvent* hc, const G4Event* event)
     {
         G4AnalysisManager::Instance()->FillNtupleDColumn(1, i, GetDEValue(hc, "GSOLeftLargeBarLogical", i)/MeV);
     } 
-
     G4AnalysisManager::Instance()->FillNtupleIColumn(1, 480, stoi(FileManager::GetInstance()->GetTime()+FileManager::GetInstance()->GetPID())); 
     G4AnalysisManager::Instance()->FillNtupleIColumn(1, 481, event->GetEventID()); 
 
+    //FC
 }
 
 void RHICFEventAction::ExtractNOPValue(G4HCofThisEvent* hc)

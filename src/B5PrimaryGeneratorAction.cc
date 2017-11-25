@@ -5,7 +5,9 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4GenericMessenger.hh"
+#include "RHICFManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "TMath.h"
 #include "Randomize.hh"
 
 
@@ -18,7 +20,7 @@ B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
   fSigmaAngle(0.*deg),
   fSigmaRange(1.*mm),
   fX(0), fY(0), fZ(0),
-  fRandomizePrimary(true)
+  fRandomizePrimary(false)
 {
     G4int n_particle = 1;
     fParticleGun  = new G4ParticleGun(n_particle);
@@ -82,7 +84,8 @@ void B5PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
         particle = fParticleGun->GetParticleDefinition();
     }
     
-    G4double pp = fMomentum + (G4UniformRand()-0.5)*fSigmaMomentum;
+    //Junsang****G4double pp = fMomentum + (G4UniformRand()-0.5)*fSigmaMomentum;
+    G4double pp = fMomentum;
     G4double mass = particle->GetPDGMass();
     G4double Ekin = std::sqrt(pp*pp+mass*mass)-mass;
     fParticleGun->SetParticleEnergy(Ekin);
@@ -94,11 +97,35 @@ void B5PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 
     fParticleGun->SetParticlePosition(position);
     //Junsang****fParticleGun->SetParticleMomentumDirection(G4ThreeVector(std::sin(angle),0.,std::cos(angle)));
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+    //Junsang****fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+    //Junsang****if (G4UniformRand()<0.5) // TL CENTER DIRECTION
+    //Junsang****{
+        //Junsang****G4double length = sqrt((RHICFManager::GetInstance()->GetARM1Y()-14.15)*(RHICFManager::GetInstance()->GetARM1Y()-14.15)+(RHICFManager::GetInstance()->GetARM1Y())*(RHICFManager::GetInstance()->GetARM1Y()));
+        //Junsang****fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,(RHICFManager::GetInstance()->GetARM1Y())/length,(RHICFManager::GetInstance()->GetARM1Y()-14.15)/length));
+        //Junsang****
+    //Junsang****}else // TS CENTER DIRECTION
+    //Junsang****{
+        //Junsang****G4double length = sqrt((RHICFManager::GetInstance()->GetARM1Y()-14.15)*(RHICFManager::GetInstance()->GetARM1Y()-14.15)+(RHICFManager::GetInstance()->GetARM1Y()-4.75)*(RHICFManager::GetInstance()->GetARM1Y()-4.75));
+        //Junsang****fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,(RHICFManager::GetInstance()->GetARM1Y()-4.75)/length,(RHICFManager::GetInstance()->GetARM1Y()-14.15)/length));
+    //Junsang****}
 
 
-
-
+    if (G4UniformRand()<0.5) 
+    {
+        G4double phi = 2*TMath::Pi()*G4UniformRand();
+        G4double p = G4UniformRand(); 
+        G4double length = sqrt((RHICFManager::GetInstance()->GetARM1Z()-14.15)*(RHICFManager::GetInstance()->GetARM1Z()-14.15)+(RHICFManager::GetInstance()->GetARM1Y())*(RHICFManager::GetInstance()->GetARM1Y()));
+        G4double A = 2.2*sqrt(2)/length;
+        fParticleGun->SetParticleMomentumDirection(G4ThreeVector(TMath::Cos(phi)*p*A,TMath::Sin(phi)*p*A, sqrt(1-p*p*A*A)).rotate(G4ThreeVector(1., 0., 0.),-TMath::ATan((RHICFManager::GetInstance()->GetARM1Y())/(RHICFManager::GetInstance()->GetARM1Z()-14.15))*rad));
+        
+    }else
+    {
+        G4double phi = 2*TMath::Pi()*G4UniformRand();
+        G4double p = G4UniformRand(); 
+        G4double length = sqrt((RHICFManager::GetInstance()->GetARM1Z()-14.15)*(RHICFManager::GetInstance()->GetARM1Z()-14.15)+(RHICFManager::GetInstance()->GetARM1Y()-4.75)*(RHICFManager::GetInstance()->GetARM1Y()-4.75));
+        G4double A = 1.1*sqrt(2)/length;
+        fParticleGun->SetParticleMomentumDirection(G4ThreeVector(TMath::Cos(phi)*p*A,TMath::Sin(phi)*p*A, sqrt(1-p*p*A*A)).rotate(G4ThreeVector(1., 0., 0.),-TMath::ATan((RHICFManager::GetInstance()->GetARM1Y()-4.74)/(RHICFManager::GetInstance()->GetARM1Z()-14.15))*rad));
+    }
 
     fParticleGun->GeneratePrimaryVertex(event);
 }
