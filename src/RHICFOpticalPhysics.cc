@@ -70,8 +70,8 @@ void RHICFOpticalPhysics::ConstructProcess()
 
   pManager->AddDiscreteProcess(fRHICFProcess);
 
-  fScintProcess->SetScintillationYieldFactor(1.);
-  fScintProcess->SetScintillationExcitationRatio(0.0);
+  fScintProcess->SetScintillationYieldFactor(0.2); // LIGHT YIELD OF GSO IS 0.2
+  fScintProcess->SetScintillationExcitationRatio(1.0);
   fScintProcess->SetTrackSecondariesFirst(true);
 
   // Use Birks Correction in the Scintillation process

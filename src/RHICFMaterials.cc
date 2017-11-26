@@ -123,15 +123,14 @@ void RHICFMaterials::CreateMaterials()
 
   density = 6.71*g/cm3;
 
-  fGSO = fNistMan->
-          ConstructNewMaterial("GSO", elements, natoms, density);
+  fGSO = fNistMan-> ConstructNewMaterial("GSO", elements, natoms, density);
 
   elements.clear();
   natoms.clear();
   const G4int NUMENTRIES = 3;
   G4double GSO_PP[NUMENTRIES]    = { 7.0*eV , 7.07*eV, 7.14*eV };
   G4double GSO_SCINT[NUMENTRIES] = { 0.1, 1.0, 0.1 };
-  G4double GSO_RIND[NUMENTRIES]  = { 1.59 , 1.57, 1.54 };
+  G4double GSO_RIND[NUMENTRIES]  = { 1.85 , 1.85, 1.85 };
   G4double GSO_ABSL[NUMENTRIES]  = { 35.*cm, 35.*cm, 35.*cm}; //atten length
   G4MaterialPropertiesTable* GSO_mt = new G4MaterialPropertiesTable();
   GSO_mt->AddProperty("FASTCOMPONENT", GSO_PP, GSO_SCINT, NUMENTRIES);
@@ -144,8 +143,8 @@ void RHICFMaterials::CreateMaterials()
   // but the Fano factor is already partially included in the correlated
   // electron production - therefore not the absolute Fano factor here:
   GSO_mt->AddConstProperty("RESOLUTIONSCALE",1.0);
-  GSO_mt->AddConstProperty("FASTTIMECONSTANT",20.*ns);
-  GSO_mt->AddConstProperty("SLOWTIMECONSTANT",45.*ns);
+  GSO_mt->AddConstProperty("FASTTIMECONSTANT",30.*ns);
+  GSO_mt->AddConstProperty("SLOWTIMECONSTANT",60.*ns);
   GSO_mt->AddConstProperty("YIELDRATIO",1.0);
   fGSO->SetMaterialPropertiesTable(GSO_mt);
   //--------------------------------------------------

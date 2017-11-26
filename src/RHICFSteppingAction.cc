@@ -51,11 +51,10 @@ void RHICFSteppingAction::UserSteppingAction(const G4Step* step)
 
 }
 
-void RHICFSteppingAction::ExtractGhostInfo()//EXTRACT INFO FROM STEP IN GHOSTCENTER AND FILL INFO INTO TREE
+void RHICFSteppingAction::ExtractGhostInfo()//EXTRACT INFO FROM STEPS INFRONT OF GHOSTCENTER AND FILL INFO INTO TREE
 {
 
     G4double tmpx = (fStepPoint->GetPosition().x())*(RHICFManager::GetInstance()->GetARM1Z()-14.15)/(fStepPoint->GetPosition().z()/cm)/mm;
-    RHICFManager::GetInstance()-> SetVerboseSW(false);
     RHICFManager::GetInstance()-> ShowDInfo("X", tmpx);
     G4double tmpy = (fStepPoint->GetPosition().y())*(RHICFManager::GetInstance()->GetARM1Z()-14.15)/(fStepPoint->GetPosition().z()/cm)/mm;
     RHICFManager::GetInstance()-> ShowDInfo("Y", tmpy);
@@ -76,7 +75,7 @@ void RHICFSteppingAction::ExtractFCInfo()
 {
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 0, fStepPoint->GetPosition().x()/mm);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 1, fStepPoint->GetPosition().y()/mm);
-    RHICFManager::GetInstance()->ShowDInfo("z: ", fStepPoint->GetPosition().z()/mm);
+    //Junsang****//Junsang****RHICFManager::GetInstance()->ShowDInfo("z: ", fStepPoint->GetPosition().z()/mm);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 2, fStepPoint->GetMomentum().x()/GeV);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 3, fStepPoint->GetMomentum().y()/GeV);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 4, fStepPoint->GetMomentum().z()/GeV);

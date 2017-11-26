@@ -61,6 +61,13 @@ void RHICFRunAction::EndOfRunAction(const G4Run* run)
 void RHICFRunAction::NtupleForARM1()
 {
     G4AnalysisManager::Instance()->CreateNtuple("ARM1PL", "GSOPL");
+    //[0-15]: DE FOR TS GSO PLATE, 
+    //[16-31]: DE FOR TL GSO PLATE, 
+    //[32-47]: NOP FOR TS GSO PLATE, 
+    //[48-63]: NOP FOR TL GSO PLATE
+    //64 : TOTAL DE ENERGY
+    //65 : RUN NUMBER
+    //66 : EVENT NUMBER
     for (int i = 0; i < 16; i++) 
     {
         G4AnalysisManager::Instance()->CreateNtupleDColumn(0,"TSGSOPLDE"+std::to_string(i));
@@ -83,18 +90,24 @@ void RHICFRunAction::NtupleForARM1()
     G4AnalysisManager::Instance()->FinishNtuple(0);
 
     G4AnalysisManager::Instance()->CreateNtuple("ARM1BAR", "GSOBAR");
+    //[0-79] : DE FOR TS GSO BAR LEFT DIRECTION * 4 LAYERS
+    //[80-239]: DE FOR TL GSO BAR LEFT DIRECTION * 4 LAYERS
+    //[240-319]: DE FOR TS GSO BAR RIGHT DIRECTION * 4 LAYERS
+    //[320-479]: DE FOR TL GSO BAR RIGHT DIRECTION * 4 LAYERS
+    //480 : RUN NUMBER
+    //481 : EVENT NUMBER
     for(int i=0; i<4; i++)
     {
         for(int j=0; j<20; j++)
         {
-            G4AnalysisManager::Instance()->CreateNtupleDColumn(1, "TSGSOBLllDE"+std::to_string(i)+std::to_string(j));
+            G4AnalysisManager::Instance()->CreateNtupleDColumn(1, "TSGSOBLDE"+std::to_string(i)+std::to_string(j));
         }
     }
     for (int i = 0; i < 4; i++) 
     {
         for(int j=0; j<40; j++)
         {
-            G4AnalysisManager::Instance()->CreateNtupleDColumn(1, "TLGSOBLllDE"+std::to_string(i)+std::to_string(j));
+            G4AnalysisManager::Instance()->CreateNtupleDColumn(1, "TLGSOBLDE"+std::to_string(i)+std::to_string(j));
         }
     }
     for (int i = 0; i < 4; i++) 
@@ -102,14 +115,44 @@ void RHICFRunAction::NtupleForARM1()
         
         for(int j=0; j<20; j++)
         {
-            G4AnalysisManager::Instance()->CreateNtupleIColumn(1, "TSGSOBLllNOP"+std::to_string(i)+std::to_string(j));
+            G4AnalysisManager::Instance()->CreateNtupleDColumn(1, "TSGSOBRDE"+std::to_string(i)+std::to_string(j));
         }
     }
     for (int i = 0; i < 4; i++) 
     {
         for(int j=0; j<40; j++)
         {
-            G4AnalysisManager::Instance()->CreateNtupleIColumn(1, "TLGSOBLllNOP"+std::to_string(i)+std::to_string(j));
+            G4AnalysisManager::Instance()->CreateNtupleDColumn(1, "TLGSOBRDE"+std::to_string(i)+std::to_string(j));
+        }
+    }
+    for (int i = 0; i < 4; i++) 
+    {
+        
+        for(int j=0; j<20; j++)
+        {
+            G4AnalysisManager::Instance()->CreateNtupleIColumn(1, "TSGSOBLNOP"+std::to_string(i)+std::to_string(j));
+        }
+    }
+    for (int i = 0; i < 4; i++) 
+    {
+        for(int j=0; j<40; j++)
+        {
+            G4AnalysisManager::Instance()->CreateNtupleIColumn(1, "TLGSOBLNOP"+std::to_string(i)+std::to_string(j));
+        }
+    }
+    for (int i = 0; i < 4; i++) 
+    {
+        
+        for(int j=0; j<20; j++)
+        {
+            G4AnalysisManager::Instance()->CreateNtupleIColumn(1, "TSGSOBRNOP"+std::to_string(i)+std::to_string(j));
+        }
+    }
+    for (int i = 0; i < 4; i++) 
+    {
+        for(int j=0; j<40; j++)
+        {
+            G4AnalysisManager::Instance()->CreateNtupleIColumn(1, "TLGSOBRNOP"+std::to_string(i)+std::to_string(j));
         }
     }
     G4AnalysisManager::Instance()->CreateNtupleIColumn(1,"RunNumber");
