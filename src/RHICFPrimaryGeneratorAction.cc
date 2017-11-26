@@ -15,7 +15,7 @@ RHICFPrimaryGeneratorAction::RHICFPrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),     
   fParticleGun(0), fMessenger(0), 
   fElectron(0), fNeutron(0), fPion(0), fProton(0),
-  fMomentum(250.*GeV),
+  fMomentum(10.*GeV),
   fSigmaMomentum(0.*MeV),
   fSigmaAngle(0.*deg),
   fSigmaRange(1.*mm),

@@ -568,6 +568,13 @@ G4int RHICFEventAction::GetNOPValue(G4HCofThisEvent* hc, G4String detectorname, 
 void RHICFEventAction::ExtractDEValue(G4HCofThisEvent* hc, const G4Event* event)
 {
     //ARM1 GSO_PL
+    //[0-15] : DE FOR SMALL GSO PLATE
+    //[16-31] : DE FOR LARGE GSO PLATE
+    //[32-47] : NOP FOR SMALL GSO PLATE
+    //[48-63] : NOP FOR LRAGE GSO PLATE
+    //64 : TOTAL DE IN ARM1
+    //65 : RUN NUMBER
+    //66 : EVENT NUMBER
     for (int i = 0; i < 16; i++) 
     {
         G4AnalysisManager::Instance()->FillNtupleDColumn(0, i, GetDEValue(hc, "SmallGSO_PLLogical", i)/MeV);

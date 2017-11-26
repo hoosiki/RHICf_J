@@ -43,9 +43,7 @@ target_link_libraries(eRHICF ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} ${HEPMC_LIBRA
 # relies on these scripts being in the current working directory.
 #
 set(eRHICF_SCRIPTS
-     vis.mac
-     gui.mac icons.mac init.mac init_vis.mac run1.mac run2.mac vis1.mac run.png example.in exampleB5.in ERvsP.in ERvsPR.in SimuData/py510G_pp.dat hepmc_ascii.in 
-  )
+     vis.mac icons.mac init.mac init_vis.mac run1.mac run2.mac vis1.mac run.png SimuData/py510G_pp.dat hepmc_ascii.in )
 
 foreach(_script ${eRHICF_SCRIPTS})
   configure_file(

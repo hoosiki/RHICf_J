@@ -25,7 +25,7 @@ RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction()
 
     FileManager* fFileManager = FileManager::GetInstance();
     fFileManager->PrepareSavingDirectory();
-    fFileManager->SetFileName("LEAKGESTUDYNEUTRONTL");
+    fFileManager->SetFileName("LEAKGESTUDYNEUTRONTL10GeV");
     G4AnalysisManager::Instance()->SetNtupleMerging(true);
     G4AnalysisManager::Instance()->SetVerboseLevel(0);
     G4AnalysisManager::Instance()->SetFileName(fFileManager->GetPathFortmp()+"/"+fFileManager->GetFileName()+".root");
