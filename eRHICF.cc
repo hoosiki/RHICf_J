@@ -26,11 +26,9 @@ int main(int argc, char** argv)
     system("date");
 #ifdef G4MULTITHREADED
     G4MTRunManager *runManager = new G4MTRunManager;
-    //Junsang****runManager -> SetNumberOfThreads(4);
 #else
     G4RunManager* runManager = new G4RunManager;
 #endif
-
     G4VUserDetectorConstruction* RHICFDC = new RHICFDetectorConstruction();
     runManager -> SetUserInitialization(RHICFDC);
 
@@ -40,13 +38,11 @@ int main(int argc, char** argv)
     G4VUserActionInitialization* actions = new RHICFActionInitialization;
     runManager -> SetUserInitialization(actions);
     runManager -> Initialize();
-
 #ifdef G4VIS_USE
     // Initialize visualization
     G4VisManager* visManager = new G4VisExecutive();
     visManager -> Initialize();
 #endif
-
     // Get the pointer to the User Interface manager
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
