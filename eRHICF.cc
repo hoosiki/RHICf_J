@@ -25,15 +25,20 @@ int main(int argc, char** argv)
 {
     system("date");
 #ifdef G4MULTITHREADED
+    G4cout << 28 << G4endl;
     G4MTRunManager *runManager = new G4MTRunManager;
 #else
     G4RunManager* runManager = new G4RunManager;
 #endif
+    G4cout << 33 << G4endl;
     G4VUserDetectorConstruction* RHICFDC = new RHICFDetectorConstruction();
+    G4cout << 35 << G4endl;
     runManager -> SetUserInitialization(RHICFDC);
 
+    G4cout << 38 << G4endl;
     G4VModularPhysicsList* physicsList = new RHICFPhysicsList("QGSP_BERT");
 
+    G4cout << 41 << G4endl;
     runManager -> SetUserInitialization(physicsList);
     G4VUserActionInitialization* actions = new RHICFActionInitialization;
     runManager -> SetUserInitialization(actions);
