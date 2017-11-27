@@ -30,8 +30,6 @@ void RHICFOpticalPhysics::ConstructParticle()
 
 void RHICFOpticalPhysics::ConstructProcess()
 {
-    G4cout << "RHICFOpticalPhysics:: Add Optical Physics Processes"
-           << G4endl;
 
   fRHICFProcess = new G4OpWLS();
 
@@ -40,7 +38,7 @@ void RHICFOpticalPhysics::ConstructProcess()
   fScintProcess->SetTrackSecondariesFirst(true);
 
   fCerenkovProcess = new G4Cerenkov();
-  fCerenkovProcess->SetMaxNumPhotonsPerStep(300);
+  //Junsang****fCerenkovProcess->SetMaxNumPhotonsPerStep(300);
   fCerenkovProcess->SetTrackSecondariesFirst(true);
 
   fAbsorptionProcess      = new G4OpAbsorption();
