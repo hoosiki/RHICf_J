@@ -9,7 +9,6 @@
 #include "RHICFPrimaryGeneratorAction.hh"
 #include "G4HCofThisEvent.hh"
 
-/// Event action
 class RHICFRunAction;
 
 class RHICFEventAction : public G4UserEventAction

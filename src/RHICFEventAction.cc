@@ -25,7 +25,6 @@ using namespace std;
 
 RHICFEventAction::RHICFEventAction(RHICFPrimaryGeneratorAction* RHICFG): G4UserEventAction(),  fRHICFPrimary(RHICFG)
 {
-    G4cout << "event action generated" << G4endl;
 
 }
 
@@ -40,7 +39,6 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
 {
 
 
-    G4cout << "Event start" << G4endl;
 
     //Junsang****RHICFDetectorConstruction* fConstruction = new RHICFDetectorConstruction();// Detector construction for get information about SD
 //Junsang****
@@ -112,7 +110,6 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
 
 void RHICFEventAction::EndOfEventAction(const G4Event* event)
 {
-    G4cout << "Event ended" << G4endl;
 
     G4HCofThisEvent* fHCE = event -> GetHCofThisEvent();
 

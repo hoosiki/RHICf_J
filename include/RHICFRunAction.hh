@@ -7,7 +7,6 @@
 class RHICFEventAction;
 class G4Run;
 class HistoManager;
-/// Run action class
 
 class RHICFRunAction : public G4UserRunAction
 {

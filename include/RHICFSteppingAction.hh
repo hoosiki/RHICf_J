@@ -18,12 +18,8 @@ public:
 
   virtual void UserSteppingAction(const G4Step* step);
   
-  void ExtractGhostInfo();
-  void ExtractFCInfo();
-private:
-
-  G4Track* track;
-  G4StepPoint* fStepPoint; 
+  void ExtractGhostInfo(const G4Step* step);
+  void ExtractFCInfo(const G4Step* step);
 };
 
 #endif

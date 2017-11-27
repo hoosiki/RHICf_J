@@ -96,11 +96,11 @@ void RHICFOpticalPhysics::ConstructProcess()
       pManager->AddProcess(fCerenkovProcess);
       pManager->SetProcessOrdering(fCerenkovProcess,idxPostStep);
     }
-    //Junsang****if(fScintProcess->IsApplicable(*particle)){ //SCINTILLATOR ON/OFF
-      //Junsang****pManager->AddProcess(fScintProcess);
-      //Junsang****pManager->SetProcessOrderingToLast(fScintProcess,idxAtRest);
-      //Junsang****pManager->SetProcessOrderingToLast(fScintProcess,idxPostStep);
-    //Junsang****}
+    if(fScintProcess->IsApplicable(*particle)){ //SCINTILLATOR ON/OFF
+      pManager->AddProcess(fScintProcess);
+      pManager->SetProcessOrderingToLast(fScintProcess,idxAtRest);
+      pManager->SetProcessOrderingToLast(fScintProcess,idxPostStep);
+    }
 
   }
 }

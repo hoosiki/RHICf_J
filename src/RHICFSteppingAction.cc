@@ -21,30 +21,27 @@ RHICFSteppingAction::~RHICFSteppingAction()
 
 void RHICFSteppingAction::UserSteppingAction(const G4Step* step)
 {
-    G4cout << "Stepping action start" << G4endl;
-    track = step->GetTrack();
-    fStepPoint = step -> GetPostStepPoint();
-
+    G4Track* ftrack = step->GetTrack();
+    G4StepPoint* fStepPoint = step -> GetPreStepPoint();
     G4String nextVolName;
-    if (track->GetNextVolume()) nextVolName =  track->GetNextVolume()->GetName();
+    if (ftrack->GetNextVolume()) nextVolName =  ftrack->GetNextVolume()->GetName();
     if(G4PhysicalVolumeStore::GetInstance()->GetVolume("GhostCenterSmallPhysical",false))
     {
         if (nextVolName=="GhostCenterSmallPhysical" || nextVolName=="GhostCenterLargePhysical") 
         {
             if (fStepPoint->GetMomentum().z()>0) 
             {
-                ExtractGhostInfo();
+                ExtractGhostInfo(step);
             }
         }
     }
-    fStepPoint = step -> GetPostStepPoint();
     if(G4PhysicalVolumeStore::GetInstance()->GetVolume("FrontCounterSmallPhysical",false))
     {
         if (nextVolName=="FrontCounterSmallPhysical" || nextVolName=="FrontCounterLargePhysical") 
         {
             if (fStepPoint->GetMomentum().z()>0) 
             {
-                ExtractFCInfo();
+                ExtractFCInfo(step);
             }
         }
     }
@@ -52,9 +49,10 @@ void RHICFSteppingAction::UserSteppingAction(const G4Step* step)
 
 }
 
-void RHICFSteppingAction::ExtractGhostInfo()//EXTRACT INFO FROM STEPS INFRONT OF GHOSTCENTER AND FILL INFO INTO TREE
+void RHICFSteppingAction::ExtractGhostInfo(const G4Step* step)//EXTRACT INFO FROM STEPS INFRONT OF GHOSTCENTER AND FILL INFO INTO TREE
 {
-
+    G4Track* track = step->GetTrack();
+    G4StepPoint* fStepPoint = step -> GetPostStepPoint();
     G4double tmpx = (fStepPoint->GetPosition().x())*(RHICFManager::GetInstance()->GetARM1Z()-14.15)/(fStepPoint->GetPosition().z()/cm)/mm;
     RHICFManager::GetInstance()-> ShowDInfo("X", tmpx);
     G4double tmpy = (fStepPoint->GetPosition().y())*(RHICFManager::GetInstance()->GetARM1Z()-14.15)/(fStepPoint->GetPosition().z()/cm)/mm;
@@ -72,8 +70,10 @@ void RHICFSteppingAction::ExtractGhostInfo()//EXTRACT INFO FROM STEPS INFRONT OF
     G4AnalysisManager::Instance()->AddNtupleRow(3);
 }
 
-void RHICFSteppingAction::ExtractFCInfo()
+void RHICFSteppingAction::ExtractFCInfo(const G4Step* step)
 {
+    G4Track* track = step->GetTrack();
+    G4StepPoint* fStepPoint = step -> GetPostStepPoint();
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 0, fStepPoint->GetPosition().x()/mm);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 1, fStepPoint->GetPosition().y()/mm);
     //Junsang****//Junsang****RHICFManager::GetInstance()->ShowDInfo("z: ", fStepPoint->GetPosition().z()/mm);
