@@ -21,6 +21,7 @@ RHICFSteppingAction::~RHICFSteppingAction()
 
 void RHICFSteppingAction::UserSteppingAction(const G4Step* step)
 {
+    G4cout << "Stepping action start" << G4endl;
     track = step->GetTrack();
     fStepPoint = step -> GetPostStepPoint();
 

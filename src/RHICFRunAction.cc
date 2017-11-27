@@ -22,6 +22,7 @@
 
 RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction(), fEventAction(eventAction)
 {
+    G4cout << "Run action generated" << G4endl;
     FileManager* fFileManager = FileManager::GetInstance();
     auto fAnalysisManager = G4AnalysisManager::Instance();
     fFileManager->PrepareSavingDirectory();
@@ -41,9 +42,10 @@ RHICFRunAction::~RHICFRunAction()
 
 void RHICFRunAction::BeginOfRunAction(const G4Run* run)
 {
+    G4cout << "Run Begin" << G4endl;
     auto fAnalysisManager = G4AnalysisManager::Instance();
     RHICFManager::GetInstance()->SetVerboseSW(false); //SHOW INFO
-    Seeder* fSeeder = new Seeder;
+    Seeder* fSeeder = new Seeder();
     G4long tmpseed = (long)fSeeder->GetSeedForG4();
     G4Random::setTheSeeds(&tmpseed);
     fAnalysisManager->OpenFile();
@@ -54,6 +56,7 @@ void RHICFRunAction::BeginOfRunAction(const G4Run* run)
 void RHICFRunAction::EndOfRunAction(const G4Run* run)
 {
 
+    G4cout << "Run ended" << G4endl;
     auto fAnalysisManager = G4AnalysisManager::Instance();
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
