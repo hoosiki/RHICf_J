@@ -1,46 +1,36 @@
 #include "RHICFActionInitialization.hh"
 #include "RHICFPrimaryGeneratorAction.hh"
+#include "G4SystemOfUnits.hh"
 #include "RHICFEventAction.hh"
 #include "RHICFRunAction.hh"
 #include "RHICFSteppingAction.hh"
 #include "ExN04PrimaryGeneratorAction.hh"
 #include "G4SystemOfUnits.hh"
+#include "RHICFManager.hh"
 
 RHICFActionInitialization::RHICFActionInitialization(): G4VUserActionInitialization()
 {
-    ;
 }
 
 RHICFActionInitialization::~RHICFActionInitialization()
 {
-    ;
 }
 
 void RHICFActionInitialization::BuildForMaster() const
 {
-    RHICFEventAction* eventAction = 0;
+    RHICFEventAction* eventAction = new RHICFEventAction;
     SetUserAction(new RHICFRunAction(eventAction));
 }
 
 void RHICFActionInitialization::Build() const
 {
-
-
-    //ExN04PrimaryGeneratorAction* Primary = new ExN04PrimaryGeneratorAction;
-    RHICFPrimaryGeneratorAction* Primary = new RHICFPrimaryGeneratorAction;
-
     //SetUserAction(new ExN04PrimaryGeneratorAction);
-    SetUserAction(Primary);
-
-    
-    RHICFEventAction* eventAction = new RHICFEventAction(Primary);
+    SetUserAction(new RHICFPrimaryGeneratorAction);
+    auto eventAction = new RHICFEventAction();
     SetUserAction(eventAction);
     RHICFRunAction* runAction = new RHICFRunAction(eventAction);
     SetUserAction(runAction);
-    SetUserAction(new RHICFSteppingAction);
-
-
-
+    SetUserAction(new RHICFSteppingAction());
 }
 
 

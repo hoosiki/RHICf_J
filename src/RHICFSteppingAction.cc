@@ -10,8 +10,9 @@
 #include "G4Threading.hh"
 #include "FileManager.hh"
 #include "g4root.hh"
-RHICFSteppingAction::RHICFSteppingAction() 
+RHICFSteppingAction::RHICFSteppingAction()
 {
+
 }
 
 
@@ -54,9 +55,7 @@ void RHICFSteppingAction::ExtractGhostInfo(const G4Step* step)//EXTRACT INFO FRO
     G4Track* track = step->GetTrack();
     G4StepPoint* fStepPoint = step -> GetPostStepPoint();
     G4double tmpx = (fStepPoint->GetPosition().x())*(RHICFManager::GetInstance()->GetARM1Z()-14.15)/(fStepPoint->GetPosition().z()/cm)/mm;
-    RHICFManager::GetInstance()-> ShowDInfo("X", tmpx);
     G4double tmpy = (fStepPoint->GetPosition().y())*(RHICFManager::GetInstance()->GetARM1Z()-14.15)/(fStepPoint->GetPosition().z()/cm)/mm;
-    RHICFManager::GetInstance()-> ShowDInfo("Y", tmpy);
     G4AnalysisManager::Instance()->FillNtupleDColumn(3, 0, tmpx);
     G4AnalysisManager::Instance()->FillNtupleDColumn(3, 1, tmpy);
     G4AnalysisManager::Instance()->FillNtupleDColumn(3, 2, fStepPoint->GetMomentum().x()/GeV);
@@ -76,7 +75,7 @@ void RHICFSteppingAction::ExtractFCInfo(const G4Step* step)
     G4StepPoint* fStepPoint = step -> GetPostStepPoint();
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 0, fStepPoint->GetPosition().x()/mm);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 1, fStepPoint->GetPosition().y()/mm);
-    //Junsang****//Junsang****RHICFManager::GetInstance()->ShowDInfo("z: ", fStepPoint->GetPosition().z()/mm);
+    RHICFManager::GetInstance()->ShowDInfo("z: ", fStepPoint->GetPosition().z()/mm);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 2, fStepPoint->GetMomentum().x()/GeV);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 3, fStepPoint->GetMomentum().y()/GeV);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 4, fStepPoint->GetMomentum().z()/GeV);

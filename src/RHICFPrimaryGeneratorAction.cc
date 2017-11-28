@@ -16,7 +16,7 @@ RHICFPrimaryGeneratorAction::RHICFPrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),     
   fParticleGun(0), fMessenger(0), 
   fElectron(0), fNeutron(0), fPion(0), fProton(0),
-  fMomentum(10.*GeV),
+  fMomentum(250.*GeV),
   fSigmaMomentum(0.*MeV),
   fSigmaAngle(0.*deg),
   fSigmaRange(1.*mm),
@@ -39,8 +39,6 @@ RHICFPrimaryGeneratorAction::RHICFPrimaryGeneratorAction()
     //Junsang****fParticleGun->SetParticleDefinition(fElectron);
     fParticleGun->SetParticleDefinition(fNeutron);
     
-    //G4cout << "***********************" << (fParticleGun -> GetMomentum())/GeV << "*****************"<< G4endl;
-    // define commands for this class
     DefineCommands();
 }
 
@@ -98,7 +96,7 @@ void RHICFPrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 
     fParticleGun->SetParticlePosition(position);
     //Junsang****fParticleGun->SetParticleMomentumDirection(G4ThreeVector(std::sin(angle),0.,std::cos(angle)));
-    //Junsang****fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
     //Junsang****if (G4UniformRand()<0.5) // TL CENTER DIRECTION
     //Junsang****{
         //Junsang****G4double length = sqrt((RHICFManager::GetInstance()->GetARM1Y()-14.15)*(RHICFManager::GetInstance()->GetARM1Y()-14.15)+(RHICFManager::GetInstance()->GetARM1Y())*(RHICFManager::GetInstance()->GetARM1Y()));
@@ -110,6 +108,7 @@ void RHICFPrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
         //Junsang****fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,(RHICFManager::GetInstance()->GetARM1Y()-4.75)/length,(RHICFManager::GetInstance()->GetARM1Y()-14.15)/length));
     //Junsang****}
 
+    //CONE MODE
 
 
     if (G4UniformRand()<0.8) 

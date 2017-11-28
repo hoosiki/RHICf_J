@@ -1,7 +1,6 @@
 #include "RHICFRunAction.hh"
 #include "RHICFDetectorConstruction.hh"
 #include "FileManager.hh"
-#include "RHICFManager.hh"
 #include "Seeder.hh"
 ////////////////////////////////////////////////////////////////////////////////
 #include "G4Run.hh"
@@ -22,14 +21,14 @@
 
 RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction(), fEventAction(eventAction)
 {
-    FileManager* fFileManager = FileManager::GetInstance();
-    auto fAnalysisManager = G4AnalysisManager::Instance();
-    fFileManager->PrepareSavingDirectory();
-    fFileManager->SetFileName("LEAKGESTUDYNEUTRONTL10GeV");
-    fAnalysisManager->SetNtupleMerging(true);
-    fAnalysisManager->SetVerboseLevel(0);
-    fAnalysisManager->SetFileName(fFileManager->GetPathFortmp()+"/"+fFileManager->GetFileName()+".root");
+    FileManager::GetInstance()->PrepareSavingDirectory();
+    FileManager::GetInstance()->SetFileName("LEAKGESTUDYNEUTRONTL10GeV");
+    G4AnalysisManager::Instance()->SetNtupleMerging(true);
+    G4AnalysisManager::Instance()->SetVerboseLevel(0);
+    G4AnalysisManager::Instance()->SetFileName(FileManager::GetInstance()->GetPathFortmp()+"/"+FileManager::GetInstance()->GetFileName()+".root");
+    //Junsang****G4AnalysisManager::Instance()->SetFileName("test.root");
     NtupleForARM1();
+    NtupleForSTARZDC();
 
 }
 
@@ -41,29 +40,24 @@ RHICFRunAction::~RHICFRunAction()
 
 void RHICFRunAction::BeginOfRunAction(const G4Run* run)
 {
-    auto fAnalysisManager = G4AnalysisManager::Instance();
-    RHICFManager::GetInstance()->SetVerboseSW(false); //SHOW INFO
     Seeder* fSeeder = new Seeder;
     G4long tmpseed = (long)fSeeder->GetSeedForG4();
     G4Random::setTheSeeds(&tmpseed);
-    fAnalysisManager->OpenFile();
+    G4AnalysisManager::Instance()->OpenFile();
 }
 
 
 
 void RHICFRunAction::EndOfRunAction(const G4Run* run)
 {
-
-    auto fAnalysisManager = G4AnalysisManager::Instance();
-    fAnalysisManager->Write();
-    fAnalysisManager->CloseFile();
+    G4AnalysisManager::Instance()->Write();
+    G4AnalysisManager::Instance()->CloseFile();
 }
 
 
 void RHICFRunAction::NtupleForARM1()
 {
-    auto fAnalysisManager = G4AnalysisManager::Instance();
-    fAnalysisManager->CreateNtuple("ARM1PL", "GSOPL");
+    G4AnalysisManager::Instance()->CreateNtuple("ARM1PL", "GSOPL");
     //[0-15]: DE FOR TS GSO PLATE, 
     //[16-31]: DE FOR TL GSO PLATE, 
     //[32-47]: NOP FOR TS GSO PLATE, 
@@ -73,26 +67,26 @@ void RHICFRunAction::NtupleForARM1()
     //66 : EVENT NUMBER
     for (int i = 0; i < 16; i++) 
     {
-        fAnalysisManager->CreateNtupleDColumn(0,"TSGSOPLDE"+std::to_string(i));
+        G4AnalysisManager::Instance()->CreateNtupleDColumn(0,"TSGSOPLDE"+std::to_string(i));
     }
     for (int i = 0; i < 16; i++) 
     {
-        fAnalysisManager->CreateNtupleDColumn(0,"TLGSOPLDE"+std::to_string(i));
+        G4AnalysisManager::Instance()->CreateNtupleDColumn(0,"TLGSOPLDE"+std::to_string(i));
     }
     for (int i = 0; i < 16; i++) 
     {
-        fAnalysisManager->CreateNtupleIColumn(0,"TSGSOPLNOP"+std::to_string(i));
+        G4AnalysisManager::Instance()->CreateNtupleIColumn(0,"TSGSOPLNOP"+std::to_string(i));
     }
     for (int i = 0; i < 16; i++) 
     {
-        fAnalysisManager->CreateNtupleIColumn(0,"TLGSOPLNOP"+std::to_string(i));
+        G4AnalysisManager::Instance()->CreateNtupleIColumn(0,"TLGSOPLNOP"+std::to_string(i));
     }
-    fAnalysisManager->CreateNtupleDColumn(0, "TotalEnergy");
-    fAnalysisManager->CreateNtupleIColumn(0,"RunNumber");
-    fAnalysisManager->CreateNtupleIColumn(0,"EventNumber");
-    fAnalysisManager->FinishNtuple(0);
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(0, "TotalEnergy");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(0,"RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(0,"EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(0);
 
-    fAnalysisManager->CreateNtuple("ARM1BAR", "GSOBAR");
+    G4AnalysisManager::Instance()->CreateNtuple("ARM1BAR", "GSOBAR");
     //[0-79] : DE FOR TS GSO BAR LEFT DIRECTION * 4 LAYERS
     //[80-239]: DE FOR TL GSO BAR LEFT DIRECTION * 4 LAYERS
     //[240-319]: DE FOR TS GSO BAR RIGHT DIRECTION * 4 LAYERS
@@ -103,14 +97,14 @@ void RHICFRunAction::NtupleForARM1()
     {
         for(int j=0; j<20; j++)
         {
-            fAnalysisManager->CreateNtupleDColumn(1, "TSGSOBLDE"+std::to_string(i)+std::to_string(j));
+            G4AnalysisManager::Instance()->CreateNtupleDColumn(1, "TSGSOBLDE"+std::to_string(i)+std::to_string(j));
         }
     }
     for (int i = 0; i < 4; i++) 
     {
         for(int j=0; j<40; j++)
         {
-            fAnalysisManager->CreateNtupleDColumn(1, "TLGSOBLDE"+std::to_string(i)+std::to_string(j));
+            G4AnalysisManager::Instance()->CreateNtupleDColumn(1, "TLGSOBLDE"+std::to_string(i)+std::to_string(j));
         }
     }
     for (int i = 0; i < 4; i++) 
@@ -118,14 +112,14 @@ void RHICFRunAction::NtupleForARM1()
         
         for(int j=0; j<20; j++)
         {
-            fAnalysisManager->CreateNtupleDColumn(1, "TSGSOBRDE"+std::to_string(i)+std::to_string(j));
+            G4AnalysisManager::Instance()->CreateNtupleDColumn(1, "TSGSOBRDE"+std::to_string(i)+std::to_string(j));
         }
     }
     for (int i = 0; i < 4; i++) 
     {
         for(int j=0; j<40; j++)
         {
-            fAnalysisManager->CreateNtupleDColumn(1, "TLGSOBRDE"+std::to_string(i)+std::to_string(j));
+            G4AnalysisManager::Instance()->CreateNtupleDColumn(1, "TLGSOBRDE"+std::to_string(i)+std::to_string(j));
         }
     }
     for (int i = 0; i < 4; i++) 
@@ -133,14 +127,14 @@ void RHICFRunAction::NtupleForARM1()
         
         for(int j=0; j<20; j++)
         {
-            fAnalysisManager->CreateNtupleIColumn(1, "TSGSOBLNOP"+std::to_string(i)+std::to_string(j));
+            G4AnalysisManager::Instance()->CreateNtupleIColumn(1, "TSGSOBLNOP"+std::to_string(i)+std::to_string(j));
         }
     }
     for (int i = 0; i < 4; i++) 
     {
         for(int j=0; j<40; j++)
         {
-            fAnalysisManager->CreateNtupleIColumn(1, "TLGSOBLNOP"+std::to_string(i)+std::to_string(j));
+            G4AnalysisManager::Instance()->CreateNtupleIColumn(1, "TLGSOBLNOP"+std::to_string(i)+std::to_string(j));
         }
     }
     for (int i = 0; i < 4; i++) 
@@ -148,180 +142,131 @@ void RHICFRunAction::NtupleForARM1()
         
         for(int j=0; j<20; j++)
         {
-            fAnalysisManager->CreateNtupleIColumn(1, "TSGSOBRNOP"+std::to_string(i)+std::to_string(j));
+            G4AnalysisManager::Instance()->CreateNtupleIColumn(1, "TSGSOBRNOP"+std::to_string(i)+std::to_string(j));
         }
     }
     for (int i = 0; i < 4; i++) 
     {
         for(int j=0; j<40; j++)
         {
-            fAnalysisManager->CreateNtupleIColumn(1, "TLGSOBRNOP"+std::to_string(i)+std::to_string(j));
+            G4AnalysisManager::Instance()->CreateNtupleIColumn(1, "TLGSOBRNOP"+std::to_string(i)+std::to_string(j));
         }
     }
-    fAnalysisManager->CreateNtupleIColumn(1,"RunNumber");
-    fAnalysisManager->CreateNtupleIColumn(1,"EventNumber");
-    fAnalysisManager->FinishNtuple(1);
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(1,"RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(1,"EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(1);
 
-    fAnalysisManager->CreateNtuple("FrontCounterInfo", "DENOP");
-    fAnalysisManager->CreateNtupleDColumn(2, "TSFCDE");
-    fAnalysisManager->CreateNtupleDColumn(2, "TLFCDE");
-    fAnalysisManager->CreateNtupleIColumn(2, "TSFCNOP");
-    fAnalysisManager->CreateNtupleIColumn(2, "TLFCNOP");
-    fAnalysisManager->CreateNtupleIColumn(2, "RunNumber");
-    fAnalysisManager->CreateNtupleIColumn(2, "EventNumber");
+    G4AnalysisManager::Instance()->CreateNtuple("FrontCounterInfo", "DENOP");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(2, "TSFCDE");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(2, "TLFCDE");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(2, "TSFCNOP");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(2, "TLFCNOP");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(2, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(2, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(2);
 
-    fAnalysisManager->FinishNtuple(2);
+    G4AnalysisManager::Instance()->CreateNtuple("Center", "ParticleInformation");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "POSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "POSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "MOMENTUMX[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "MOMENTUMY[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "MOMENTUMZ[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "KINETICENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(3, "PID[PDG]");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(3, "TYPE");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(3, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(3, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(3);
 
-    fAnalysisManager->CreateNtuple("Center", "ParticleInformation");
-    fAnalysisManager->CreateNtupleDColumn(3, "POSITIONX[mm]");
-    fAnalysisManager->CreateNtupleDColumn(3, "POSITIONY[mm]");
-    fAnalysisManager->CreateNtupleDColumn(3, "MOMENTUMX[GeV/c]");
-    fAnalysisManager->CreateNtupleDColumn(3, "MOMENTUMY[GeV/c]");
-    fAnalysisManager->CreateNtupleDColumn(3, "MOMENTUMZ[GeV/c]");
-    fAnalysisManager->CreateNtupleDColumn(3, "KINETICENERGY[GeV]");
-    fAnalysisManager->CreateNtupleIColumn(3, "PID[PDG]");
-    fAnalysisManager->CreateNtupleSColumn(3, "TYPE");
-    fAnalysisManager->CreateNtupleIColumn(3, "RunNumber");
-    fAnalysisManager->CreateNtupleIColumn(3, "EventNumber");
-    fAnalysisManager->FinishNtuple(3);
+    G4AnalysisManager::Instance()->CreateNtuple("Center", "ParticleInformation");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "POSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "POSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "MOMENTUMX[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "MOMENTUMY[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "MOMENTUMZ[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "KINETICENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(3, "PID[PDG]");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(3, "TYPE");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(3, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(3, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(3);
 
-    fAnalysisManager->CreateNtuple("FrontCounterParticle", "ParticleInformation");
-    fAnalysisManager->CreateNtupleDColumn(4, "POSITIONX[mm]");
-    fAnalysisManager->CreateNtupleDColumn(4, "POSITIONY[mm]");
-    fAnalysisManager->CreateNtupleDColumn(4, "MOMENTUMX[GeV/c]");
-    fAnalysisManager->CreateNtupleDColumn(4, "MOMENTUMY[GeV/c]");
-    fAnalysisManager->CreateNtupleDColumn(4, "MOMENTUMZ[GeV/c]");
-    fAnalysisManager->CreateNtupleDColumn(4, "KINETICENERGY[GeV]");
-    fAnalysisManager->CreateNtupleIColumn(4, "PID[PDG]");
-    fAnalysisManager->CreateNtupleSColumn(4, "TYPE");
-    fAnalysisManager->CreateNtupleIColumn(4, "RunNumber");
-    fAnalysisManager->CreateNtupleIColumn(4, "EventNumber");
-    fAnalysisManager->FinishNtuple(4);
+    G4AnalysisManager::Instance()->CreateNtuple("FrontCounterParticle", "ParticleInformation");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "POSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "POSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "MOMENTUMX[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "MOMENTUMY[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "MOMENTUMZ[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "KINETICENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(4, "PID[PDG]");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(4, "TYPE");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(4, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(4, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(4);
 }
 
 void RHICFRunAction::NtupleForSTARZDC()
 {
-    //Junsang****RHICFDetectorConstruction* fConstruction = new RHICFDetectorConstruction();
-    //Junsang****
-    //Junsang****G4cout << "SDforWInZDC  : " << fConstruction->GetSDforWInZDC() << G4endl;
-    //Junsang****G4cout << "SDforI_PL    : " << fConstruction->GetSDforI_PL() << G4endl;
-    //Junsang****G4cout << "SDforPMMA    : " << fConstruction->GetSDforPMMA() << G4endl;
-    //Junsang****G4cout << "SDforSMD     : " << fConstruction->GetSDforSMD() << G4endl;
-    //Junsang****G4cout << "SDforWInARM1 : " << fConstruction->GetSDforWInARM1() << G4endl;
-    //Junsang****G4cout << "SDforWHolder : " << fConstruction->GetSDforHolder() << G4endl;
-    //Junsang****G4cout << "SDforGSOBar  : " << fConstruction->GetSDforGSOBar() << G4endl;
-    //Junsang****G4cout << "SDforGSOPlate: " << fConstruction->GetSDforGSOPlate() << G4endl;
-    //Junsang****G4cout << "SDforAlFrame : " << fConstruction->GetSDforFrame() << G4endl;
-    //Junsang****G4cout << "SDforPanels  : " << fConstruction->GetSDforPanels() << G4endl;
-    //
-    //
-    //
-    //Junsang****// Leaf for SMDH ID:[0-63]
-    //Junsang****for(G4int i=1; i<33; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = SMDHCHDE + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(tmpstr);
-    //Junsang****}
-    //Junsang****for(G4int i=1; i<33; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = SMDHCHNOP + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleIColumn(tmpstr);
-    //Junsang****}
-    //Junsang****// Leaf for SMDV ID:[64-105]
-    //Junsang****for(G4int i=1; i<22; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = SMDVCHDE + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(tmpstr);
-    //Junsang****}
-    //Junsang****for(G4int i=1; i<22; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = SMDVCHNOP + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleIColumn(tmpstr);
-    //Junsang****}
-    //Junsang****// Leaf for ZDC1 ID:[106-157]
-    //Junsang****for(G4int i=1; i<27; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = ZDC1CHDE + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(tmpstr);
-    //Junsang****}
-    //Junsang****for(G4int i=1; i<27; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = ZDC1CHNOP + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleIColumn(tmpstr);
-    //Junsang****}
-    //Junsang****// Leaf for ZDC2 ID:[158-209]
-    //Junsang****for(G4int i=1; i<27; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = ZDC2CHDE + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(tmpstr);
-    //Junsang****}
-    //Junsang****for(G4int i=1; i<27; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = ZDC2CHNOP + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleIColumn(tmpstr);
-    //Junsang****}
-    //Junsang****// Leaf for ZDC3 ID:[210-261]
-    //Junsang****for(G4int i=1; i<27; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = ZDC3CHDE + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(tmpstr);
-    //Junsang****}
-    //Junsang****for(G4int i=1; i<27; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = ZDC3CHNOP + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleIColumn(tmpstr);
-    //Junsang****}
-    //Junsang****// Leaf for ZDC1W ID:[262-288]
-    //Junsang****for(G4int i=1; i<28; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = ZDC1WCHDE + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(tmpstr);
-    //Junsang****}
-    //Junsang****// Leaf for ZDC2W ID:[289-315]
-    //Junsang****for(G4int i=1; i<28; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = ZDC2WCHDE + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(tmpstr);
-    //Junsang****}
-    //Junsang****// Leaf for ZDC3W ID:[316-342]
-    //Junsang****for(G4int i=1; i<28; i++)
-    //Junsang****{
-    //Junsang****
-    //Junsang****G4String tmpstr = ZDC3WCHDE + std::to_string(i);
-    //Junsang****G4cout << "tmpstr: " << tmpstr << G4endl;
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(tmpstr);
-    //Junsang****}
-    //Junsang****
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(ZDCTDE); // ID:343
-    //Junsang****fAnalysisManager->CreateNtupleIColumn(ZDCTNOP);// ID:344
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(I_PLTDE);// ID:345
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(W_PLTDE);// ID:346
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(SMDHTDE);// ID:347
-    //Junsang****fAnalysisManager->CreateNtupleIColumn(SMDHTNOP);// ID:348
-    //Junsang****fAnalysisManager->CreateNtupleDColumn(SMDVTDE);// ID:349
-    //Junsang****fAnalysisManager->CreateNtupleIColumn(SMDVTNOP);// ID:350
+    G4AnalysisManager::Instance()->CreateNtuple("ZDCPMMA", "PMMALAYER");
+    G5AnalysisManager::Instance()->CreateNtupleDColumn(5, "1stPMMADE[MeV]");
+    G5AnalysisManager::Instance()->CreateNtupleDColumn(5, "2ndPMMADE[MeV]");
+    G5AnalysisManager::Instance()->CreateNtupleDColumn(5, "3rdPMMADE[MeV]");
+    G5AnalysisManager::Instance()->CreateNtupleIColumn(5, "1stPMMANOP");
+    G5AnalysisManager::Instance()->CreateNtupleIColumn(5, "2ndPMMANOP");
+    G5AnalysisManager::Instance()->CreateNtupleIColumn(5, "3rdPMMANOP");
+    G5AnalysisManager::Instance()->CreateNtupleDColumn(5, "1stZDCDE[GeV]");
+    G5AnalysisManager::Instance()->CreateNtupleDColumn(5, "2ndZDCDE[GeV]");
+    G5AnalysisManager::Instance()->CreateNtupleDColumn(5, "3rdZDCDE[GeV]");
+    G5AnalysisManager::Instance()->CreateNtupleDColumn(5, "TotalDE[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(5);
+
+    G4AnalysisManager::Instance()->CreateNtuple("ZDCSMD", "SMD");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDVDE1[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDVDE2[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDVDE3[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDVDE4[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDVDE5[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDVDE6[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDVDE7[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDHDE1[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDHDE2[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDHDE3[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDHDE4[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDHDE5[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDHDE6[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDHDE7[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleDColumn(6, "SMDHDE8[MeV]");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDVNOP1");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDVNOP2");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDVNOP3");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDVNOP4");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDVNOP5");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDVNOP6");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDVNOP7");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDHNOP1");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDHNOP2");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDHNOP3");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDHNOP4");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDHNOP5");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDHNOP6");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDHNOP7");
+    G6AnalysisManager::Instance()->CreateNtupleIColumn(6, "SMDHNOP8");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(6, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(6, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(6);
+
+    G4AnalysisManager::Instance()->CreateNtuple("ZDCGHOST", "Particle");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "POSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "POSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "MOMENTUMX[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "MOMENTUMY[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "MOMENTUMZ[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "KINETICENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "PID[PDG]");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(7, "TYPE");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(7);
 }

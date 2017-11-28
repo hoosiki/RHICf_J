@@ -137,11 +137,7 @@ void RHICFMaterials::CreateMaterials()
   GSO_mt->AddProperty("SLOWCOMPONENT", GSO_PP, GSO_SCINT, NUMENTRIES);
   GSO_mt->AddProperty("RINDEX",        GSO_PP, GSO_RIND,  NUMENTRIES);
   GSO_mt->AddProperty("ABSLENGTH",     GSO_PP, GSO_ABSL,  NUMENTRIES);
-  GSO_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV); // include QE 20%
-  // and 13eV creation energy for photons - may be 15eV?
-  // Fano factor assumed 1; should be much less for Xe ~ 0.13
-  // but the Fano factor is already partially included in the correlated
-  // electron production - therefore not the absolute Fano factor here:
+  GSO_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV); 
   GSO_mt->AddConstProperty("RESOLUTIONSCALE",1.0);
   GSO_mt->AddConstProperty("FASTTIMECONSTANT",30.*ns);
   GSO_mt->AddConstProperty("SLOWTIMECONSTANT",60.*ns);

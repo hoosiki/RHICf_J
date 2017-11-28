@@ -20,28 +20,22 @@
 #include <ctime>
 #include <cstdlib>
 #include "FileManager.hh"
+#include "RHICFManager.hh"
 
 int main(int argc, char** argv)
 {
     system("date");
-#ifdef G4MULTITHREADED
-    G4cout << 28 << G4endl;
-    G4MTRunManager *runManager = new G4MTRunManager;
-#else
-    G4RunManager* runManager = new G4RunManager;
-#endif
-    G4cout << 33 << G4endl;
-    G4VUserDetectorConstruction* RHICFDC = new RHICFDetectorConstruction();
-    G4cout << 35 << G4endl;
-    runManager -> SetUserInitialization(RHICFDC);
+//Junsang****#ifdef G4MULTITHREADED // NOTE : USING MULTITHREAD MAKE ROOT FILE BIGGER AND MAY BRING "double free or corruption" BUG
+    //Junsang****auto runManager = new G4MTRunManager;
+//Junsang****#else
+    auto runManager = new G4RunManager;
+//Junsang****#endif
+    runManager -> SetUserInitialization(new RHICFDetectorConstruction());
 
-    G4cout << 38 << G4endl;
-    G4VModularPhysicsList* physicsList = new RHICFPhysicsList("QGSP_BERT");
 
-    G4cout << 41 << G4endl;
-    runManager -> SetUserInitialization(physicsList);
-    G4VUserActionInitialization* actions = new RHICFActionInitialization;
-    runManager -> SetUserInitialization(actions);
+    runManager -> SetUserInitialization(new RHICFPhysicsList("QGSP_BERT"));
+    //Junsang****G4VUserActionInitialization* actions = new RHICFActionInitialization;
+    runManager -> SetUserInitialization(new RHICFActionInitialization);
     runManager -> Initialize();
 #ifdef G4VIS_USE
     // Initialize visualization
@@ -50,8 +44,6 @@ int main(int argc, char** argv)
 #endif
     // Get the pointer to the User Interface manager
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-
     if(argc!=1) // batch mode
     {
         G4String command = "/control/execute ";

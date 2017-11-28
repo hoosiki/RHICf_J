@@ -7,7 +7,6 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "g4root.hh"
 #include "G4RunManager.hh"
-#include "RHICFManager.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4VHitsCollection.hh"
@@ -23,7 +22,7 @@
 using namespace std;
 ///////////////////////////////////////////////////////////////////////////////
 
-RHICFEventAction::RHICFEventAction(RHICFPrimaryGeneratorAction* RHICFG): G4UserEventAction(),  fRHICFPrimary(RHICFG)
+RHICFEventAction::RHICFEventAction(): G4UserEventAction()
 {
 
 }
@@ -43,7 +42,7 @@ void RHICFEventAction::BeginOfEventAction(const G4Event*)
     //Junsang****RHICFDetectorConstruction* fConstruction = new RHICFDetectorConstruction();// Detector construction for get information about SD
 //Junsang****
 //Junsang****
-    //Junsang****// Get SD number for each sensitive detector
+   //Junsang****// Get SD number for each sensitive detector
     //Junsang****if(NbSMDH == -1)
     //Junsang****{
 //Junsang****
@@ -113,6 +112,11 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 
     G4HCofThisEvent* fHCE = event -> GetHCofThisEvent();
 
+    if(G4PhysicalVolumeStore::GetInstance()->GetVolume("ARM1Physical",false))
+    {
+        ExtractDEValue(fHCE, event);
+        ExtractNOPValue(fHCE);
+    }
     if(G4PhysicalVolumeStore::GetInstance()->GetVolume("ARM1Physical",false))
     {
         ExtractDEValue(fHCE, event);
@@ -541,9 +545,10 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
 
     //Junsang****fAnalysisManager -> AddNtupleRow();
 
-    G4AnalysisManager::Instance()->AddNtupleRow(0);
-    G4AnalysisManager::Instance()->AddNtupleRow(1);
-    G4AnalysisManager::Instance()->AddNtupleRow(2);
+    G4AnalysisManager::Instance()->AddNtupleRow(0);//ARM1PL
+    G4AnalysisManager::Instance()->AddNtupleRow(1);//ARM1BAR
+    G4AnalysisManager::Instance()->AddNtupleRow(2);//FCInfo DE & NOP
+    //Junsang****G4AnalysisManager::Instance()->AddNtupleRow(3);//STARZDC
 }
 
 G4double RHICFEventAction::GetDEValue(G4HCofThisEvent* hc, G4String detectorname, int channel)
@@ -581,7 +586,7 @@ void RHICFEventAction::ExtractDEValue(G4HCofThisEvent* hc, const G4Event* event)
     } 
     for (int i = 16; i < 32; i++) 
     {
-        G4AnalysisManager::Instance()->FillNtupleDColumn(0, i, GetDEValue(hc, "LargeGSO_PLLogical", i)/MeV);
+        G4AnalysisManager::Instance()->FillNtupleDColumn(0, i, GetDEValue(hc, "LargeGSO_PLLogical", i-16)/MeV);
     } 
 
     G4double tmpDE = 0.;
@@ -604,9 +609,7 @@ void RHICFEventAction::ExtractDEValue(G4HCofThisEvent* hc, const G4Event* event)
     for (int i = 0; i < 18; i++) 
     {
         tmpDE += GetDEValue(hc, "LargeW_PLLogical", i);
-        RHICFManager::GetInstance()->ShowDInfo("LargeW_PL"+to_string(i),GetDEValue(hc, "LargeW_PLLogical", i)/GeV);
         tmpDE += GetDEValue(hc, "SmallW_PLLogical", i);
-        RHICFManager::GetInstance()->ShowDInfo("SmallW_PL"+to_string(i),GetDEValue(hc, "SmallW_PLLogical", i)/GeV);
         tmpDE += GetDEValue(hc, "WHolder_1Logical", i);
     }
     for (int i = 0; i < 4; i++) 
@@ -676,29 +679,27 @@ void RHICFEventAction::ExtractNOPValue(G4HCofThisEvent* hc)
 {
     for (int i = 32; i < 48; i++) 
     {
-        G4AnalysisManager::Instance()->FillNtupleIColumn(0, i, GetNOPValue(hc, "SmallGSO_PLLogical", i));
-        RHICFManager::GetInstance()->ShowDInfo("SmallGSO_PLLogical"+to_string(i),GetNOPValue(hc, "SmallGSO_PLLogical", i));
+        G4AnalysisManager::Instance()->FillNtupleIColumn(0, i, GetNOPValue(hc, "SmallGSO_PLLogical", i-32));
     } 
     for (int i = 48; i < 64; i++) 
     {
-        G4AnalysisManager::Instance()->FillNtupleIColumn(0, i, GetNOPValue(hc, "SmallGSO_PLLogical", i));
-        RHICFManager::GetInstance()->ShowDInfo("SmallGSO_PLLogical"+to_string(i),GetNOPValue(hc, "SmallGSO_PLLogical", i));
+        G4AnalysisManager::Instance()->FillNtupleIColumn(0, i, GetNOPValue(hc, "SmallGSO_PLLogical", i-48));
     } 
     for (int i = 480; i < 560; i++) 
     {
-        G4AnalysisManager::Instance()->FillNtupleIColumn(1, i, GetNOPValue(hc, "GSOLeftSmallBarLogical", i));
+        G4AnalysisManager::Instance()->FillNtupleIColumn(1, i, GetNOPValue(hc, "GSOLeftSmallBarLogical", i-480));
     } 
     for (int i = 560; i < 720; i++) 
     {
-        G4AnalysisManager::Instance()->FillNtupleIColumn(1, i, GetNOPValue(hc, "GSOLeftSmallBarLogical", i));
+        G4AnalysisManager::Instance()->FillNtupleIColumn(1, i, GetNOPValue(hc, "GSOLeftSmallBarLogical", i-560));
     } 
     for (int i = 720; i < 800; i++) 
     {
-        G4AnalysisManager::Instance()->FillNtupleIColumn(1, i, GetNOPValue(hc, "GSOLeftSmallBarLogical", i));
+        G4AnalysisManager::Instance()->FillNtupleIColumn(1, i, GetNOPValue(hc, "GSORightSmallBarLogical", i-720));
     } 
     for (int i = 800; i < 960; i++) 
     {
-        G4AnalysisManager::Instance()->FillNtupleIColumn(1, i, GetNOPValue(hc, "GSOLeftSmallBarLogical", i));
+        G4AnalysisManager::Instance()->FillNtupleIColumn(1, i, GetNOPValue(hc, "GSORightSmallBarLogical", i-800));
     } 
 
     G4AnalysisManager::Instance()->FillNtupleIColumn(2, 2, GetNOPValue(hc, "FrontCounterSmallLogical", 0));

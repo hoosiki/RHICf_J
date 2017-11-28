@@ -92,15 +92,15 @@ void RHICFOpticalPhysics::ConstructProcess()
                     FatalException,o.str().c_str());
     }
 
-    if(fCerenkovProcess->IsApplicable(*particle)){
-      pManager->AddProcess(fCerenkovProcess);
-      pManager->SetProcessOrdering(fCerenkovProcess,idxPostStep);
-    }
-    if(fScintProcess->IsApplicable(*particle)){ //SCINTILLATOR ON/OFF
-      pManager->AddProcess(fScintProcess);
-      pManager->SetProcessOrderingToLast(fScintProcess,idxAtRest);
-      pManager->SetProcessOrderingToLast(fScintProcess,idxPostStep);
-    }
+    //Junsang****if(fCerenkovProcess->IsApplicable(*particle)){
+      //Junsang****pManager->AddProcess(fCerenkovProcess);
+      //Junsang****pManager->SetProcessOrdering(fCerenkovProcess,idxPostStep);
+    //Junsang****}
+    //Junsang****if(fScintProcess->IsApplicable(*particle)){ //SCINTILLATOR ON/OFF
+      //Junsang****pManager->AddProcess(fScintProcess);
+      //Junsang****pManager->SetProcessOrderingToLast(fScintProcess,idxAtRest);
+      //Junsang****pManager->SetProcessOrderingToLast(fScintProcess,idxPostStep);
+    //Junsang****}
 
   }
 }

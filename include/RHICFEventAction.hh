@@ -15,7 +15,7 @@ class RHICFEventAction : public G4UserEventAction
 {
     public:
 
-        RHICFEventAction(RHICFPrimaryGeneratorAction*);
+        RHICFEventAction();
         virtual ~RHICFEventAction();
         virtual void BeginOfEventAction(const G4Event*);
         virtual void EndOfEventAction(const G4Event*);
@@ -26,7 +26,6 @@ class RHICFEventAction : public G4UserEventAction
 
     private:
 
-        RHICFPrimaryGeneratorAction* fRHICFPrimary;
         G4int fPrintModulo;
 };
 
