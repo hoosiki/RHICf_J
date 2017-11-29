@@ -333,8 +333,7 @@ void RHICFMaterials::CreateMaterials()
   
   density = 2.64*g/cm3;
 
-  fQuartz = fNistMan->
-          ConstructNewMaterial("Quartz", elements, natoms, density);
+  fQuartz = fNistMan-> ConstructNewMaterial("Quartz", elements, natoms, density);
 
   elements.clear();
   natoms.clear();
@@ -348,8 +347,7 @@ void RHICFMaterials::CreateMaterials()
   
   density = 2.2*g/cm3;
 
-  fQuartz = fNistMan->
-          ConstructNewMaterial("Quartz", elements, natoms, density);
+  fARM1Quartz = fNistMan-> ConstructNewMaterial("ARM1Quartz", elements, natoms, density);
 
   elements.clear();
   natoms.clear();
@@ -363,8 +361,7 @@ void RHICFMaterials::CreateMaterials()
   
   density = 1.060*g/cm3;
 
-  fSilicone = fNistMan->
-          ConstructNewMaterial("Silicone", elements, natoms, density);
+  fSilicone = fNistMan-> ConstructNewMaterial("Silicone", elements, natoms, density);
 
   elements.clear();
   natoms.clear();
@@ -384,8 +381,7 @@ void RHICFMaterials::CreateMaterials()
 
   density     = 4.26*g/cm3;
 
-  G4Material* TiO2 = fNistMan->
-          ConstructNewMaterial("TiO2", elements, natoms, density);
+  G4Material* TiO2 = fNistMan-> ConstructNewMaterial("TiO2", elements, natoms, density);
 
   elements.clear();
   natoms.clear();
@@ -396,8 +392,7 @@ void RHICFMaterials::CreateMaterials()
 
   density = 1.52*g/cm3;
 
-  fCoating =
-          new G4Material("Coating", density, ncomponents=2);
+  fCoating = new G4Material("Coating", density, ncomponents=2);
 
   fCoating->AddMaterial(TiO2,         fractionmass = 15*perCent);
   fCoating->AddMaterial(fPolystyrene, fractionmass = 85*perCent);

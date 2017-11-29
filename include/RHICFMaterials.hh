@@ -32,6 +32,7 @@ class RHICFMaterials
     G4Material*         fFPMMA;
     G4Material*         fPL_SCINTI;
     G4Material*         fQuartz;
+    G4Material*         fARM1Quartz;
     G4Material*         fGSO;
     G4Material*         fGten;
     G4Material*         fG10;

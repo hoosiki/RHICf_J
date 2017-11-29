@@ -113,15 +113,17 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
 
     /*-*///SET GEOMETRY
     //Junsang****PHENIXPIPE();
-    //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1867.59*cm), fRotationY180);
+    //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 50*cm), fRotationY180);
     RHICFManager::GetInstance()->SetARM1Z(1787);
     //Junsang****RHICFManager::GetInstance()->SetARM1Y(7.16);//TOP CENTER
     //Junsang****RHICFManager::GetInstance()->SetARM1Y(4.76);//TS CENTER
     RHICFManager::GetInstance()->SetARM1Y(0.);//TS CENTER
     //Junsang****RHICFManager::GetInstance()->SetARM1Z(50.);
-    //Junsang****kARM1ZPosition = 50;
+    
     /*-*/STARPIPEINSTALL(RHICFManager::GetInstance()->GetARM1Y(), (RHICFManager::GetInstance()->GetARM1Z()-14.15));
     /*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, RHICFManager::GetInstance()->GetARM1Y()*cm, RHICFManager::GetInstance()->GetARM1Z()*cm), fRotationY180);
+    //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1867.59*cm), fRotationY180);
+    /*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1854.59*cm), fRotationY180);
 
 
     
@@ -471,7 +473,7 @@ void RHICFDetectorConstruction::PHENIXZDCINSTALL(G4VPhysicalVolume* world_phys, 
 
 void RHICFDetectorConstruction::STARZDCINSTALL(G4VPhysicalVolume* world_phys, G4ThreeVector vector, G4RotationMatrix* mat)
 {
-    /*-*/fSTARZDCSolid              = new G4Box("STARZDCSolid", wcntPar[0]*cm, wcntPar[1]*cm, wcntPar[2]*3.6/5*cm);
+    /*-*/fSTARZDCSolid              = new G4Box("STARZDCSolid", wcntPar[0]*cm, wcntPar[1]*cm, (wcntPar[2]*3.6/5+0.1)*cm);
     /*-*/fSTARZDCLogical            = new G4LogicalVolume(fSTARZDCSolid, FindMaterial("G4_AIR"), "STARZDCLogical");
     /*-*/fSTARZDCPhysical           = new G4PVPlacement(mat, vector, "STARZDCPhysical", fSTARZDCLogical,  world_phys, false, 0, checkOverlaps);
 
@@ -487,6 +489,8 @@ void RHICFDetectorConstruction::STARZDCINSTALL(G4VPhysicalVolume* world_phys, G4
     /*-*/fI_PLSolid              = new G4Box("I_PLSolid", iplPar[0]*cm, iplPar[1]*cm, iplPar[2]*cm);
     /*-*/// DEFINE 'HALF OF PMMA FIBER'
     /*-*/fFIBSolid               = new G4Tubs("FIBSolid", fibPar[0]*cm, fibPar[1]*cm, gapper[2]/2.*cm, 0, twopi);
+    auto fGhostZDCSolid = new G4Box("GhostZDCSolid", wplPar[0]*cm, wplPar[2]/sqrt(2)*cm, 0.0005*cm);
+    auto fGhostZDCLogical = new G4LogicalVolume(fGhostZDCSolid, FindMaterial("G4_AIR"), "GhostZDCLogical");
     /*-*/// DEFINE 'TENGSTEN PLATE' : W_PL IS PLATE WHICH MADE OF TUNGSTEN
     /*-*/fW_PLSolid              = new G4Box("W_PLSolid", wplPar[0]*cm, wplPar[2]*cm, wplPar[1]*cm);
     /*-*/// DEFINE 'BAR FOR ELIMINATING OPTICAL PHOTON PROPAGATING DOWNWARD'
@@ -551,11 +555,11 @@ void RHICFDetectorConstruction::STARZDCINSTALL(G4VPhysicalVolume* world_phys, G4
     /*-*/        interval        = (gapper[1]+wplPar[1])*2.0/sin;
     /*-*/        zpos            = 8 + Lmod - (2.0*iplPar[1]+2.0*wplPar[1]+gapper[1])/sin - interval*(i-1)-1.85*cos;
     /*-*/        if(Nmod>=1)
-    /*-*/            fGAPF_1Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]* sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-2) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + smdPar[1]*2.0/sin + zpos)*cm), fGAPF_1Logical, "GAPF_1Physical", fSTARZDCLogical, true, i, checkOverlaps);
+    /*-*/            fGAPF_1Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]* sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-2) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + smdPar[1]*2.0/sin + zpos)*cm), fGAPF_1Logical, "GAPF_1Physical", fSTARZDCLogical, true, 0, checkOverlaps);
     /*-*/        if(Nmod>=2)
-    /*-*/            fGAPF_2Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]* sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-4) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fGAPF_2Logical, "GAPF_2Physical", fSTARZDCLogical, true, i, checkOverlaps);
+    /*-*/            fGAPF_2Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]* sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-4) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fGAPF_2Logical, "GAPF_2Physical", fSTARZDCLogical, true, 0, checkOverlaps);
     /*-*/        if(Nmod>=3)
-    /*-*/            fGAPF_3Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]* sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-6) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fGAPF_3Logical, "GAPF_3Physical", fSTARZDCLogical, true, i, checkOverlaps);
+    /*-*/            fGAPF_3Physical = new G4PVPlacement(GAPFRotation, G4ThreeVector(0, (zdcPar[1] - wplPar[2]* sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-6) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fGAPF_3Logical, "GAPF_3Physical", fSTARZDCLogical, true, 0, checkOverlaps);
     /*-*/    }
     /*-*/}
 
@@ -594,7 +598,8 @@ void RHICFDetectorConstruction::STARZDCINSTALL(G4VPhysicalVolume* world_phys, G4
     /*-*/// PUT TUNGSTEN PLATES INTO STARZDC
     /*-*/ypos                     = -zdcPar[1] + wplPar[1]*sin + wplPar[2]*cos +1.85*cos;
     /*-*/interval                 = (gapper[1] + wplPar[1])*2.0/sin;
-    /*-*/
+    /*-*/// PUT GHOST ZDC
+    /*-*/auto fGhostZDCPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (1*(Nmod+1-2) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + smdPar[1]*2.0/ sin + 36.2 + Lmod - ypos/tan - (2.0*iplPar[1] + wplPar[1])/sin )*cm), fGhostZDCLogical, "GhostZDCPhysical", fSTARZDCLogical, 0, false, checkOverlaps);
     /*-*/
     /*-*/if(Nmod>0 && Nmod<4)
     /*-*/{
@@ -604,11 +609,11 @@ void RHICFDetectorConstruction::STARZDCINSTALL(G4VPhysicalVolume* world_phys, G4
     /*-*/
     /*-*/        zpos                = 8 + Lmod - ypos/tan - (2.0*iplPar[1] + wplPar[1])/sin - interval*(i-1);
     /*-*/        if(Nmod>=1)
-    /*-*/            fW_PL_1Physical = new G4PVPlacement(fQPhi, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-2) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + smdPar[1]*2.0/sin + zpos)*cm), fW_PL_1Logical, "W_PL_1Physical", fSTARZDCLogical, true, i, checkOverlaps);
+    /*-*/            fW_PL_1Physical = new G4PVPlacement(fQPhi, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-2) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + smdPar[1]*2.0/sin + zpos)*cm), fW_PL_1Logical, "W_PL_1Physical", fSTARZDCLogical, true, 0, checkOverlaps);
     /*-*/        if(Nmod>=2)
-    /*-*/            fW_PL_2Physical = new G4PVPlacement(fQPhi, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-4) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fW_PL_2Logical, "W_PL_2Physical", fSTARZDCLogical, true, i, checkOverlaps);
+    /*-*/            fW_PL_2Physical = new G4PVPlacement(fQPhi, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-4) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fW_PL_2Logical, "W_PL_2Physical", fSTARZDCLogical, true, 0, checkOverlaps);
     /*-*/        if(Nmod>=3)
-    /*-*/            fW_PL_3Physical = new G4PVPlacement(fQPhi, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-6) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fW_PL_3Logical, "W_PL_3Physical", fSTARZDCLogical, true, i, checkOverlaps);
+    /*-*/            fW_PL_3Physical = new G4PVPlacement(fQPhi, G4ThreeVector(0, (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos + ypos)*cm, (Lmod*(Nmod+1-6) - (zdcPar[1] - wplPar[2]*sin - wplPar[1]*cos)/tan + zpos)*cm), fW_PL_3Logical, "W_PL_3Physical", fSTARZDCLogical, true, 0, checkOverlaps);
     /*-*/    }
     /*-*/}
 
@@ -631,7 +636,7 @@ void RHICFDetectorConstruction::STARZDCINSTALL(G4VPhysicalVolume* world_phys, G4
     /*-*/        zpos                = (-8.5+0.5*i);
     /*-*/        SMDHRotation -> rotateZ(90*deg);
     /*-*/        SMDHRotation -> rotateX(90*deg);
-    /*-*/        new G4PVPlacement(SMDHRotation, G4ThreeVector(0.0, -0.36*cm, zpos*cm), fSMDHLogical, "SMDHPhysical", fSMDLogical, false, i, checkOverlaps);
+    /*-*/        new G4PVPlacement(SMDHRotation, G4ThreeVector(0.0, -0.36*cm, zpos*cm), fSMDHLogical, "SMDHPhysical", fSMDLogical, false, (i-1)/4, checkOverlaps);
     /*-*/
     /*-*/    }
     /*-*/
@@ -641,7 +646,7 @@ void RHICFDetectorConstruction::STARZDCINSTALL(G4VPhysicalVolume* world_phys, G4
     /*-*/        zpos                = (-8.5+0.5*i);
     /*-*/        SMDH2Rotation -> rotateZ(-90*deg);
     /*-*/        SMDH2Rotation -> rotateX(90*deg);
-    /*-*/        new G4PVPlacement(SMDH2Rotation, G4ThreeVector(0.0, -0.36*cm, zpos*cm), fSMDHLogical, "SMDHPhysical", fSMDLogical, false, i, checkOverlaps);
+    /*-*/        new G4PVPlacement(SMDH2Rotation, G4ThreeVector(0.0, -0.36*cm, zpos*cm), fSMDHLogical, "SMDHPhysical", fSMDLogical, false, (i-1)/4, checkOverlaps);
     /*-*/
     /*-*/    }
     /*-*/}
@@ -655,7 +660,7 @@ void RHICFDetectorConstruction::STARZDCINSTALL(G4VPhysicalVolume* world_phys, G4
     /*-*/    {
     /*-*/        SMDVRotation            -> rotateZ(-45*deg);
     /*-*/        xpos                = 0.5*(i-11);
-    /*-*/        new G4PVPlacement(SMDVRotation, G4ThreeVector(xpos*cm, 0.36*cm, 0.*cm), fSMDVLogical, "SMDVPhysical", fSMDLogical, true, i, checkOverlaps);
+    /*-*/        new G4PVPlacement(SMDVRotation, G4ThreeVector(xpos*cm, 0.36*cm, 0.*cm), fSMDVLogical, "SMDVPhysical", fSMDLogical, true, (i-1)/3, checkOverlaps);
     /*-*/    }
     /*-*/
     /*-*/    // EVEN NUMBER SMDVSTRIP
@@ -663,7 +668,7 @@ void RHICFDetectorConstruction::STARZDCINSTALL(G4VPhysicalVolume* world_phys, G4
     /*-*/    {
     /*-*/        SMDVRotation            -> rotateZ(45*deg);
     /*-*/        xpos                = 0.5*i-5.5;
-    /*-*/        new G4PVPlacement(SMDVRotation, G4ThreeVector(xpos*cm, 0.36*cm, 0.*cm), fSMDVLogical, "SMDVPhysical", fSMDLogical, true, i, checkOverlaps);
+    /*-*/        new G4PVPlacement(SMDVRotation, G4ThreeVector(xpos*cm, 0.36*cm, 0.*cm), fSMDVLogical, "SMDVPhysical", fSMDLogical, true, (i-1)/3, checkOverlaps);
     /*-*/    }
     /*-*/}
 
@@ -680,8 +685,6 @@ void RHICFDetectorConstruction::STARZDCINSTALL(G4VPhysicalVolume* world_phys, G4
     /*-*/visAttributes           -> SetVisibility(false);
     /*-*///-fZDC_1Logical -> SetVisAttributes(visAttributes);
     /*-*///Junsang****fSMDLogical             -> SetVisAttributes(visAttributes);
-       fMagneticLogical -> SetVisAttributes(visAttributes);
-       fVisAttributes.push_back(visAttributes);
     /*-*/visAttributes           = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));
     /*-*/visAttributes           -> SetVisibility(false);
     /*-*/fVisAttributes.push_back(visAttributes);
@@ -1104,9 +1107,11 @@ void RHICFDetectorConstruction::PHENIXPIPE()
 void RHICFDetectorConstruction::ARM1INSTALL(G4VPhysicalVolume* world_phys, G4ThreeVector vector, G4RotationMatrix* mat)
 {
     /*-*/// Define ARM1
-    /*-*/fARM1Solid          = new G4Box("ARM1Solid", kARM1par[0]*cm, kARM1par[1]*cm, kARM1par[2]*cm); 
+    /*-*/fARM1Solid          = new G4Box("ARM1Solid", kARM1par[0]*cm, kARM1par[1]*1.4*cm, kARM1par[2]*cm); 
     /*-*/fARM1Logical        = new G4LogicalVolume(fARM1Solid, FindMaterial("G4_Galactic"), "ARM1Logical");
     /*-*/fARM1Physical       = new G4PVPlacement(mat, vector, "ARM1Physical", fARM1Logical, world_phys, false, 0, checkOverlaps);
+
+
 
     //-------------------------------------FRONT COUNTER-----------------------
     //SCINTILLATOR
@@ -1722,8 +1727,8 @@ void RHICFDetectorConstruction::ARM1INSTALL(G4VPhysicalVolume* world_phys, G4Thr
     /*-*/fGSOBarHolderLogical                = new G4LogicalVolume(fGSOBarHolderSolid, FindMaterial("Acrylic"), "GSOBarHolderLogical");
 
     /*-*///DEFINE LOGICAL VOLIMES FOR LIGHT GUIDE
-    /*-*/fLightGuideLargeLogical             = new G4LogicalVolume(fLightGuideLargeSolid, FindMaterial("Quartz"), "LightGuideLargeLogical");
-    /*-*/fLightGuideSmallLogical             = new G4LogicalVolume(fLightGuideSmallSolid, FindMaterial("Quartz"), "LightGuideSmallLogical");
+    /*-*/fLightGuideLargeLogical             = new G4LogicalVolume(fLightGuideLargeSolid, FindMaterial("ARM1Quartz"), "LightGuideLargeLogical");
+    /*-*/fLightGuideSmallLogical             = new G4LogicalVolume(fLightGuideSmallSolid, FindMaterial("ARM1Quartz"), "LightGuideSmallLogical");
 
     /*-*/// PUT TUNGSTEM PLATE HOLDER INTO AMR1
     /*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-0+basez+dz)*mm), fWHolder_1Logical, "WHolder_1Physical", fARM1Logical, false, 0, checkOverlaps);
@@ -2046,6 +2051,10 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4double arm1y, G4double arm1z)
     /*-*/auto fGhostCenterSmallSolid = new G4Box("GhostCenterSmallSolid", ghostsize[0]*cm, ghostsize[1]*cm, ghostsize[2]*cm);
     /*-*/auto fGhostCenterSmallLogical = new G4LogicalVolume(fGhostCenterSmallSolid, FindMaterial("G4_Galactic"), "GhostCenterSmallLogical");
     /*-*/auto fGhostCenterSmallPhysical = new G4PVPlacement(fRotationZ45, G4ThreeVector(0.*cm, 5./arm1z*(arm1y-4.76)*cm, -213.667*cm), fGhostCenterSmallLogical, "GhostCenterSmallPhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
+    /*-*/G4double kghost[5] = {0., kARM1par[1]/(RHICFManager::GetInstance()->GetARM1Z()-16.45)*3, 0.0005, 0., 360.};
+    /*-*/auto fGhostCircleSolid = new G4Tubs("GhostCircleSolid", kghost[0]*cm, kghost[1]*cm, kghost[2]*cm, kghost[3]*deg, kghost[4]*deg);
+    /*-*/auto fGhostCircleLogical = new G4LogicalVolume(fGhostCircleSolid, FindMaterial("G4_Galactic"), "GhostCircleLogical");
+    /*-*/auto fGhostCireclePhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 3./(RHICFManager::GetInstance()->GetARM1Z()-16.45)*(RHICFManager::GetInstance()->GetARM1Y()-2.37)*cm, -215.667*cm), fGhostCircleLogical, "GhostCirclePhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
 
 
     auto f3InchVacuumPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -13.627*cm), f3InchVacuumLogical, "3InchVacuumPhysical", f3InchSectionLogical, 0, false, checkOverlaps);

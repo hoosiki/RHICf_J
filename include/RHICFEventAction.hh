@@ -21,8 +21,9 @@ class RHICFEventAction : public G4UserEventAction
         virtual void EndOfEventAction(const G4Event*);
         G4double GetDEValue(G4HCofThisEvent*, G4String, int );
         G4int GetNOPValue(G4HCofThisEvent*, G4String, int );
-        void    ExtractDEValue(G4HCofThisEvent*, const G4Event*);
-        void    ExtractNOPValue(G4HCofThisEvent*);
+        void    ExtractDEValueForARM1(G4HCofThisEvent*, const G4Event*);
+        void    ExtractNOPValueForARM1(G4HCofThisEvent*);
+        void    ExtractValueForSTARZDC(G4HCofThisEvent*, const G4Event*);
 
     private:
 

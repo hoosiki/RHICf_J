@@ -139,15 +139,10 @@ void RHICFPrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 void RHICFPrimaryGeneratorAction::DefineCommands()
 {
     // Define /RHICF/generator command directory using generic messenger class
-    fMessenger 
-      = new G4GenericMessenger(this, 
-                               "/RHICF/generator/", 
-                               "Primary generator control");
+    fMessenger = new G4GenericMessenger(this, "/RHICF/generator/", "Primary generator control");
               
     // momentum command
-    G4GenericMessenger::Command& momentumCmd
-      = fMessenger->DeclarePropertyWithUnit("momentum", "GeV", fMomentum, 
-                                    "Mean momentum of primaries.");
+    G4GenericMessenger::Command& momentumCmd = fMessenger->DeclarePropertyWithUnit("momentum", "GeV", fMomentum, "Mean momentum of primaries.");
     momentumCmd.SetParameterName("p", true);
     momentumCmd.SetRange("p>=0.");                                
     momentumCmd.SetDefaultValue("1.");
@@ -156,58 +151,43 @@ void RHICFPrimaryGeneratorAction::DefineCommands()
     //momentumCmd.SetRange("p>=0.");                                
     
     // sigmaMomentum command
-    G4GenericMessenger::Command& sigmaMomentumCmd
-      = fMessenger->DeclarePropertyWithUnit("sigmaMomentum",
-          "MeV", fSigmaMomentum, "Sigma momentum of primaries.");
+    G4GenericMessenger::Command& sigmaMomentumCmd = fMessenger->DeclarePropertyWithUnit("sigmaMomentum", "MeV", fSigmaMomentum, "Sigma momentum of primaries.");
     sigmaMomentumCmd.SetParameterName("sp", true);
     sigmaMomentumCmd.SetRange("sp>=0.");                                
     sigmaMomentumCmd.SetDefaultValue("50.");
 
     // sigmaAngle command
-    G4GenericMessenger::Command& sigmaAngleCmd
-      = fMessenger->DeclarePropertyWithUnit("sigmaAngle", "deg", fSigmaAngle, 
-                                    "Sigma angle divergence of primaries.");
+    G4GenericMessenger::Command& sigmaAngleCmd = fMessenger->DeclarePropertyWithUnit("sigmaAngle", "deg", fSigmaAngle, "Sigma angle divergence of primaries.");
     sigmaAngleCmd.SetParameterName("t", true);
     sigmaAngleCmd.SetRange("t>=0.");                                
     sigmaAngleCmd.SetDefaultValue("2.");
 
     // sigmarange command
-    G4GenericMessenger::Command& sigmaRangeCmd
-      = fMessenger->DeclarePropertyWithUnit("sigmaRange", "mm", fSigmaRange, 
-                                    "Sigma range divergence of primaries.");
+    G4GenericMessenger::Command& sigmaRangeCmd = fMessenger->DeclarePropertyWithUnit("sigmaRange", "mm", fSigmaRange, "Sigma range divergence of primaries.");
     sigmaAngleCmd.SetParameterName("st", true);
     sigmaAngleCmd.SetRange("st>=0.");                                
     sigmaAngleCmd.SetDefaultValue("1.");
 
     // X command
-    G4GenericMessenger::Command& XCmd
-      = fMessenger->DeclarePropertyWithUnit("X", "mm", fX, 
-                                    "X of position");
+    G4GenericMessenger::Command& XCmd = fMessenger->DeclarePropertyWithUnit("X", "mm", fX, "X of position");
     sigmaAngleCmd.SetParameterName("X", true);
     sigmaAngleCmd.SetDefaultValue("0.");
 
     // Y command
-    G4GenericMessenger::Command& YCmd
-      = fMessenger->DeclarePropertyWithUnit("Y", "mm", fY, 
-                                    "Y of position");
+    G4GenericMessenger::Command& YCmd = fMessenger->DeclarePropertyWithUnit("Y", "mm", fY, "Y of position");
     sigmaAngleCmd.SetParameterName("Y", true);
     sigmaAngleCmd.SetDefaultValue("0.");
 
     // Z command
-    G4GenericMessenger::Command& ZCmd
-      = fMessenger->DeclarePropertyWithUnit("Z", "mm", fZ, 
-                                    "Z of position");
+    G4GenericMessenger::Command& ZCmd = fMessenger->DeclarePropertyWithUnit("Z", "mm", fZ, "Z of position");
     sigmaAngleCmd.SetParameterName("Z", true);
     sigmaAngleCmd.SetDefaultValue("0.");
 
 
     // randomizePrimary command
-    G4GenericMessenger::Command& randomCmd
-      = fMessenger->DeclareProperty("randomizePrimary", fRandomizePrimary);
-    G4String guidance
-       = "Boolean flag for randomizing primary particle types.\n";   
-    guidance
-       += "In case this flag is false, you can select the primary particle\n";
+    G4GenericMessenger::Command& randomCmd = fMessenger->DeclareProperty("randomizePrimary", fRandomizePrimary);
+    G4String guidance = "Boolean flag for randomizing primary particle types.\n";   
+    guidance += "In case this flag is false, you can select the primary particle\n";
     guidance += "  with /gun/particle command.";                               
     randomCmd.SetGuidance(guidance);
     randomCmd.SetParameterName("flg", true);

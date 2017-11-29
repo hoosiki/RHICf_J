@@ -284,7 +284,6 @@ class RHICFDetectorConstruction: public G4VUserDetectorConstruction
         G4RotationMatrix*           fRotationZ90;
         G4RotationMatrix*           fRotationY180;
 
-        G4double                    kARM1YPosition, kARM1ZPosition;
         G4double                    worX, worY, worZ;
         G4double                    interval, zpos, ypos;
         G4double                    putFx, pos;

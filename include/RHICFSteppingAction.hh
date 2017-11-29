@@ -17,7 +17,9 @@ class RHICFSteppingAction : public G4UserSteppingAction
         virtual ~RHICFSteppingAction();
         virtual void UserSteppingAction(const G4Step* step);
         void ExtractGhostInfo(const G4Step* step);
+        void ExtractGhostCircleInfo(const G4Step* step);
         void ExtractFCInfo(const G4Step* step);
+        void ExtractGhostZDCInfo(const G4Step* step);
 };
 
 #endif

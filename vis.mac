@@ -26,6 +26,7 @@
 #
 # Specify view angle:
 /vis/viewer/set/viewpointThetaPhi 90. 180.
+/vis/viewer/set/background white
 #
 # Specify zoom value:
 #/vis/viewer/zoom 2.
