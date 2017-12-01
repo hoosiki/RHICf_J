@@ -115,8 +115,8 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     //Junsang****PHENIXPIPE();
     //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 50*cm), fRotationY180);
     RHICFManager::GetInstance()->SetARM1Z(1787);
-    //Junsang****RHICFManager::GetInstance()->SetARM1Y(7.16);//TOP CENTER
-    //Junsang****RHICFManager::GetInstance()->SetARM1Y(4.76);//TS CENTER
+    //Junsang****RHICFManager::GetInstance()->SetARM1Y((30.1*sqrt(2)+5+24)/10.);//TOP CENTER
+    //Junsang****RHICFManager::GetInstance()->SetARM1Y((30.1*sqrt(2)+5)/10.);//TS CENTER
     RHICFManager::GetInstance()->SetARM1Y(0.);//TS CENTER
     //Junsang****RHICFManager::GetInstance()->SetARM1Z(50.);
     
@@ -2051,10 +2051,10 @@ void RHICFDetectorConstruction::STARPIPEINSTALL(G4double arm1y, G4double arm1z)
     /*-*/auto fGhostCenterSmallSolid = new G4Box("GhostCenterSmallSolid", ghostsize[0]*cm, ghostsize[1]*cm, ghostsize[2]*cm);
     /*-*/auto fGhostCenterSmallLogical = new G4LogicalVolume(fGhostCenterSmallSolid, FindMaterial("G4_Galactic"), "GhostCenterSmallLogical");
     /*-*/auto fGhostCenterSmallPhysical = new G4PVPlacement(fRotationZ45, G4ThreeVector(0.*cm, 5./arm1z*(arm1y-4.76)*cm, -213.667*cm), fGhostCenterSmallLogical, "GhostCenterSmallPhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
-    /*-*/G4double kghost[5] = {0., kARM1par[1]/(RHICFManager::GetInstance()->GetARM1Z()-16.45)*3, 0.0005, 0., 360.};
+    /*-*/G4double kghost[5] = {0., (kARM1par[1]+7.156)/(RHICFManager::GetInstance()->GetARM1Z()-14.15)*3., 0.0005, 0., 360.};
     /*-*/auto fGhostCircleSolid = new G4Tubs("GhostCircleSolid", kghost[0]*cm, kghost[1]*cm, kghost[2]*cm, kghost[3]*deg, kghost[4]*deg);
     /*-*/auto fGhostCircleLogical = new G4LogicalVolume(fGhostCircleSolid, FindMaterial("G4_Galactic"), "GhostCircleLogical");
-    /*-*/auto fGhostCireclePhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 3./(RHICFManager::GetInstance()->GetARM1Z()-16.45)*(RHICFManager::GetInstance()->GetARM1Y()-2.37)*cm, -215.667*cm), fGhostCircleLogical, "GhostCirclePhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
+    /*-*/auto fGhostCireclePhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -215.667*cm), fGhostCircleLogical, "GhostCirclePhysical", f3InchVacuumLogical, 0, false, checkOverlaps);
 
 
     auto f3InchVacuumPhysical = new G4PVPlacement(fNonRotation, G4ThreeVector(0.*cm, 0.*cm, -13.627*cm), f3InchVacuumLogical, "3InchVacuumPhysical", f3InchSectionLogical, 0, false, checkOverlaps);

@@ -56,7 +56,7 @@ void RHICFSteppingAction::UserSteppingAction(const G4Step* step)
             }
         }
     }
-    if(G4PhysicalVolumeStore::GetInstance()->GetVolume("GhostZDCPhysical",false))
+    if(!G4PhysicalVolumeStore::GetInstance()->GetVolume("GhostZDCPhysical",false)) // IF WANT TO USE THIS INFO, CHANGE FROM "!G4PhysicalVolume..." TO "G4PhyscalVolume..."
     {
         if (nextVolName=="GhostZDCPhysical") 
         {
@@ -93,8 +93,8 @@ void RHICFSteppingAction::ExtractGhostCircleInfo(const G4Step* step)//EXTRACT IN
 {
     G4Track* track = step->GetTrack();
     G4StepPoint* fStepPoint = step -> GetPostStepPoint();
-    G4double tmpx = (fStepPoint->GetPosition().x())*(RHICFManager::GetInstance()->GetARM1Z()-16.45)/(fStepPoint->GetPosition().z()/cm)/mm;
-    G4double tmpy = ((fStepPoint->GetPosition().y())*(RHICFManager::GetInstance()->GetARM1Z()-16.45)/(fStepPoint->GetPosition().z()/cm)-RHICFManager::GetInstance()->GetARM1Y()+2.37)/mm;
+    G4double tmpx = (fStepPoint->GetPosition().x())*(RHICFManager::GetInstance()->GetARM1Z()-14.15)/(fStepPoint->GetPosition().z()/cm)/mm;
+    G4double tmpy = ((fStepPoint->GetPosition().y())*(RHICFManager::GetInstance()->GetARM1Z()-14.15)/(fStepPoint->GetPosition().z()/cm))/mm;
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 0, tmpx);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 1, tmpy);
     G4AnalysisManager::Instance()->FillNtupleDColumn(4, 2, fStepPoint->GetMomentum().x()/GeV);

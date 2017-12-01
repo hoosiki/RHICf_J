@@ -257,7 +257,7 @@ void RHICFRunAction::NtupleForSTARZDC()
     G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "EventNumber");
     G4AnalysisManager::Instance()->FinishNtuple(7);
 
-    G4AnalysisManager::Instance()->CreateNtuple("ZDCGhost", "Particle");
+    G4AnalysisManager::Instance()->CreateNtuple("ZDCGhost", "Particle"); // INFO OF PARTICLES GOTHROUGH ZDCGHOST
     G4AnalysisManager::Instance()->CreateNtupleDColumn(8, "POSITIONX[mm]");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(8, "POSITIONY[mm]");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(8, "MOMENTUMX[GeV/c]");
