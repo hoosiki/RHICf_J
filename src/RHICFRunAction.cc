@@ -19,27 +19,27 @@
 
 
 
-RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction(), fEventAction(eventAction)
+RHICFRunAction::RHICFRunAction(RHICFEventAction* eventAction): G4UserRunAction(), fEventAction(eventAction), fRHICFRunActionMessenger(0)
 {
+    fRHICFRunActionMessenger = new RHICFRunActionMessenger(this);
     FileManager::GetInstance()->PrepareSavingDirectory();
-    FileManager::GetInstance()->SetFileName("LEAKGESTUDYNEUTRONTL250GeV");
     G4AnalysisManager::Instance()->SetNtupleMerging(true);
     G4AnalysisManager::Instance()->SetVerboseLevel(0);
-    G4AnalysisManager::Instance()->SetFileName(FileManager::GetInstance()->GetPathFortmp()+"/"+FileManager::GetInstance()->GetFileName()+".root");
-    //Junsang****G4AnalysisManager::Instance()->SetFileName("test.root");
-    NtupleForARM1();
-    NtupleForSTARZDC();
 
 }
 
 RHICFRunAction::~RHICFRunAction()
 {
     delete G4AnalysisManager::Instance();
+    delete fRHICFRunActionMessenger;
 }
 
 
 void RHICFRunAction::BeginOfRunAction(const G4Run* run)
 {
+    G4AnalysisManager::Instance()->SetFileName(FileManager::GetInstance()->GetPathFortmp()+"/"+FileManager::GetInstance()->GetFileName()+".root");
+    NtupleForARM1();
+    NtupleForSTARZDC();
     Seeder* fSeeder = new Seeder;
     G4long tmpseed = (long)fSeeder->GetSeedForG4();
     G4Random::setTheSeeds(&tmpseed);
@@ -54,6 +54,10 @@ void RHICFRunAction::EndOfRunAction(const G4Run* run)
     G4AnalysisManager::Instance()->CloseFile();
 }
 
+void RHICFRunAction::SetRootFileName(G4String name)
+{
+    FileManager::GetInstance()->SetFileName(name);
+}
 
 void RHICFRunAction::NtupleForARM1()
 {

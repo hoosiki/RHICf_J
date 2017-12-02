@@ -3,6 +3,7 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+#include "RHICFRunActionMessenger.hh"
 
 class RHICFEventAction;
 class G4Run;
@@ -17,8 +18,11 @@ class RHICFRunAction : public G4UserRunAction
         virtual ~RHICFRunAction();
         virtual void BeginOfRunAction(const G4Run*);
         virtual void   EndOfRunAction(const G4Run*);
+        void SetRootFileName(G4String);
     private:
         RHICFEventAction* fEventAction;
+        RHICFRunActionMessenger* fRHICFRunActionMessenger;
+
 };
 #endif
 

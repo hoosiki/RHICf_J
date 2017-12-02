@@ -13,7 +13,6 @@
 //#include "G4PhysListFactory.hh"
 #include "FTFP_BERT.hh"
 #include "QGSP_BERT_HP.hh"
-#include "QGSP_BERT.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -35,6 +34,7 @@
 #include "G4SystemOfUnits.hh"
 
 
+
 RHICFPhysicsList::RHICFPhysicsList(G4String physName) : G4VModularPhysicsList()
 {
     G4LossTableManager::Instance();
@@ -44,10 +44,10 @@ RHICFPhysicsList::RHICFPhysicsList(G4String physName) : G4VModularPhysicsList()
     fCutForElectron  = defaultCutValue;
     fCutForPositron  = defaultCutValue;
 
-//    G4PHYSLISTFACTORY FACTORY;
+//    G4PhysListFactory factory;
     G4VModularPhysicsList* phys = NULL;
     if (physName == "QGSP_BERT") {
-       phys = new QGSP_BERT;
+       phys = new QGSP_BERT_HP;
     } else {
        phys = new FTFP_BERT;
     }
@@ -66,20 +66,12 @@ RHICFPhysicsList::RHICFPhysicsList(G4String physName) : G4VModularPhysicsList()
        RegisterPhysics(elem);
     }
 
-    fAbsorptionOn = false;
+    fAbsorptionOn = true;
     
-    //This looks complex, but it is not:
-    //Get from base-class the pointer of the phsyicsVector
-    //to be used. Remember: G4VModularPhysicsList is now a split class.
-    //Why G4VModularPhysicsList::RegisterPhysics method is not used instead?
-    //If possible we can remove this...
-    fPhysicsVector =
-                GetSubInstanceManager().offset[GetInstanceID()].physicsVector;
-    
-    fPhysicsVector->push_back(new RHICFExtraPhysics());
-    fPhysicsVector->push_back(fOpticalPhysics = new RHICFOpticalPhysics(fAbsorptionOn));
+    RegisterPhysics(new RHICFExtraPhysics());
+    RegisterPhysics(fOpticalPhysics = new RHICFOpticalPhysics(fAbsorptionOn));
 
-    fPhysicsVector->push_back(new G4RadioactiveDecayPhysics());
+    RegisterPhysics(new G4RadioactiveDecayPhysics());
 
     fStepMaxProcess = new RHICFStepMax();
 }
@@ -127,6 +119,8 @@ void RHICFPhysicsList::ConstructParticle()
 void RHICFPhysicsList::ConstructProcess()
 {
     G4VModularPhysicsList::ConstructProcess();
+
+    SetVerbose(0);
 
     G4DecayWithSpin* decayWithSpin = new G4DecayWithSpin();
 
@@ -189,6 +183,7 @@ void RHICFPhysicsList::ConstructProcess()
 }
 
 
+
 void RHICFPhysicsList::RemoveFromPhysicsList(const G4String& name)
 {
     G4bool success = false;
@@ -210,6 +205,7 @@ void RHICFPhysicsList::RemoveFromPhysicsList(const G4String& name)
 }
 
 
+
 void RHICFPhysicsList::SetAbsorption(G4bool toggle)
 {
        fAbsorptionOn = toggle;
@@ -218,6 +214,7 @@ void RHICFPhysicsList::SetAbsorption(G4bool toggle)
                     push_back(fOpticalPhysics = new RHICFOpticalPhysics(toggle));
        fOpticalPhysics->ConstructProcess();
 }
+
 
 
 void RHICFPhysicsList::SetCuts()
@@ -238,11 +235,13 @@ void RHICFPhysicsList::SetCuts()
 }
 
 
+
 void RHICFPhysicsList::SetCutForGamma(G4double cut)
 {
     fCutForGamma = cut;
     SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
+
 
 
 void RHICFPhysicsList::SetCutForElectron(G4double cut)
@@ -252,11 +251,13 @@ void RHICFPhysicsList::SetCutForElectron(G4double cut)
 }
 
 
+
 void RHICFPhysicsList::SetCutForPositron(G4double cut)
 {
     fCutForPositron = cut;
     SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
+
 
 
 void RHICFPhysicsList::SetStepMax(G4double step)
@@ -265,19 +266,22 @@ void RHICFPhysicsList::SetStepMax(G4double step)
 }
 
 
+
 RHICFStepMax* RHICFPhysicsList::GetStepMaxProcess()
 {
   return fStepMaxProcess;
 }
 
 
+
 void RHICFPhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-  auto theParticleIterator = GetParticleIterator();
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
+
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
       if (fStepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
@@ -294,3 +298,12 @@ void RHICFPhysicsList::SetNbOfPhotonsCerenkov(G4int maxNumber)
 }
 
 
+void RHICFPhysicsList::SetVerbose(G4int verbose)
+{
+   fOpticalPhysics->GetCerenkovProcess()->SetVerboseLevel(verbose);
+   fOpticalPhysics->GetScintillationProcess()->SetVerboseLevel(verbose);
+   fOpticalPhysics->GetAbsorptionProcess()->SetVerboseLevel(verbose);
+   fOpticalPhysics->GetRayleighScatteringProcess()->SetVerboseLevel(verbose);
+   fOpticalPhysics->GetMieHGScatteringProcess()->SetVerboseLevel(verbose);
+   fOpticalPhysics->GetBoundaryProcess()->SetVerboseLevel(verbose);
+}

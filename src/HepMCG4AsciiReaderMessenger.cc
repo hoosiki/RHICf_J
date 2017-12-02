@@ -44,8 +44,7 @@ HepMCG4AsciiReaderMessenger::HepMCG4AsciiReaderMessenger
   dir= new G4UIdirectory("/generator/hepmcAscii/");
   dir-> SetGuidance("Reading HepMC event from an Ascii file");
 
-  verbose=
-    new G4UIcmdWithAnInteger("/generator/hepmcAscii/verbose", this);
+  verbose= new G4UIcmdWithAnInteger("/generator/hepmcAscii/verbose", this);
   verbose-> SetGuidance("Set verbose level");
   verbose-> SetParameterName("verboseLevel", false, false);
   verbose-> SetRange("verboseLevel>=0 && verboseLevel<=1");

@@ -25,7 +25,7 @@
 //
 // $Id: RHICFExtraPhysics.hh 68752 2013-04-05 10:23:47Z gcosmo $
 //
-/// \file optical/RHICF/include/RHICFExtraPhysics.hh
+/// \file optical/wls/include/RHICFExtraPhysics.hh
 /// \brief Definition of the RHICFExtraPhysics class
 //
 

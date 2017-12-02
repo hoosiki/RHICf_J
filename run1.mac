@@ -1,2 +1,4 @@
+/RHICfPhysicsList/removePhysics Optical
+/RHICfPhysicsList/removePhysics Extra
 /run/beamOn 1000
 #

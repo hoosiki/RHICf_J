@@ -262,9 +262,9 @@ void RHICFEventAction::ExtractValueForSTARZDC(G4HCofThisEvent* hc, const G4Event
     {
         G4AnalysisManager::Instance()->FillNtupleDColumn(7, i, GetDEValue(hc, "SMDVLogical", i)/MeV);
     }
-    for (int i = 8; i < 15; i++) 
+    for (int i = 7; i < 15; i++) 
     {
-        G4AnalysisManager::Instance()->FillNtupleDColumn(7, i, GetDEValue(hc, "SMDHLogical", i-8)/MeV);
+        G4AnalysisManager::Instance()->FillNtupleDColumn(7, i, GetDEValue(hc, "SMDHLogical", i-7)/MeV);
     }
     for (int i = 15; i < 22; i++) {
         G4AnalysisManager::Instance()->FillNtupleIColumn(7, i, GetNOPValue(hc, "SMDVLogical", i-15));

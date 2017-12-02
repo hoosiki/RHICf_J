@@ -25,7 +25,7 @@
 //
 // $Id: RHICFOpticalPhysics.hh 69561 2013-05-08 12:25:56Z gcosmo $
 //
-/// \file optical/RHICF/include/RHICFOpticalPhysics.hh
+/// \file optical/wls/include/RHICFOpticalPhysics.hh
 /// \brief Definition of the RHICFOpticalPhysics class
 //
 
@@ -52,7 +52,7 @@ class RHICFOpticalPhysics : public G4VPhysicsConstructor
 {
   public:
 
-    RHICFOpticalPhysics(G4bool toggle=false);
+    RHICFOpticalPhysics(G4bool toggle=true);
     virtual ~RHICFOpticalPhysics();
 
     virtual void ConstructParticle();

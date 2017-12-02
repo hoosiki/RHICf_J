@@ -29,6 +29,9 @@ public:
     void SetMomentum(G4double val) { fMomentum = val; }
     G4double GetMomentum() const { return fMomentum; }
 
+    void SetEnergy(G4double val) { fEnergy = val; }
+    G4double GetEnergy() const { return fEnergy; }
+
     void SetSigmaMomentum(G4double val) { fSigmaMomentum = val; }
     G4double GetSigmaMomentum() const { return fSigmaMomentum; }
 
@@ -66,6 +69,7 @@ private:
     G4double fY;
     G4double fZ;
     G4double fMomentum;
+    G4double fEnergy;
     G4double fSigmaMomentum;
     G4double fSigmaAngle;
     G4double fSigmaRange;

@@ -16,8 +16,6 @@ RHICFPrimaryGeneratorAction::RHICFPrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),     
   fParticleGun(0), fMessenger(0), 
   fElectron(0), fNeutron(0), fPion(0), fProton(0),
-  fMomentum(250.*GeV),
-  fSigmaMomentum(0.*MeV),
   fSigmaAngle(0.*deg),
   fSigmaRange(1.*mm),
   fX(0), fY(0), fZ(0),
@@ -87,7 +85,7 @@ void RHICFPrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
     G4double pp = fMomentum;
     G4double mass = particle->GetPDGMass();
     G4double Ekin = std::sqrt(pp*pp+mass*mass)-mass;
-    fParticleGun->SetParticleEnergy(Ekin);
+    fParticleGun->SetParticleEnergy(255.*GeV);
     
    
     //Junsang****G4double angle = (G4UniformRand()-0.5)*fSigmaAngle;
@@ -123,7 +121,7 @@ void RHICFPrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
         
     }else
     {
-        G4double length = sqrt((RHICFManager::GetInstance()->GetARM1Z()-14.15)*(RHICFManager::GetInstance()->GetARM1Z()-14.15)+(RHICFManager::GetInstance()->GetARM1Y()-4.75)*(RHICFManager::GetInstance()->GetARM1Y()-4.75));
+        G4double length = sqrt((RHICFManager::GetInstance()->GetARM1Z()-14.15)*(RHICFManager::GetInstance()->GetARM1Z()-14.15)+(RHICFManager::GetInstance()->GetARM1Y()-(30.1*sqrt(2)+5+24)/10.)*(RHICFManager::GetInstance()->GetARM1Y()-(30.1*sqrt(2)+5+24)/10.));
         G4double A = 1.1*sqrt(2)/length;
         G4double phi = 2*TMath::Pi()*G4UniformRand();
         G4double theta = atan(A)*G4UniformRand();
@@ -139,8 +137,14 @@ void RHICFPrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 void RHICFPrimaryGeneratorAction::DefineCommands()
 {
     // Define /RHICF/generator command directory using generic messenger class
-    fMessenger = new G4GenericMessenger(this, "/RHICF/generator/", "Primary generator control");
+    fMessenger = new G4GenericMessenger(this, "/RHICfPrimaryGenerator/", "Primary generator control");
               
+    // momentum command
+    G4GenericMessenger::Command& energyCmd = fMessenger->DeclarePropertyWithUnit("energy", "GeV", fEnergy, "Mean energy of primaries.");
+    energyCmd.SetParameterName("E", true);
+    energyCmd.SetRange("E>=0.");                                
+    energyCmd.SetDefaultValue("100.");
+
     // momentum command
     G4GenericMessenger::Command& momentumCmd = fMessenger->DeclarePropertyWithUnit("momentum", "GeV", fMomentum, "Mean momentum of primaries.");
     momentumCmd.SetParameterName("p", true);
