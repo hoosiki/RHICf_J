@@ -104,7 +104,7 @@ void RHICFOpticalPhysics::ConstructProcess()
 
   pManager->AddDiscreteProcess(fRHICFProcess);
 
-  fScintProcess->SetScintillationYieldFactor(1.);
+  fScintProcess->SetScintillationYieldFactor(0.2);
   fScintProcess->SetScintillationExcitationRatio(0.0);
   fScintProcess->SetTrackSecondariesFirst(true);
 

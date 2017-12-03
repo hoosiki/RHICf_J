@@ -1,4 +1,5 @@
 /RHICfPhysicsList/removePhysics Optical
 /RHICfPhysicsList/removePhysics Extra
+/RHICfGenerator/select ipuni
 /run/beamOn 1000
 #

@@ -1,83 +1,68 @@
-#ifndef RHICFPrimaryGeneratorAction_h
-#define RHICFPrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
+#ifndef RHICF_PRIMARY_GENERATOR_ACTION_H
+#define RHICF_PRIMARY_GENERATOR_ACTION_H
+
+#include <map>
 #include "globals.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 
-class G4ParticleGun;
-class G4GenericMessenger;
 class G4Event;
-class G4ParticleDefinition;
+class G4VPrimaryGenerator;
+class RHICFPrimaryGeneratorMessenger;
 
-/// Primary generator
-///
-/// A single particle is generated.
-/// User can select 
-/// - the initial momentum and angle
-/// - the momentum and angle spreads
-/// - random selection of a particle type from proton, kaon+, pi+, muon+, e+ 
-
-
-class RHICFPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class RHICFPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction 
 {
-public:
-    RHICFPrimaryGeneratorAction();
-    virtual ~RHICFPrimaryGeneratorAction();
-    
-    virtual void GeneratePrimaries(G4Event*);
-    
-    void SetMomentum(G4double val) { fMomentum = val; }
-    G4double GetMomentum() const { return fMomentum; }
+    public:
 
-    void SetEnergy(G4double val) { fEnergy = val; }
-    G4double GetEnergy() const { return fEnergy; }
+        RHICFPrimaryGeneratorAction();
+        ~RHICFPrimaryGeneratorAction();
 
-    void SetSigmaMomentum(G4double val) { fSigmaMomentum = val; }
-    G4double GetSigmaMomentum() const { return fSigmaMomentum; }
+        virtual void GeneratePrimaries(G4Event* anEvent);
 
-    void SetSigmaAngle(G4double val) { fSigmaAngle = val; }
-    G4double GetSigmaAngle() const { return fSigmaAngle; }
+        void SetGenerator(G4VPrimaryGenerator* gen);
+        void SetGenerator(G4String genname);
 
-    void SetRandomize(G4bool val) { fRandomizePrimary = val; }
-    G4bool GetRandomize() const { return fRandomizePrimary; }
+        G4VPrimaryGenerator* GetGenerator() const;
+        G4String GetGeneratorName() const;
 
-    void SetSigmaRange(G4double val) { fSigmaRange = val; }
-    G4double GetSigmaRange() const { return fSigmaRange; }
+    private:
 
-    void SetX(G4double val) { fX = val; }
-    G4double GetX() const { return fX; }
+        //Junsang****G4VPrimaryGenerator* fParticleGun;
+        G4VPrimaryGenerator* hepmcAscii;
+        G4VPrimaryGenerator* pythia;
+        G4VPrimaryGenerator* ipunibeam;
+        G4VPrimaryGenerator* testunibeam;
 
-    void SetY(G4double val) { fY = val; }
-    G4double GetY() const { return fY; }
+        G4VPrimaryGenerator* currentGenerator;
+        G4String currentGeneratorName;
+        std::map<G4String, G4VPrimaryGenerator*> fGenTypeMap;
 
-    void SetZ(G4double val) { fZ = val; }
-    G4double GetZ() const { return fZ; }
-    
-private:
-    void DefineCommands();
+        RHICFPrimaryGeneratorMessenger* fMessenger;
 
-    G4ParticleGun* fParticleGun;
-    G4GenericMessenger* fMessenger;
-    G4ParticleDefinition* fPositron;
-    G4ParticleDefinition* fMuon;
-    G4ParticleDefinition* fPion;
-    G4ParticleDefinition* fKaon;
-    G4ParticleDefinition* fProton;
-    G4ParticleDefinition* fNeutron;
-    G4ParticleDefinition* fElectron;
-    G4double fX;
-    G4double fY;
-    G4double fZ;
-    G4double fMomentum;
-    G4double fEnergy;
-    G4double fSigmaMomentum;
-    G4double fSigmaAngle;
-    G4double fSigmaRange;
-    G4bool fRandomizePrimary;
-
-    
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+inline void RHICFPrimaryGeneratorAction::SetGenerator(G4VPrimaryGenerator* gen)
+{
+    currentGenerator = gen;
+}
+
+inline void RHICFPrimaryGeneratorAction::SetGenerator(G4String genname)
+{
+    std::map<G4String, G4VPrimaryGenerator*>::iterator pos = fGenTypeMap.find(genname);
+    if ( pos != fGenTypeMap.end() ) {
+        currentGenerator = pos->second;
+        currentGeneratorName = genname;
+    }
+}
+
+inline G4VPrimaryGenerator* RHICFPrimaryGeneratorAction::GetGenerator() const
+{
+    return currentGenerator;
+}
+
+inline G4String RHICFPrimaryGeneratorAction::GetGeneratorName() const
+{
+    return currentGeneratorName;
+}
 
 #endif

@@ -4,7 +4,6 @@
 #include "RHICFEventAction.hh"
 #include "RHICFRunAction.hh"
 #include "RHICFSteppingAction.hh"
-#include "ExN04PrimaryGeneratorAction.hh"
 #include "G4SystemOfUnits.hh"
 #include "RHICFManager.hh"
 

@@ -12,7 +12,7 @@
 
 //#include "G4PhysListFactory.hh"
 #include "FTFP_BERT.hh"
-#include "QGSP_BERT_HP.hh"
+#include "QGSP_BERT.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -47,7 +47,7 @@ RHICFPhysicsList::RHICFPhysicsList(G4String physName) : G4VModularPhysicsList()
 //    G4PhysListFactory factory;
     G4VModularPhysicsList* phys = NULL;
     if (physName == "QGSP_BERT") {
-       phys = new QGSP_BERT_HP;
+       phys = new QGSP_BERT;
     } else {
        phys = new FTFP_BERT;
     }
@@ -68,7 +68,7 @@ RHICFPhysicsList::RHICFPhysicsList(G4String physName) : G4VModularPhysicsList()
 
     fAbsorptionOn = true;
     
-    RegisterPhysics(new RHICFExtraPhysics());
+    //Junsang****RegisterPhysics(new RHICFExtraPhysics());
     RegisterPhysics(fOpticalPhysics = new RHICFOpticalPhysics(fAbsorptionOn));
 
     RegisterPhysics(new G4RadioactiveDecayPhysics());
