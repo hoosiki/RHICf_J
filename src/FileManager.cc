@@ -83,10 +83,10 @@ FileManager::FileManager()
 
     tmpStr1 = ""; // set saving directory path
     tmpStr1 = string(getenv("DATA_DIR"));
-    SavingPath = tmpStr1 + "/" + Year + Date;
+    SavingPath = tmpStr1 + "/" + Year + Date + "/";
     
     tmpStr1 = ""; // set saving directory for temporary files
-    PathFortmp = SavingPath + "/" + "tmp"; 
+    PathFortmp = SavingPath + "tmp"; 
 
     tmpStr1 = ""; // set saving directory for simulation data
     PathForSIMDATA = SavingPath + "SIMDATA"; 
