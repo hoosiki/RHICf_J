@@ -1,5 +1,6 @@
-/RHICfPhysicsList/removePhysics Optical
-/RHICfPhysicsList/removePhysics Extra
-/RHICfGenerator/select ipuni
-/run/beamOn 1000
-#
+#/RHICfPhysicsList/removePhysics Optical
+#/RHICfPhysicsList/removePhysics Extra
+#/RHICfGenerator/select ipuni
+/RHICfGenerator/select pythia
+/RHICfRunAction/setFileName PYTHIA
+/run/beamOn 100
