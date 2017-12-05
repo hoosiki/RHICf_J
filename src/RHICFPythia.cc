@@ -57,6 +57,7 @@ RHICFPythia::RHICFPythia()
 
     fPythia.readString("Random:setSeed = on");
     string tmpstring = "Random:seed = " + to_string(fSeeder->GetSeedForPythia());
+    std::cout << "Pythia seed: " << tmpstring << std::endl;
     fPythia.readString(tmpstring); 
     fPythia.init();
 

@@ -25,7 +25,7 @@ int Seeder::GetSeedForPythia()
 {
     std::random_device Seed;
     std::mt19937_64 Engine(Seed());
-    std::uniform_int_distribution<int> Distribution(0,1000000000);
+    std::uniform_int_distribution<int> Distribution(1,900000000);
     auto GetRMDForPythia = bind(Distribution, Engine);
     return GetRMDForPythia();
 }
@@ -34,7 +34,7 @@ int Seeder::GetSeedForCRMC()
 {
     std::random_device Seed;
     std::mt19937_64 Engine(Seed());
-    std::uniform_int_distribution<int> Distribution(1,900000000);
+    std::uniform_int_distribution<int> Distribution(0,1000000000);
     auto GetRMDForCRMC = bind(Distribution, Engine);
     return GetRMDForCRMC();
 }
