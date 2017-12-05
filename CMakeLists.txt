@@ -48,15 +48,13 @@ target_link_libraries(TSwoW ${Geant4_LIBRARIES} ${hepmc} ${ROOT_LIBRARIES} ${HEP
 add_executable(TOPwoW TOPwoW.cc ${PYTHIA8_INCLUDE_DIR}/Pythia8 ${PYTHIA8PLUGIN_INCLUDE_DIR} ${sources} ${headers})
 target_link_libraries(TOPwoW ${Geant4_LIBRARIES} ${hepmc} ${ROOT_LIBRARIES} ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES} ${PYTHIA8PLUGIN_INCLUDE_DIR} ${PYTHIA8_LIBRARIES} -ldl)
 
-add_executable(test main.cc ${PYTHIA8_INCLUDE_DIR}/Pythia8 ${PYTHIA8PLUGIN_INCLUDE_DIR} ${sources} ${headers})
-target_link_libraries(test ${Geant4_LIBRARIES} ${hepmc} ${ROOT_LIBRARIES} ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES} ${PYTHIA8PLUGIN_INCLUDE_DIR} ${PYTHIA8_LIBRARIES} -ldl)
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build RE06. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
 set(RHICf_SCRIPTS
-     vis.mac icons.mac init.mac init_vis.mac run1.mac run2.mac vis1.mac run.png SimuData/py510G_pp.dat hepmc_ascii.in )
+     vis.mac icons.mac init.mac init_vis.mac run1.mac run2.mac vis1.mac run.png)
 
  foreach(_script ${RHICf_SCRIPTS})
   configure_file(
@@ -72,6 +70,7 @@ endforeach()
 #
 #set(CMAKE_C_COMPILER "/home/hoosiki/Packages/gcc/bin/gcc")
 #set(CMAKE_CXX_COMPILER "/home/hoosiki/Packages/gcc/bin/g++")
+set(CMAKE_CXX_FLAGS "-std=c++11")
 #set(CMAKE_CXX_FLAGS "-g -ggdb -O3")
 
 #----------------------------------------------------------------------------

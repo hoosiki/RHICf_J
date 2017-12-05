@@ -16,7 +16,7 @@
 
 
 IPCenterInterface::IPCenterInterface()
-: ParticleName("neutron"), fEnergy(100.*GeV), fMessenger(0), fSigmaAngle(0.*deg), fSigmaRange(1.*mm), fX(0.), fY(0.), fZ(0.), fRandomizePrimary(false)
+: ParticleName("neutron"), fEnergy(100.), fMessenger(0), fSigmaAngle(0.*deg), fSigmaRange(1.*mm), fX(0.), fY(0.), fZ(0.), fRandomizePrimary(false)
 {
     DefineCommands();
 }
@@ -38,16 +38,13 @@ void IPCenterInterface::GeneratePrimaryVertex(G4Event* event)
 
     //CONE MODE
 
+    // SET PARTICLE INFO
     G4PrimaryVertex* fVertex = new G4PrimaryVertex();
     fVertex-> SetPosition(fX*mm, fY*mm, fZ*mm);
     G4PrimaryParticle* fPrimaryParticle = new G4PrimaryParticle();
-    fPrimaryParticle-> SetTotalEnergy(fEnergy*GeV);
+    fPrimaryParticle-> SetTotalEnergy(fEnergy);
     fPrimaryParticle-> SetPDGcode(PDGID);
 
-    //Junsang****G4cout << "X: " << fX << G4endl;
-    //Junsang****G4cout << "Y: " << fY << G4endl;
-    //Junsang****G4cout << "Z: " << fZ << G4endl;
-    //Junsang****G4cout << "Energy: " << fEnergy << G4endl;
 
     if (G4UniformRand()<0.8) 
     {
