@@ -4,11 +4,10 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4VPrimaryGenerator.hh"
 #include "globals.hh"
+#include "G4ParticleGun.hh"
 
-class G4ParticleGun;
 class G4GenericMessenger;
 class G4Event;
-class G4ParticleDefinition;
 
 /// Primary generator
 ///
@@ -19,18 +18,27 @@ class G4ParticleDefinition;
 /// - random selection of a particle type from proton, kaon+, pi+, muon+, e+ 
 
 
-class TestInterface : public G4VPrimaryGenerator
+class TestInterface : public G4ParticleGun
 {
     public:
 
         TestInterface();
         virtual ~TestInterface();
 
+        void SetParticleName(G4String val) { ParticleName = val; }
+        G4String GetParticleName() const { return ParticleName; }
+
+        void SetPosition(G4String val) { Position = val; }
+        G4String GetPosition() const { return Position; }
+
+        void SetShape(G4String val) { Shape = val; }
+        G4String GetShape() const { return Shape; }
+
+        void SetTower(G4String val) { Tower = val; }
+        G4String GetTower() const { return Tower; }
+    
         void SetEnergy(G4double val) { fEnergy = val; }
         G4double GetEnergy() const { return fEnergy; }
-
-        void SetSigmaMomentum(G4double val) { fSigmaMomentum = val; }
-        G4double GetSigmaMomentum() const { return fSigmaMomentum; }
 
         void SetSigmaAngle(G4double val) { fSigmaAngle = val; }
         G4double GetSigmaAngle() const { return fSigmaAngle; }
@@ -47,27 +55,20 @@ class TestInterface : public G4VPrimaryGenerator
         void SetY(G4double val) { fY = val; }
         G4double GetY() const { return fY; }
 
-        void SetZ(G4double val) { fZ = val; }
-        G4double GetZ() const { return fZ; }
+        G4ThreeVector UnitVector(G4ThreeVector);
 
     private:
         void DefineCommands();
         void GeneratePrimaryVertex(G4Event* event);
 
-        G4ParticleGun* fParticleGun;
         G4GenericMessenger* fMessenger;
-        G4ParticleDefinition* fPositron;
-        G4ParticleDefinition* fMuon;
-        G4ParticleDefinition* fPion;
-        G4ParticleDefinition* fKaon;
-        G4ParticleDefinition* fProton;
-        G4ParticleDefinition* fNeutron;
-        G4ParticleDefinition* fElectron;
+        G4String ParticleName;
+        G4String Position;
+        G4String Shape;
+        G4String Tower;
         G4double fX;
         G4double fY;
-        G4double fZ;
         G4double fEnergy;
-        G4double fSigmaMomentum;
         G4double fSigmaAngle;
         G4double fSigmaRange;
         G4bool fRandomizePrimary;

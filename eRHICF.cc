@@ -2,6 +2,7 @@
 #include "RHICFActionInitialization.hh"
 #include "RHICFPhysicsList.hh"
 #include "Randomize.hh"
+#include "Seeder.hh"
 /////////////////////////////////////////////////////////////////////////////////
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -34,7 +35,6 @@ int main(int argc, char** argv)
 
 
     runManager -> SetUserInitialization(new RHICFPhysicsList("QGSP_BERT"));
-    //Junsang****G4VUserActionInitialization* actions = new RHICFActionInitialization;
     runManager -> SetUserInitialization(new RHICFActionInitialization);
     runManager -> Initialize();
 #ifdef G4VIS_USE

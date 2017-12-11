@@ -18,8 +18,13 @@ class RHICFSteppingAction : public G4UserSteppingAction
         virtual void UserSteppingAction(const G4Step* step);
         void ExtractGhostInfo(const G4Step* step);
         void ExtractGhostCircleInfo(const G4Step* step);
-        void ExtractFCInfo(const G4Step* step);
+        void ExtractWInfo(const G4Step* step);
         void ExtractGhostZDCInfo(const G4Step* step);
+        void ExtractNeutronSignal(const G4Step* step);
+        void ExtractPionSignal(const G4Step* step, int tmpint);
+        void ExtractNeutronInfo(const G4Step* step);
+        void ExtractPionInfo(const G4Step* step, int tmpint);
+        bool IfGoingThrough(G4String, const G4Step*);
 };
 
 #endif

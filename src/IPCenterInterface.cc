@@ -11,12 +11,13 @@
 #include "G4GenericMessenger.hh"
 #include "RHICFManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "TRandom.h"
 #include "TMath.h"
 #include "Randomize.hh"
 
 
 IPCenterInterface::IPCenterInterface()
-: ParticleName("neutron"), fEnergy(100.), fMessenger(0), fSigmaAngle(0.*deg), fSigmaRange(1.*mm), fX(0.), fY(0.), fZ(0.), fRandomizePrimary(false)
+:Position("TL"), Tower("Large"), Shape("Diamond"), ParticleName("neutron"), fEnergy(100.), fMessenger(0), fSigmaAngle(0.*deg), fSigmaRange(0.), fX(0.), fY(0.), fRandomizePrimary(false)
 {
     DefineCommands();
 }
@@ -30,44 +31,55 @@ IPCenterInterface::~IPCenterInterface()
 
 void IPCenterInterface::GeneratePrimaryVertex(G4Event* event)
 {
-    //Junsang****G4ParticleDefinition* tmpparticle = G4ParticleTable::GetParticleTable()->FindParticle(ParticleName);
-    
     G4int PDGID = G4ParticleTable::GetParticleTable()->FindParticle(ParticleName)->GetPDGEncoding();
-    //Junsang****G4cout << "PDGID: " << PDGID << G4endl;
-    //Junsang****G4int PDGID = tmpparticle->GetPDGEncoding();
 
-    //CONE MODE
-
-    // SET PARTICLE INFO
     G4PrimaryVertex* fVertex = new G4PrimaryVertex();
-    fVertex-> SetPosition(fX*mm, fY*mm, fZ*mm);
+    fVertex-> SetPosition(0.*mm, 0.*mm, 0.*mm);
     G4PrimaryParticle* fPrimaryParticle = new G4PrimaryParticle();
-    fPrimaryParticle-> SetTotalEnergy(fEnergy);
+    fPrimaryParticle-> SetTotalEnergy(fEnergy*GeV);
     fPrimaryParticle-> SetPDGcode(PDGID);
 
+    G4double tmpx,tmpy;
 
-    if (G4UniformRand()<0.8) 
+    if (Shape=="Diamond") 
     {
-        G4double length = sqrt((RHICFManager::GetInstance()->GetARM1Z()-14.15)*(RHICFManager::GetInstance()->GetARM1Z()-14.15)+(RHICFManager::GetInstance()->GetARM1Y())*(RHICFManager::GetInstance()->GetARM1Y()));
-        G4double A = 2.2*sqrt(2)/length;
-        G4double phi = 2*TMath::Pi()*G4UniformRand();
-        G4double theta = atan(A)*G4UniformRand();
-        //Junsang****G4double p = G4UniformRand(); 
-        //Junsang****fParticleGun->SetParticleMomentumDirection(G4ThreeVector(TMath::Cos(phi)*p*A,TMath::Sin(phi)*p*A, sqrt(1-p*p*A*A)).rotate(G4ThreeVector(1., 0., 0.),-TMath::ATan((RHICFManager::GetInstance()->GetARM1Y())/(RHICFManager::GetInstance()->GetARM1Z()-14.15))*rad));
-        fPrimaryParticle-> SetMomentumDirection(G4ThreeVector(cos(phi)*sin(theta), sin(theta)*sin(phi), cos(theta)).rotate(G4ThreeVector(1., 0., 0.),-TMath::ATan((RHICFManager::GetInstance()->GetARM1Y())/(RHICFManager::GetInstance()->GetARM1Z()-14.15))*rad));
+        tmpx = gRandom->Uniform(-fSigmaRange,fSigmaRange);
+        tmpy = gRandom->Uniform(-fSigmaRange,fSigmaRange);
+        G4ThreeVector tmpdirection = G4ThreeVector( tmpx, tmpy, 0.).rotate(G4ThreeVector(0., 0., 1.), 45*deg);
         
-    }else
+    }else if(Shape=="Circle")
     {
-        G4double length = sqrt((RHICFManager::GetInstance()->GetARM1Z()-14.15)*(RHICFManager::GetInstance()->GetARM1Z()-14.15)+(RHICFManager::GetInstance()->GetARM1Y()-(30.1*sqrt(2)+5+24)/10.)*(RHICFManager::GetInstance()->GetARM1Y()-(30.1*sqrt(2)+5+24)/10.));
-        G4double A = 1.1*sqrt(2)/length;
-        G4double phi = 2*TMath::Pi()*G4UniformRand();
-        G4double theta = atan(A)*G4UniformRand();
-        //Junsang****G4double p = G4UniformRand(); 
-        //Junsang****fParticleGun->SetParticleMomentumDirection(G4ThreeVector(TMath::Cos(phi)*p*A,TMath::Sin(phi)*p*A, sqrt(1-p*p*A*A)).rotate(G4ThreeVector(1., 0., 0.),-TMath::ATan((RHICFManager::GetInstance()->GetARM1Y()-4.74)/(RHICFManager::GetInstance()->GetARM1Z()-14.15))*rad));
-        fPrimaryParticle-> SetMomentumDirection(G4ThreeVector(cos(phi)*sin(theta), sin(theta)*sin(phi), cos(theta)).rotate(G4ThreeVector(1., 0., 0.),-TMath::ATan((RHICFManager::GetInstance()->GetARM1Y()-4.74)/(RHICFManager::GetInstance()->GetARM1Z()-14.15))*rad));
+        gRandom->Circle(tmpx, tmpy, fSigmaRange);
+    }
+
+
+
+    if (Position=="TOP") 
+    {
+        if (Tower=="Small") 
+        {
+            
+            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpx, tmpy+(RHICFManager::GetInstance()->GetARM1Y()*10.),(RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+        }else
+        {
+        fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpx, tmpy+(RHICFManager::GetInstance()->GetARM1Y()*10.)+47.4, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+        }
+    }
+    if (Position=="TS") 
+    {
+        if (Tower=="Small") 
+        {
+            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpx, tmpy, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+        }else
+        {
+            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpx, tmpy+47.4, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+        }
+    }
+    if (Position=="Manual") 
+    {
+            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpx+fX, tmpy+fY, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
     }
     
-
     fVertex-> SetPrimary(fPrimaryParticle);
     event-> AddPrimaryVertex(fVertex);
 }
@@ -80,22 +92,50 @@ void IPCenterInterface::DefineCommands()
 
     // pdgid command
     G4GenericMessenger::Command& pdgidCmd = fMessenger->DeclarePropertyWithUnit("particle", "G4String", ParticleName, "particle of primaries.");
+    G4String guidance = "Setting for Primary particle having specific energy thrown from IP.\n";   
+    guidance += "eg: e-, neutron, pi0, pi+, pi-, etc..\n";
+    guidance += "eg: /IPUnibeam/particle neutron";                               
+    pdgidCmd.SetGuidance(guidance);
     pdgidCmd.SetParameterName("particle", true);
-    //Junsang****pdgidCmd.SetRange("E>=0.");                                
     pdgidCmd.SetDefaultValue("neutron");
+
+    // position command
+    G4GenericMessenger::Command& positionidCmd = fMessenger->DeclarePropertyWithUnit("position", "G4String", Position, "RHICF position");
+    guidance = "Setting for Position of RHICf\n";   
+    guidance += "eg: TL, TS, TOP, Manual\n";
+    guidance += "Manual is set beam center manually with X,Y value\n";
+    guidance += "eg: /IPUnibeam/position TL";                               
+    positionidCmd.SetGuidance(guidance);
+    positionidCmd.SetParameterName("position", true);
+    positionidCmd.SetDefaultValue("TL");
+    
+    // tower command
+    G4GenericMessenger::Command& toweridCmd = fMessenger->DeclarePropertyWithUnit("tower", "G4String", Tower, "RHICF tower");
+    guidance = "Beam center tower\n";   
+    guidance += "eg: Large, Small\n";
+    guidance += "eg: /IPUnibeam/tower Large";                               
+    toweridCmd.SetGuidance(guidance);
+    toweridCmd.SetParameterName("tower", true);
+    toweridCmd.SetDefaultValue("Large");
+    
+    // shape command
+    G4GenericMessenger::Command& shapeidCmd = fMessenger->DeclarePropertyWithUnit("shape", "G4String", Shape, "Beam shape");
+    guidance = "Beam shape\n";   
+    guidance += "eg: Diamond, Circle\n";
+    guidance += "eg: /IPUnibeam/shape Diamond";                               
+    shapeidCmd.SetGuidance(guidance);
+    shapeidCmd.SetParameterName("shape", true);
+    shapeidCmd.SetDefaultValue("Diamond");
               
     // energy command
     G4GenericMessenger::Command& energyCmd = fMessenger->DeclarePropertyWithUnit("energy", "GeV", fEnergy, "Mean energy of primaries.");
+    guidance = "Setting for Primary particle having specific energy thrown from IP.\n";   
+    guidance += "eg: /IPUnibeam/energy 100 GeV";                               
+    energyCmd.SetGuidance(guidance);
     energyCmd.SetParameterName("E", true);
     energyCmd.SetRange("E>=0.");                                
     energyCmd.SetDefaultValue("100.");
     
-    // sigmaMomentum command
-    G4GenericMessenger::Command& sigmaMomentumCmd = fMessenger->DeclarePropertyWithUnit("sigmaMomentum", "MeV", fSigmaMomentum, "Sigma momentum of primaries.");
-    sigmaMomentumCmd.SetParameterName("sp", true);
-    sigmaMomentumCmd.SetRange("sp>=0.");                                
-    sigmaMomentumCmd.SetDefaultValue("50.");
-
     // sigmaAngle command
     G4GenericMessenger::Command& sigmaAngleCmd = fMessenger->DeclarePropertyWithUnit("sigmaAngle", "deg", fSigmaAngle, "Sigma angle divergence of primaries.");
     sigmaAngleCmd.SetParameterName("t", true);
@@ -118,15 +158,10 @@ void IPCenterInterface::DefineCommands()
     sigmaAngleCmd.SetParameterName("Y", true);
     sigmaAngleCmd.SetDefaultValue("0.");
 
-    // Z command
-    G4GenericMessenger::Command& ZCmd = fMessenger->DeclarePropertyWithUnit("Z", "mm", fZ, "Z of position");
-    sigmaAngleCmd.SetParameterName("Z", true);
-    sigmaAngleCmd.SetDefaultValue("0.");
-
 
     // randomizePrimary command
     G4GenericMessenger::Command& randomCmd = fMessenger->DeclareProperty("randomizePrimary", fRandomizePrimary);
-    G4String guidance = "Boolean flag for randomizing primary particle types.\n";   
+    guidance = "Boolean flag for randomizing primary particle types.\n";   
     guidance += "In case this flag is false, you can select the primary particle\n";
     guidance += "  with /gun/particle command.";                               
     randomCmd.SetGuidance(guidance);
@@ -134,3 +169,10 @@ void IPCenterInterface::DefineCommands()
     randomCmd.SetDefaultValue("true");
 }
 
+
+G4ThreeVector IPCenterInterface::UnitVector(G4ThreeVector tmpvec)
+{
+    G4double length = sqrt(tmpvec.x()*tmpvec.x()+ tmpvec.y()*tmpvec.y()+tmpvec.z()*tmpvec.z());
+    G4ThreeVector vec = G4ThreeVector(tmpvec.x()/length, tmpvec.y()/length, tmpvec.z()/length); 
+    return vec;
+}

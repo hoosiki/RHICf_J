@@ -59,8 +59,8 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     G4AnalysisManager::Instance()->AddNtupleRow(0);//ARM1PL
     G4AnalysisManager::Instance()->AddNtupleRow(1);//ARM1BAR
     G4AnalysisManager::Instance()->AddNtupleRow(2);//FCInfo DE & NOP
-    G4AnalysisManager::Instance()->AddNtupleRow(6);//PMMA
-    G4AnalysisManager::Instance()->AddNtupleRow(7);//SMD
+    G4AnalysisManager::Instance()->AddNtupleRow(4);//PMMA
+    G4AnalysisManager::Instance()->AddNtupleRow(5);//SMD
 }
 
 G4double RHICFEventAction::GetDEValue(G4HCofThisEvent* hc, G4String detectorname, int channel)
@@ -228,15 +228,15 @@ void RHICFEventAction::ExtractValueForSTARZDC(G4HCofThisEvent* hc, const G4Event
     //9 : TOTAL DE IN STARZDC
     //10 : RUN NUMBER
     //11 : EVENT NUMBER
-    G4AnalysisManager::Instance()->FillNtupleDColumn(6, 0, GetDEValue(hc, "GAPF_1Logical", 0)/MeV);
-    G4AnalysisManager::Instance()->FillNtupleDColumn(6, 1, GetDEValue(hc, "GAPF_2Logical", 0)/MeV);
-    G4AnalysisManager::Instance()->FillNtupleDColumn(6, 2, GetDEValue(hc, "GAPF_3Logical", 0)/MeV);
-    G4AnalysisManager::Instance()->FillNtupleIColumn(6, 3, GetNOPValue(hc, "GAPF_1Logical", 0));
-    G4AnalysisManager::Instance()->FillNtupleIColumn(6, 4, GetNOPValue(hc, "GAPF_2Logical", 0));
-    G4AnalysisManager::Instance()->FillNtupleIColumn(6, 5, GetNOPValue(hc, "GAPF_3Logical", 0));
-    G4AnalysisManager::Instance()->FillNtupleDColumn(6, 6, GetDEValue(hc, "W_PL_1Logical", 0)/GeV);
-    G4AnalysisManager::Instance()->FillNtupleDColumn(6, 7, GetDEValue(hc, "W_PL_2Logical", 0)/GeV);
-    G4AnalysisManager::Instance()->FillNtupleDColumn(6, 8, GetDEValue(hc, "W_PL_3Logical", 0)/GeV);
+    G4AnalysisManager::Instance()->FillNtupleDColumn(4, 0, GetDEValue(hc, "GAPF_1Logical", 0)/MeV);
+    G4AnalysisManager::Instance()->FillNtupleDColumn(4, 1, GetDEValue(hc, "GAPF_2Logical", 0)/MeV);
+    G4AnalysisManager::Instance()->FillNtupleDColumn(4, 2, GetDEValue(hc, "GAPF_3Logical", 0)/MeV);
+    G4AnalysisManager::Instance()->FillNtupleIColumn(4, 3, GetNOPValue(hc, "GAPF_1Logical", 0));
+    G4AnalysisManager::Instance()->FillNtupleIColumn(4, 4, GetNOPValue(hc, "GAPF_2Logical", 0));
+    G4AnalysisManager::Instance()->FillNtupleIColumn(4, 5, GetNOPValue(hc, "GAPF_3Logical", 0));
+    G4AnalysisManager::Instance()->FillNtupleDColumn(4, 6, GetDEValue(hc, "W_PL_1Logical", 0)/GeV);
+    G4AnalysisManager::Instance()->FillNtupleDColumn(4, 7, GetDEValue(hc, "W_PL_2Logical", 0)/GeV);
+    G4AnalysisManager::Instance()->FillNtupleDColumn(4, 8, GetDEValue(hc, "W_PL_3Logical", 0)/GeV);
     G4double tmpDE = 0.;
     tmpDE += GetDEValue(hc, "GAPF_1Logical", 0);
     tmpDE += GetDEValue(hc, "GAPF_2Logical", 0);
@@ -245,9 +245,9 @@ void RHICFEventAction::ExtractValueForSTARZDC(G4HCofThisEvent* hc, const G4Event
     tmpDE += GetDEValue(hc, "W_PL_2Logical", 0);
     tmpDE += GetDEValue(hc, "W_PL_3Logical", 0);
     tmpDE += GetDEValue(hc, "I_PLLogical", 0);
-    G4AnalysisManager::Instance()->FillNtupleDColumn(6, 9, tmpDE/GeV); 
-    G4AnalysisManager::Instance()->FillNtupleIColumn(6, 10, stoi(FileManager::GetInstance()->GetTime()+FileManager::GetInstance()->GetPID())); 
-    G4AnalysisManager::Instance()->FillNtupleIColumn(6, 11, event->GetEventID()); 
+    G4AnalysisManager::Instance()->FillNtupleDColumn(4, 9, tmpDE/GeV); 
+    G4AnalysisManager::Instance()->FillNtupleIColumn(4, 10, stoi(FileManager::GetInstance()->GetTime()+FileManager::GetInstance()->GetPID())); 
+    G4AnalysisManager::Instance()->FillNtupleIColumn(4, 11, event->GetEventID()); 
 
 
 
@@ -260,21 +260,21 @@ void RHICFEventAction::ExtractValueForSTARZDC(G4HCofThisEvent* hc, const G4Event
     //31 : EVENT NUMBER
     for (int i = 0; i < 7; i++) 
     {
-        G4AnalysisManager::Instance()->FillNtupleDColumn(7, i, GetDEValue(hc, "SMDVLogical", i)/MeV);
+        G4AnalysisManager::Instance()->FillNtupleDColumn(5, i, GetDEValue(hc, "SMDVLogical", i)/MeV);
     }
     for (int i = 7; i < 15; i++) 
     {
-        G4AnalysisManager::Instance()->FillNtupleDColumn(7, i, GetDEValue(hc, "SMDHLogical", i-7)/MeV);
+        G4AnalysisManager::Instance()->FillNtupleDColumn(5, i, GetDEValue(hc, "SMDHLogical", i-7)/MeV);
     }
     for (int i = 15; i < 22; i++) {
-        G4AnalysisManager::Instance()->FillNtupleIColumn(7, i, GetNOPValue(hc, "SMDVLogical", i-15));
+        G4AnalysisManager::Instance()->FillNtupleIColumn(5, i, GetNOPValue(hc, "SMDVLogical", i-15));
     }
     for (int i = 22; i < 30; i++) 
     {
-        G4AnalysisManager::Instance()->FillNtupleIColumn(7, i, GetNOPValue(hc, "SMDHLogical", i-22));
+        G4AnalysisManager::Instance()->FillNtupleIColumn(5, i, GetNOPValue(hc, "SMDHLogical", i-22));
     }
-    G4AnalysisManager::Instance()->FillNtupleIColumn(7, 30, stoi(FileManager::GetInstance()->GetTime()+FileManager::GetInstance()->GetPID())); 
-    G4AnalysisManager::Instance()->FillNtupleIColumn(7, 31, event->GetEventID()); 
+    G4AnalysisManager::Instance()->FillNtupleIColumn(5, 30, stoi(FileManager::GetInstance()->GetTime()+FileManager::GetInstance()->GetPID())); 
+    G4AnalysisManager::Instance()->FillNtupleIColumn(5, 31, event->GetEventID()); 
 
 
 }

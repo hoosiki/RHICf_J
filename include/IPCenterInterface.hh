@@ -27,12 +27,18 @@ class IPCenterInterface : public G4ParticleGun
 
         void SetParticleName(G4String val) { ParticleName = val; }
         G4String GetParticleName() const { return ParticleName; }
+
+        void SetPosition(G4String val) { Position = val; }
+        G4String GetPosition() const { return Position; }
+
+        void SetShape(G4String val) { Shape = val; }
+        G4String GetShape() const { return Shape; }
+
+        void SetTower(G4String val) { Tower = val; }
+        G4String GetTower() const { return Tower; }
     
         void SetEnergy(G4double val) { fEnergy = val; }
         G4double GetEnergy() const { return fEnergy; }
-
-        void SetSigmaMomentum(G4double val) { fSigmaMomentum = val; }
-        G4double GetSigmaMomentum() const { return fSigmaMomentum; }
 
         void SetSigmaAngle(G4double val) { fSigmaAngle = val; }
         G4double GetSigmaAngle() const { return fSigmaAngle; }
@@ -49,8 +55,7 @@ class IPCenterInterface : public G4ParticleGun
         void SetY(G4double val) { fY = val; }
         G4double GetY() const { return fY; }
 
-        void SetZ(G4double val) { fZ = val; }
-        G4double GetZ() const { return fZ; }
+        G4ThreeVector UnitVector(G4ThreeVector);
 
     private:
         void DefineCommands();
@@ -58,11 +63,12 @@ class IPCenterInterface : public G4ParticleGun
 
         G4GenericMessenger* fMessenger;
         G4String ParticleName;
+        G4String Position;
+        G4String Shape;
+        G4String Tower;
         G4double fX;
         G4double fY;
-        G4double fZ;
         G4double fEnergy;
-        G4double fSigmaMomentum;
         G4double fSigmaAngle;
         G4double fSigmaRange;
         G4bool fRandomizePrimary;

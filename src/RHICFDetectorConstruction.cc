@@ -123,7 +123,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     /*-*/STARPIPEINSTALL(RHICFManager::GetInstance()->GetARM1Y(), (RHICFManager::GetInstance()->GetARM1Z()-14.15));
     /*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, RHICFManager::GetInstance()->GetARM1Y()*cm, RHICFManager::GetInstance()->GetARM1Z()*cm), fRotationY180);
     //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1867.59*cm), fRotationY180);
-    /*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1854.59*cm), fRotationY180);
+    //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1854.59*cm), fRotationY180);
 
 
     
@@ -1779,7 +1779,7 @@ void RHICFDetectorConstruction::ARM1INSTALL(G4VPhysicalVolume* world_phys, G4Thr
     /*-*/new G4PVPlacement(fNonRotation, G4ThreeVector(0*mm, 0*mm, (-210.35+basez+dz)*mm), fGSO_PLHolderLogical, "GSO_PLHolderPhysical", fARM1Logical, false, 15, checkOverlaps);
 
     /*-*/// Put tungsten plates
-    /*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-0+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
+    /*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-0+basez+dz)*mm), fLargeW_PLLogical, "1stLargeW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
     /*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-10.30+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
     /*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-20.60+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
     /*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-34.70+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);
@@ -1802,7 +1802,7 @@ void RHICFDetectorConstruction::ARM1INSTALL(G4VPhysicalVolume* world_phys, G4Thr
     /*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-205.20+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 16, checkOverlaps);
     /*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, 0*mm, (-215.50+basez+dz)*mm), fLargeW_PLLogical, "LargeW_PLPhysical", fARM1Logical, false, 17, checkOverlaps);
     /*-*///// Put small tungsten plate into arm1
-    /*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-0+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
+    /*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-0+basez+dz)*mm), fSmallW_PLLogical, "1stSmallW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
     /*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-10.30+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 1, checkOverlaps);
     /*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-20.60+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 0, checkOverlaps);
     /*-*/new G4PVPlacement(fRotationZ45, G4ThreeVector(0*mm, -(30.1*sqrt(2)+5)*mm, (-34.70+basez+dz)*mm), fSmallW_PLLogical, "SmallW_PLPhysical", fARM1Logical, false, 2, checkOverlaps);

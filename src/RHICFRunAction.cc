@@ -37,12 +37,24 @@ RHICFRunAction::~RHICFRunAction()
 
 void RHICFRunAction::BeginOfRunAction(const G4Run* run)
 {
+    long seeds[2];
+    time_t systime = time(NULL) + getpid();
+    seeds[0] = (long) systime;
+    seeds[1] = (long) (systime*G4UniformRand());
+    G4Random::setTheSeeds(seeds);
+    G4Random::showEngineStatus();
+    //Junsang****Seeder* fSeeder = new Seeder;
+    //Junsang****G4int tmpint = fSeeder->GetSeedForG4();
+    //Junsang****G4cout << "G4Seed: " << tmpint << G4endl;
+    //Junsang****G4Random::setTheEngine(new CLHEP::RanecuEngine);
+    //Junsang****G4Random::setTheSeed(tmpint);
     G4AnalysisManager::Instance()->SetFileName(FileManager::GetInstance()->GetPathFortmp()+"/"+FileManager::GetInstance()->GetFileName()+".root");
     NtupleForARM1();
     NtupleForSTARZDC();
-    Seeder* fSeeder = new Seeder;
-    G4long tmpseed = (long)fSeeder->GetSeedForG4();
-    G4Random::setTheSeeds(&tmpseed);
+    NtupleForIP();
+    //Junsang****Seeder* fSeeder = new Seeder;
+    //Junsang****G4long tmpseed = (long)fSeeder->GetSeedForG4();
+    //Junsang****G4Random::setTheSeeds(&tmpseed);
     G4AnalysisManager::Instance()->OpenFile();
 }
 
@@ -169,108 +181,213 @@ void RHICFRunAction::NtupleForARM1()
     G4AnalysisManager::Instance()->CreateNtupleIColumn(2, "EventNumber");
     G4AnalysisManager::Instance()->FinishNtuple(2);
 
-    G4AnalysisManager::Instance()->CreateNtuple("CenterGhost", "ParticleInformation");
+
+    G4AnalysisManager::Instance()->CreateNtuple("WPlate", "ParticleInformation");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "POSITIONX[mm]");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "POSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "POSITIONZ[mm]");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "MOMENTUMX[GeV/c]");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "MOMENTUMY[GeV/c]");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "MOMENTUMZ[GeV/c]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "KINETICENERGY[GeV]");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(3, "PID[PDG]");
-    G4AnalysisManager::Instance()->CreateNtupleSColumn(3, "TYPE");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(3, "ENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(3, "NAME");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(3, "ORIGINALPARTICLE");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(3, "TRACKID");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(3, "MOTHERTRACKID");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(3, "RunNumber");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(3, "EventNumber");
     G4AnalysisManager::Instance()->FinishNtuple(3);
 
-    G4AnalysisManager::Instance()->CreateNtuple("CenterCircle", "ParticleInformation");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "POSITIONX[mm]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "POSITIONY[mm]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "MOMENTUMX[GeV/c]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "MOMENTUMY[GeV/c]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "MOMENTUMZ[GeV/c]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "KINETICENERGY[GeV]");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(4, "PID[PDG]");
-    G4AnalysisManager::Instance()->CreateNtupleSColumn(4, "TYPE");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(4, "RunNumber");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(4, "EventNumber");
-    G4AnalysisManager::Instance()->FinishNtuple(4);
-
-    G4AnalysisManager::Instance()->CreateNtuple("FrontCounterParticle", "ParticleInformation");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "POSITIONX[mm]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "POSITIONY[mm]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "MOMENTUMX[GeV/c]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "MOMENTUMY[GeV/c]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "MOMENTUMZ[GeV/c]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "KINETICENERGY[GeV]");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "PID[PDG]");
-    G4AnalysisManager::Instance()->CreateNtupleSColumn(5, "TYPE");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "RunNumber");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "EventNumber");
-    G4AnalysisManager::Instance()->FinishNtuple(5);
 }
 
 void RHICFRunAction::NtupleForSTARZDC()
 {
     G4AnalysisManager::Instance()->CreateNtuple("ZDCPMMA", "PMMALAYER");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "1stPMMADE[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "2ndPMMADE[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "3rdPMMADE[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(6, "1stPMMANOP");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(6, "2ndPMMANOP");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(6, "3rdPMMANOP");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "1stZDCDE[GeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "2ndZDCDE[GeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "3rdZDCDE[GeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "TotalEnergy");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "1stPMMADE[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "2ndPMMADE[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "3rdPMMADE[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(4, "1stPMMANOP");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(4, "2ndPMMANOP");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(4, "3rdPMMANOP");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "1stZDCDE[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "2ndZDCDE[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "3rdZDCDE[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(4, "TotalEnergy");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(4, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(4, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(4);
+
+    G4AnalysisManager::Instance()->CreateNtuple("ZDCSMD", "SMD");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDVDE1[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDVDE2[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDVDE3[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDVDE4[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDVDE5[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDVDE6[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDVDE7[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDHDE1[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDHDE2[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDHDE3[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDHDE4[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDHDE5[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDHDE6[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDHDE7[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(5, "SMDHDE8[MeV]");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDVNOP1");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDVNOP2");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDVNOP3");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDVNOP4");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDVNOP5");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDVNOP6");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDVNOP7");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDHNOP1");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDHNOP2");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDHNOP3");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDHNOP4");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDHNOP5");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDHNOP6");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDHNOP7");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "SMDHNOP8");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(5, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(5);
+
+    G4AnalysisManager::Instance()->CreateNtuple("ZDCGhost", "Particle"); // INFO OF PARTICLES GOTHROUGH ZDCGHOST
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "POSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "POSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "MOMENTUMX[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "MOMENTUMY[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "MOMENTUMZ[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(6, "ENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(6, "NAME");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(6, "ORIGINALPARTICLE");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(6, "TRACKID");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(6, "MOTHERTRACKID");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(6, "RunNumber");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(6, "EventNumber");
     G4AnalysisManager::Instance()->FinishNtuple(6);
+}
 
-    G4AnalysisManager::Instance()->CreateNtuple("ZDCSMD", "SMD");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDVDE1[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDVDE2[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDVDE3[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDVDE4[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDVDE5[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDVDE6[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDVDE7[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDHDE1[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDHDE2[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDHDE3[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDHDE4[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDHDE5[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDHDE6[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDHDE7[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "SMDHDE8[MeV]");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDVNOP1");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDVNOP2");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDVNOP3");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDVNOP4");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDVNOP5");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDVNOP6");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDVNOP7");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDHNOP1");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDHNOP2");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDHNOP3");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDHNOP4");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDHNOP5");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDHNOP6");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDHNOP7");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "SMDHNOP8");
+void RHICFRunAction::NtupleForIP()
+{
+    G4AnalysisManager::Instance()->CreateNtuple("IP", "ParticleInformation");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "POSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "POSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "POSITIONZ[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "MOMENTUMX[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "MOMENTUMY[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "MOMENTUMZ[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(7, "ENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(7, "NAME");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "RunNumber");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(7, "EventNumber");
     G4AnalysisManager::Instance()->FinishNtuple(7);
 
-    G4AnalysisManager::Instance()->CreateNtuple("ZDCGhost", "Particle"); // INFO OF PARTICLES GOTHROUGH ZDCGHOST
+    G4AnalysisManager::Instance()->CreateNtuple("Ghost", "ParticleInformation");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(8, "POSITIONX[mm]");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(8, "POSITIONY[mm]");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(8, "MOMENTUMX[GeV/c]");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(8, "MOMENTUMY[GeV/c]");
     G4AnalysisManager::Instance()->CreateNtupleDColumn(8, "MOMENTUMZ[GeV/c]");
-    G4AnalysisManager::Instance()->CreateNtupleDColumn(8, "KINETICENERGY[GeV]");
-    G4AnalysisManager::Instance()->CreateNtupleIColumn(8, "PID[PDG]");
-    G4AnalysisManager::Instance()->CreateNtupleSColumn(8, "TYPE");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(8, "ENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(8, "NAME");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(8, "ORIGINALPARTICLE");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(8, "TRACKID");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(8, "MOTHERTRACKID");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(8, "RunNumber");
     G4AnalysisManager::Instance()->CreateNtupleIColumn(8, "EventNumber");
     G4AnalysisManager::Instance()->FinishNtuple(8);
+
+    G4AnalysisManager::Instance()->CreateNtuple("Circle", "ParticleInformation");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(9, "POSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(9, "POSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(9, "MOMENTUMX[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(9, "MOMENTUMY[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(9, "MOMENTUMZ[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(9, "ENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(9, "NAME");
+    G4AnalysisManager::Instance()->CreateNtupleSColumn(9, "ORIGINALPARTICLE");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(9, "TRACKID");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(9, "MOTHERTRACKID");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(9, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(9, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(9);
+
+    G4AnalysisManager::Instance()->CreateNtuple("GhostWhenPion", "ParticleInformation");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(10, "POSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(10, "POSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(10, "MOMENTUMX[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(10, "MOMENTUMY[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(10, "MOMENTUMZ[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(10, "ENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(10, "TRACKID");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(10, "VPOSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(10, "VPOSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(10, "VPOSITIONZ[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(10, "PIONMOMENTUMX");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(10, "PIONMOMENTUMY");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(10, "PIONMOMENTUMZ");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(10, "TOWERID");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(10, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(10, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(10);
+
+    G4AnalysisManager::Instance()->CreateNtuple("GhostWhenNeutron", "ParticleInformation");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(11, "POSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(11, "POSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(11, "MOMENTUMX[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(11, "MOMENTUMY[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(11, "MOMENTUMZ[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(11, "ENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(11, "VPOSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(11, "VPOSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(11, "VPOSITIONZ[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(11, "NEUTRONMOMENTUMX");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(11, "NEUTRONMOMENTUMY");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(11, "NEUTRONMOMENTUMZ");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(11, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(11, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(11);
+
+    G4AnalysisManager::Instance()->CreateNtuple("PionSignal", "ParticleInformation");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(12, "POSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(12, "POSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(12, "MOMENTUMX[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(12, "MOMENTUMY[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(12, "MOMENTUMZ[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(12, "ENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(12, "TRACKID");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(12, "VPOSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(12, "VPOSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(12, "VPOSITIONZ[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(12, "PIONMOMENTUMX");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(12, "PIONMOMENTUMY");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(12, "PIONMOMENTUMZ");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(12, "TOWERID");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(12, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(12, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(12);
+
+    G4AnalysisManager::Instance()->CreateNtuple("NeutronSignal", "ParticleInformation");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(13, "POSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(13, "POSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(13, "MOMENTUMX[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(13, "MOMENTUMY[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(13, "MOMENTUMZ[GeV/c]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(13, "ENERGY[GeV]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(13, "VPOSITIONX[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(13, "VPOSITIONY[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(13, "VPOSITIONZ[mm]");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(13, "NEUTRONMOMENTUMX");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(13, "NEUTRONMOMENTUMY");
+    G4AnalysisManager::Instance()->CreateNtupleDColumn(13, "NEUTRONMOMENTUMZ");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(13, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(13, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(13);
+
+    G4AnalysisManager::Instance()->CreateNtuple("SPINInfo", "Spin pattern");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(14, "SpinPattern");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(14, "RunNumber");
+    G4AnalysisManager::Instance()->CreateNtupleIColumn(14, "EventNumber");
+    G4AnalysisManager::Instance()->FinishNtuple(14);
 }

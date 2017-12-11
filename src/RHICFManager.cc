@@ -37,6 +37,21 @@ void RHICFManager::SetARM1Z(G4double z)
     ARM1Z = z;
 }
 
+void RHICFManager::SetMomentumX(G4double x)
+{
+    MomentumX = x;
+}
+
+void RHICFManager::SetMomentumY(G4double y)
+{
+    MomentumY = y;
+}
+
+void RHICFManager::SetMomentumZ(G4double z)
+{
+    MomentumZ = z;
+}
+
 void RHICFManager::SetVerboseSW(G4bool tr)
 {
     trigger = tr;
@@ -76,6 +91,11 @@ RHICFManager* RHICFManager::GetInstance()
     return fRHICFManager;
 
 
+}
+
+void RHICFManager::SetParticleName(G4String string)
+{
+    fParticleName = string;
 }
 
 

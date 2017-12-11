@@ -4,6 +4,7 @@
 #include "RHICFEventAction.hh"
 #include "RHICFRunAction.hh"
 #include "RHICFSteppingAction.hh"
+#include "RHICFTrackingAction.hh"
 #include "G4SystemOfUnits.hh"
 #include "RHICFManager.hh"
 
@@ -27,6 +28,8 @@ void RHICFActionInitialization::Build() const
     SetUserAction(new RHICFPrimaryGeneratorAction);
     auto eventAction = new RHICFEventAction();
     SetUserAction(eventAction);
+    RHICFTrackingAction* trackAction = new RHICFTrackingAction(eventAction);
+    SetUserAction(trackAction);
     RHICFRunAction* runAction = new RHICFRunAction(eventAction);
     SetUserAction(runAction);
     SetUserAction(new RHICFSteppingAction());

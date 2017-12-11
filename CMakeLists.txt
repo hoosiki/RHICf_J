@@ -48,6 +48,8 @@ target_link_libraries(TSwoW ${Geant4_LIBRARIES} ${hepmc} ${ROOT_LIBRARIES} ${HEP
 add_executable(TOPwoW TOPwoW.cc ${PYTHIA8_INCLUDE_DIR}/Pythia8 ${PYTHIA8PLUGIN_INCLUDE_DIR} ${sources} ${headers})
 target_link_libraries(TOPwoW ${Geant4_LIBRARIES} ${hepmc} ${ROOT_LIBRARIES} ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES} ${PYTHIA8PLUGIN_INCLUDE_DIR} ${PYTHIA8_LIBRARIES} -ldl)
 
+add_executable(eRHICF eRHICF.cc ${PYTHIA8_INCLUDE_DIR}/Pythia8 ${PYTHIA8PLUGIN_INCLUDE_DIR} ${sources} ${headers})
+target_link_libraries(eRHICF ${Geant4_LIBRARIES} ${hepmc} ${ROOT_LIBRARIES} ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES} ${PYTHIA8PLUGIN_INCLUDE_DIR} ${PYTHIA8_LIBRARIES} -ldl)
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build RE06. This is so that we can run the executable directly because it
