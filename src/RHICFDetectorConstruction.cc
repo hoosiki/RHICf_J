@@ -114,7 +114,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     /*-*///SET GEOMETRY
     //Junsang****PHENIXPIPE();
     //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 50*cm), fRotationY180);
-    RHICFManager::GetInstance()->SetARM1Z(1787);
+    RHICFManager::GetInstance()->SetARM1Z(1783);
     //Junsang****RHICFManager::GetInstance()->SetARM1Y((30.1*sqrt(2)+5+24)/10.);//TOP CENTER
     //Junsang****RHICFManager::GetInstance()->SetARM1Y((30.1*sqrt(2)+5)/10.);//TS CENTER
     RHICFManager::GetInstance()->SetARM1Y(0.);//TS CENTER
@@ -123,7 +123,7 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     /*-*/STARPIPEINSTALL(RHICFManager::GetInstance()->GetARM1Y(), (RHICFManager::GetInstance()->GetARM1Z()-14.15));
     /*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, RHICFManager::GetInstance()->GetARM1Y()*cm, RHICFManager::GetInstance()->GetARM1Z()*cm), fRotationY180);
     //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1867.59*cm), fRotationY180);
-    //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1854.59*cm), fRotationY180);
+    /*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1854.59*cm), fRotationY180);
 
 
     

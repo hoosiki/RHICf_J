@@ -15,7 +15,7 @@
 #include "Randomize.hh"
 
 
-TestInterface::TestInterface() :Position("TL"), Tower("Large"), Shape("Square"), ParticleName("neutron"), fEnergy(100.), fMessenger(0), fSigmaAngle(0.*deg), fSigmaRange(0.), fX(0.), fY(0.), fRandomizePrimary(false)
+TestInterface::TestInterface() :Position("TL"), Tower("Large"), Shape("Square"), ParticleName("neutron"), fEnergy(100.*GeV), fMessenger(0), fSigmaAngle(0.*deg), fSigmaRange(0.), fX(0.), fY(0.), fRandomizePrimary(false)
 {
     DefineCommands();
 }
@@ -76,8 +76,8 @@ void TestInterface::GeneratePrimaryVertex(G4Event* event)
         }
     }
 
-    fPrimaryParticle-> SetTotalEnergy(fEnergy*GeV);
     fPrimaryParticle-> SetPDGcode(PDGID);
+    fPrimaryParticle-> SetTotalEnergy(fEnergy);
     fVertex-> SetPrimary(fPrimaryParticle);
     event-> AddPrimaryVertex(fVertex);
 }

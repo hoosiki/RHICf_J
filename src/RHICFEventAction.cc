@@ -131,7 +131,6 @@ void RHICFEventAction::ExtractDEValueForARM1(G4HCofThisEvent* hc, const G4Event*
     }
     tmpDE += GetDEValue(hc, "AlFrame1Logical", 0);
     tmpDE += GetDEValue(hc, "AlFrame2Logical", 0);
-    G4cout << tmpDE << G4endl;
 
     G4AnalysisManager::Instance()->FillNtupleDColumn(0, 64, tmpDE/GeV); 
     G4AnalysisManager::Instance()->FillNtupleIColumn(0, 65, stoi(FileManager::GetInstance()->GetTime()+FileManager::GetInstance()->GetPID())); 
