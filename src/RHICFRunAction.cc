@@ -7,6 +7,7 @@
 #include "G4UnitsTable.hh"
 #include "g4root.hh"
 #include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 #include "G4RunManager.hh"
 #include "G4String.hh"
 #include <ctime>
@@ -37,24 +38,13 @@ RHICFRunAction::~RHICFRunAction()
 
 void RHICFRunAction::BeginOfRunAction(const G4Run* run)
 {
-    long seeds[2];
-    time_t systime = time(NULL) + getpid();
-    seeds[0] = (long) systime;
-    seeds[1] = (long) (systime*G4UniformRand());
-    G4Random::setTheSeeds(seeds);
-    G4Random::showEngineStatus();
-    //Junsang****Seeder* fSeeder = new Seeder;
-    //Junsang****G4int tmpint = fSeeder->GetSeedForG4();
-    //Junsang****G4cout << "G4Seed: " << tmpint << G4endl;
-    //Junsang****G4Random::setTheEngine(new CLHEP::RanecuEngine);
-    //Junsang****G4Random::setTheSeed(tmpint);
+    Seeder* fSeeder = new Seeder;
+    G4int tmpint = fSeeder->GetSeedForG4();
+    G4Random::setTheSeed(tmpint);
     G4AnalysisManager::Instance()->SetFileName(FileManager::GetInstance()->GetPathFortmp()+"/"+FileManager::GetInstance()->GetFileName()+".root");
     NtupleForARM1();
     NtupleForSTARZDC();
     NtupleForIP();
-    //Junsang****Seeder* fSeeder = new Seeder;
-    //Junsang****G4long tmpseed = (long)fSeeder->GetSeedForG4();
-    //Junsang****G4Random::setTheSeeds(&tmpseed);
     G4AnalysisManager::Instance()->OpenFile();
 }
 

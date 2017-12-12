@@ -8,6 +8,8 @@ project(RHICf)
 # You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
 # to build a batch mode only executable
 #
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g -ggdb -O3")
 list(APPEND CMAKE_MODULE_PATH ${CMAKEM_MODULE_PATH} ${PROJECT_SOURCE_DIR} $ENV{ADDITIONALCMAKE})
 find_package(Pythia8 REQUIRED)
 option(WITH_GEANT4_UIVIS "Build RHICf with Geant4 UI and Vis drivers" ON)
@@ -66,13 +68,14 @@ set(RHICf_SCRIPTS
     )
 endforeach()
 
+#set(CMAKE_CXX_COMPILER"/home/hoosiki/Packages/gcc/bin/gcc++")
+#set(CMAKE_C_COMPILER"/home/hoosiki/Packages/gcc/bin/gcc")
 #----------------------------------------------------------------------------
 # Compiler & Option setting for optimization
 # 
 #
 #set(CMAKE_C_COMPILER "/home/hoosiki/Packages/gcc/bin/gcc")
 #set(CMAKE_CXX_COMPILER "/home/hoosiki/Packages/gcc/bin/g++")
-set(CMAKE_CXX_FLAGS "-std=c++11")
 #set(CMAKE_CXX_FLAGS "-g -ggdb -O3")
 
 #----------------------------------------------------------------------------

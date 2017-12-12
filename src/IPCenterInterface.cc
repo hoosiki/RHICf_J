@@ -5,7 +5,6 @@
 #include "G4PrimaryParticle.hh"
 #include "G4PrimaryVertex.hh"
 #include "G4ParticleTable.hh"
-#include "G4MTHepRandom.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4GenericMessenger.hh"

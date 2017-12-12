@@ -4,11 +4,11 @@
 #include "Randomize.hh"
 #include "Seeder.hh"
 /////////////////////////////////////////////////////////////////////////////////
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
+//Junsang****#ifdef G4MULTITHREADED
+//Junsang****#include "G4MTRunManager.hh"
+//Junsang****#else
 #include "G4RunManager.hh"
-#endif
+//Junsang****#endif
 #include "G4UImanager.hh"
 #include "G4ParallelWorldPhysics.hh"
 #include "QGSP_BERT.hh"
@@ -28,6 +28,7 @@ int main(int argc, char** argv)
     system("date");
 //Junsang****#ifdef G4MULTITHREADED // NOTE : USING MULTITHREAD MAKE ROOT FILE BIGGER AND MAY BRING "double free or corruption" BUG
     //Junsang****auto runManager = new G4MTRunManager;
+    //Junsang****runManager->SetNumberOfThreads(1);
 //Junsang****#else
     auto runManager = new G4RunManager;
 //Junsang****#endif

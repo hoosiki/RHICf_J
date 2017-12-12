@@ -5,7 +5,6 @@
 #include "G4PrimaryParticle.hh"
 #include "G4PrimaryVertex.hh"
 #include "G4ParticleTable.hh"
-#include "G4MTHepRandom.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4GenericMessenger.hh"
@@ -16,8 +15,7 @@
 #include "Randomize.hh"
 
 
-TestInterface::TestInterface()
-:Position("TL"), Tower("Large"), Shape("Retangular"), ParticleName("neutron"), fEnergy(100.), fMessenger(0), fSigmaAngle(0.*deg), fSigmaRange(0.), fX(0.), fY(0.), fRandomizePrimary(false)
+TestInterface::TestInterface() :Position("TL"), Tower("Large"), Shape("Square"), ParticleName("neutron"), fEnergy(100.), fMessenger(0), fSigmaAngle(0.*deg), fSigmaRange(0.), fX(0.), fY(0.), fRandomizePrimary(false)
 {
     DefineCommands();
 }
@@ -31,65 +29,55 @@ TestInterface::~TestInterface()
 
 void TestInterface::GeneratePrimaryVertex(G4Event* event)
 {
+    G4PrimaryVertex* fVertex = new G4PrimaryVertex();
+    G4PrimaryParticle* fPrimaryParticle = new G4PrimaryParticle();
+    fPrimaryParticle->SetMomentumDirection(G4ThreeVector(0., 0., 1.));
     G4int PDGID = G4ParticleTable::GetParticleTable()->FindParticle(ParticleName)->GetPDGEncoding();
     G4double tmpx,tmpy;
     if (Shape=="Rectangular") 
     {
         tmpx = gRandom->Uniform(-fSigmaRange,fSigmaRange);
         tmpy = gRandom->Uniform(-fSigmaRange,fSigmaRange);
+        fVertex-> SetPosition((tmpx+fX)*mm, (tmpy+fY)*mm, 0.*mm);
+    }else if(Shape=="Square")
+    {
+        tmpx = gRandom->Uniform(-fSigmaRange,fSigmaRange);
+        tmpy = gRandom->Uniform(-fSigmaRange,fSigmaRange);
+        fVertex-> SetPosition((tmpx+fX)*mm, (tmpy+fY)*mm, 0.*mm);
     }else if(Shape=="Circle")
     {
         gRandom->Circle(tmpx, tmpy, fSigmaRange);
+        fVertex-> SetPosition((tmpx+fX)*mm, (tmpy+fY)*mm, 0.*mm);
     }else if(Shape=="Diamond")
     {
         tmpx = gRandom->Uniform(-fSigmaRange,fSigmaRange);
         tmpy = gRandom->Uniform(-fSigmaRange,fSigmaRange);
         G4ThreeVector tmpdirection = G4ThreeVector( tmpx, tmpy, 0.).rotate(G4ThreeVector(0., 0., 1.), 45*deg);
+
+        if (Position=="TOP") 
+        {
+            if (Tower=="Small") 
+            {
+                fVertex-> SetPosition(tmpx*mm,(tmpy+24)*mm, 0.*mm);
+            }else
+            {
+                fVertex-> SetPosition(tmpx*mm, (tmpy+61.4)*mm, 0.*mm);
+            }
+        }
+        if (Position=="TS") 
+        {
+            if (Tower=="Small") 
+            {
+                fVertex-> SetPosition(tmpx*mm, tmpy*mm, 0.*mm);
+            }else
+            {
+                fVertex-> SetPosition(tmpx*mm, (tmpy+47.4)*mm, 0.*mm);
+            }
+        }
     }
 
-    G4PrimaryVertex* fVertex = new G4PrimaryVertex();
-    fVertex-> SetPosition(tmpx*mm, tmpy*mm, 0.*mm);
-    G4PrimaryParticle* fPrimaryParticle = new G4PrimaryParticle();
-    fPrimaryParticle->SetMomentumDirection(G4ThreeVector(0., 0., 1.));
     fPrimaryParticle-> SetTotalEnergy(fEnergy*GeV);
     fPrimaryParticle-> SetPDGcode(PDGID);
-
-
-
-    if (Position=="TOP") 
-    {
-        if (Tower=="Small") 
-        {
-            fPrimaryParticle->SetMomentumDirection(G4ThreeVector(tmpx, tmpy+RHICFManager::GetInstance()->GetARM1Y()*10., RHICFManager::GetInstance()->GetARM1Z()*10.-120.3));
-        }else
-        {
-        fPrimaryParticle->SetMomentumDirection(G4ThreeVector(tmpx, tmpy+RHICFManager::GetInstance()->GetARM1Y()*10.+47.4, RHICFManager::GetInstance()->GetARM1Z()*10.-120.3));
-        }
-    }
-    if (Position=="TS") 
-    {
-        if (Tower=="Small") 
-        {
-            fPrimaryParticle->SetMomentumDirection(G4ThreeVector(tmpx, tmpy, RHICFManager::GetInstance()->GetARM1Z()*10.-120.3));
-        }else
-        {
-            fPrimaryParticle->SetMomentumDirection(G4ThreeVector(tmpx, tmpy+47.4, RHICFManager::GetInstance()->GetARM1Z()*10.-120.3));
-        }
-    }
-    if (Position=="Manual") 
-    {
-            fPrimaryParticle->SetMomentumDirection(G4ThreeVector(tmpx+fX, tmpy+fY, RHICFManager::GetInstance()->GetARM1Z()*10.-120.3));
-    }else
-    {
-        if (Tower=="Small") 
-        {
-            fPrimaryParticle->SetMomentumDirection(G4ThreeVector(tmpx, tmpy-47.4, RHICFManager::GetInstance()->GetARM1Z()*10.-120.3));
-        }else
-        {
-            fPrimaryParticle->SetMomentumDirection(G4ThreeVector(tmpx, tmpy, RHICFManager::GetInstance()->GetARM1Z()*10.-120.3));
-        }
-    }
-
     fVertex-> SetPrimary(fPrimaryParticle);
     event-> AddPrimaryVertex(fVertex);
 }
