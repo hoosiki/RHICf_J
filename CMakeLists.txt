@@ -75,6 +75,7 @@ endforeach()
 # 
 #
 #set(CMAKE_C_COMPILER "/home/hoosiki/Packages/gcc/bin/gcc")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -D_GLIBCXX_USE_C99")
 #set(CMAKE_CXX_COMPILER "/home/hoosiki/Packages/gcc/bin/g++")
 #set(CMAKE_CXX_FLAGS "-g -ggdb -O3")
 
