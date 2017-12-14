@@ -34,6 +34,7 @@ void TestInterface::GeneratePrimaryVertex(G4Event* event)
     fPrimaryParticle->SetMomentumDirection(G4ThreeVector(0., 0., 1.));
     G4int PDGID = G4ParticleTable::GetParticleTable()->FindParticle(ParticleName)->GetPDGEncoding();
     G4double tmpx,tmpy;
+    G4ThreeVector tmpdirection;
     if (Shape=="Rectangular") 
     {
         tmpx = gRandom->Uniform(-fSigmaRange,fSigmaRange);
@@ -46,8 +47,10 @@ void TestInterface::GeneratePrimaryVertex(G4Event* event)
         fVertex-> SetPosition((tmpx+fX)*mm, (tmpy+fY)*mm, 0.*mm);
     }else if(Shape=="Circle")
     {
-        gRandom->Circle(tmpx, tmpy, fSigmaRange);
-        fVertex-> SetPosition((tmpx+fX)*mm, (tmpy+fY)*mm, 0.*mm);
+        tmpx = gRandom->Uniform(0.,180.);
+        tmpy = gRandom->Uniform(-fSigmaRange,fSigmaRange);
+        tmpdirection = G4ThreeVector( tmpy, 0., 0.).rotate(G4ThreeVector(0., 0., 1.), tmpx*deg);
+        fVertex-> SetPosition((tmpdirection.x()+fX)*mm, (tmpdirection.y()+fY)*mm, 0.*mm);
     }else if(Shape=="Diamond")
     {
         tmpx = gRandom->Uniform(-fSigmaRange,fSigmaRange);
@@ -58,20 +61,20 @@ void TestInterface::GeneratePrimaryVertex(G4Event* event)
         {
             if (Tower=="Small") 
             {
-                fVertex-> SetPosition(tmpx*mm,(tmpy+24)*mm, 0.*mm);
+                fVertex-> SetPosition(tmpdirection.x()*mm,(tmpdirection.y()+24)*mm, 0.*mm);
             }else
             {
-                fVertex-> SetPosition(tmpx*mm, (tmpy+61.4)*mm, 0.*mm);
+                fVertex-> SetPosition(tmpdirection.x()*mm, (tmpdirection.y()+61.4)*mm, 0.*mm);
             }
         }
         if (Position=="TS") 
         {
             if (Tower=="Small") 
             {
-                fVertex-> SetPosition(tmpx*mm, tmpy*mm, 0.*mm);
+                fVertex-> SetPosition(tmpdirection.x()*mm, tmpdirection.y()*mm, 0.*mm);
             }else
             {
-                fVertex-> SetPosition(tmpx*mm, (tmpy+47.4)*mm, 0.*mm);
+                fVertex-> SetPosition(tmpdirection.x()*mm, (tmpdirection.y()+47.4)*mm, 0.*mm);
             }
         }
     }
@@ -116,6 +119,15 @@ void TestInterface::DefineCommands()
     toweridCmd.SetParameterName("particle", true);
     toweridCmd.SetDefaultValue("Large");
               
+    // shape command
+    G4GenericMessenger::Command& shapeidCmd = fMessenger->DeclarePropertyWithUnit("shape", "G4String", Shape, "Beam shape");
+    guidance = "Beam shape\n";   
+    guidance += "eg: Rectangular, Sqaure, Diamond, Circle\n";
+    guidance += "eg: /Testbeam/shape Diamond";                               
+    shapeidCmd.SetGuidance(guidance);
+    shapeidCmd.SetParameterName("shape", true);
+    shapeidCmd.SetDefaultValue("Diamond");
+
     // energy command
     G4GenericMessenger::Command& energyCmd = fMessenger->DeclarePropertyWithUnit("energy", "GeV", fEnergy, "Mean energy of primaries.");
     guidance = "Setting for Primary particle having specific energy thrown from IP.\n";   

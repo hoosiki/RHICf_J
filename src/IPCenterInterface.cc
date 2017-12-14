@@ -37,6 +37,7 @@ void IPCenterInterface::GeneratePrimaryVertex(G4Event* event)
     G4PrimaryParticle* fPrimaryParticle = new G4PrimaryParticle();
     fPrimaryParticle-> SetPDGcode(PDGID);
     fPrimaryParticle-> SetTotalEnergy(fEnergy);
+    G4ThreeVector tmpdirection;
 
     G4double tmpx,tmpy;
 
@@ -44,11 +45,13 @@ void IPCenterInterface::GeneratePrimaryVertex(G4Event* event)
     {
         tmpx = gRandom->Uniform(-fSigmaRange,fSigmaRange);
         tmpy = gRandom->Uniform(-fSigmaRange,fSigmaRange);
-        G4ThreeVector tmpdirection = G4ThreeVector( tmpx, tmpy, 0.).rotate(G4ThreeVector(0., 0., 1.), 45*deg);
+        tmpdirection = G4ThreeVector( tmpx, tmpy, 0.).rotate(G4ThreeVector(0., 0., 1.), 45*deg);
         
     }else if(Shape=="Circle")
     {
-        gRandom->Circle(tmpx, tmpy, fSigmaRange);
+        tmpx = gRandom->Uniform(0.,180.);
+        tmpy = gRandom->Uniform(-fSigmaRange,fSigmaRange);
+        tmpdirection = G4ThreeVector( tmpy, 0., 0.).rotate(G4ThreeVector(0., 0., 1.), tmpx*deg);
     }
 
 
@@ -58,25 +61,34 @@ void IPCenterInterface::GeneratePrimaryVertex(G4Event* event)
         if (Tower=="Small") 
         {
             
-            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpx, tmpy+(RHICFManager::GetInstance()->GetARM1Y()*10.),(RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+        G4cout << tmpx << ":" << tmpy << G4endl;
+            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y()+(RHICFManager::GetInstance()->GetARM1Y()*10.),(RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
         }else
         {
-        fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpx, tmpy+(RHICFManager::GetInstance()->GetARM1Y()*10.)+47.4, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+        fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y()+(RHICFManager::GetInstance()->GetARM1Y()*10.)+47.4, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
         }
-    }
-    if (Position=="TS") 
+    }else if(Position=="TS")
     {
         if (Tower=="Small") 
         {
-            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpx, tmpy, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y(), (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
         }else
         {
-            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpx, tmpy+47.4, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y()+47.4, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+        }
+    }else
+    {
+        if (Tower=="Small") 
+        {
+            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y()-24, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+        }else
+        {
+            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y(), (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
         }
     }
     if (Position=="Manual") 
     {
-            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpx+fX, tmpy+fY, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x()+fX, tmpdirection.y()+fY, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
     }
     
     fVertex-> SetPrimary(fPrimaryParticle);

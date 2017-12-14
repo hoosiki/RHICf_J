@@ -1,0 +1,4 @@
+/RHICfGenerator/select ipuni
+/IPUnibeam/sigmaRange 10
+/RHICfRunAction/setFileName Uni
+/run/beamOn 1000
