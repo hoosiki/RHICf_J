@@ -24,6 +24,7 @@ class RHICFEventAction : public G4UserEventAction
         void    ExtractDEValueForARM1(G4HCofThisEvent*, const G4Event*);
         void    ExtractNOPValueForARM1(G4HCofThisEvent*);
         void    ExtractValueForSTARZDC(G4HCofThisEvent*, const G4Event*);
+        void    ClearIPInfo();
 
     private:
 

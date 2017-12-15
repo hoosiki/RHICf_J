@@ -6,6 +6,7 @@
 #include "G4Event.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "g4root.hh"
+#include "RHICFManager.hh"
 #include "G4RunManager.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -61,6 +62,7 @@ void RHICFEventAction::EndOfEventAction(const G4Event* event)
     G4AnalysisManager::Instance()->AddNtupleRow(2);//FCInfo DE & NOP
     G4AnalysisManager::Instance()->AddNtupleRow(4);//PMMA
     G4AnalysisManager::Instance()->AddNtupleRow(5);//SMD
+    ClearIPInfo();
 }
 
 G4double RHICFEventAction::GetDEValue(G4HCofThisEvent* hc, G4String detectorname, int channel)
@@ -279,3 +281,11 @@ void RHICFEventAction::ExtractValueForSTARZDC(G4HCofThisEvent* hc, const G4Event
 
 }
 
+void RHICFEventAction::ClearIPInfo()
+{
+    RHICFManager::GetInstance()->GetNameMap().clear();
+    RHICFManager::GetInstance()->GetPXMap().clear();
+    RHICFManager::GetInstance()->GetPYMap().clear();
+    RHICFManager::GetInstance()->GetPZMap().clear();
+    RHICFManager::GetInstance()->GetEnergyMap().clear();
+}

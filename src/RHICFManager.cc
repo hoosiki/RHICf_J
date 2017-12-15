@@ -2,6 +2,8 @@
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
 #include <iostream>
+#include <map>
+#include <string>
 
 //SINGLETON FOR STORING PARAMETER WHILE PROGRAM RUNNING
 
@@ -98,4 +100,8 @@ void RHICFManager::SetParticleName(G4String string)
     fParticleName = string;
 }
 
+void RHICFManager::SetParticleNumber(G4int num)
+{
+    fParticleNum = num;
+}
 

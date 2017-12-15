@@ -39,6 +39,7 @@
 #include "G4TransportationManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "RHICFManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 HepMCG4Interface::HepMCG4Interface()
@@ -71,6 +72,7 @@ G4bool HepMCG4Interface::CheckVertexInsideWorld
 void HepMCG4Interface::HepMC2G4(const HepMC::GenEvent* hepmcevt,
                                 G4Event* g4event)
 {
+    G4int tmpevent = 0;
   for(HepMC::GenEvent::vertex_const_iterator vitr= hepmcevt->vertices_begin();
       vitr != hepmcevt->vertices_end(); ++vitr ) { // loop for vertex ...
 
@@ -106,12 +108,12 @@ void HepMCG4Interface::HepMC2G4(const HepMC::GenEvent* hepmcevt,
       G4int pdgcode= (*vpitr)-> pdg_id();
       pos= (*vpitr)-> momentum();
       G4LorentzVector p(pos.px(), pos.py(), pos.pz(), pos.e());
-      G4PrimaryParticle* g4prim=
-        new G4PrimaryParticle(pdgcode, p.x()*GeV, p.y()*GeV, p.z()*GeV);
-
+      G4PrimaryParticle* g4prim= new G4PrimaryParticle(pdgcode, p.x()*GeV, p.y()*GeV, p.z()*GeV);
+      tmpevent++;
       g4vtx-> SetPrimary(g4prim);
     }
     g4event-> AddPrimaryVertex(g4vtx);
+    RHICFManager::GetInstance()->SetParticleNumber(tmpevent);
   }
 }
 

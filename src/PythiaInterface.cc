@@ -5,6 +5,7 @@
 #include "RHICFPythia.hh"
 #include "G4LorentzVector.hh"
 #include "G4Event.hh"
+#include "RHICFManager.hh"
 #include "G4PrimaryParticle.hh"
 #include "G4PrimaryVertex.hh"
 #include "G4TransportationManager.hh"
@@ -32,6 +33,7 @@ G4bool PythiaInterface::CheckVertexInsideWorld(const G4ThreeVector& pos) const
 
 void PythiaInterface::HepMC2G4(const HepMC::GenEvent* hepmcevt, G4Event* g4event)
 {
+    G4int tmpevent = 0;
     for(HepMC::GenEvent::vertex_const_iterator vitr= hepmcevt->vertices_begin(); vitr != hepmcevt->vertices_end(); ++vitr ) 
     { // loop for vertex ...
 
@@ -58,10 +60,13 @@ void PythiaInterface::HepMC2G4(const HepMC::GenEvent* hepmcevt, G4Event* g4event
             pos= (*vpitr)-> momentum();
             G4LorentzVector p(pos.px(), pos.py(), pos.pz(), pos.e());
             G4PrimaryParticle* g4prim= new G4PrimaryParticle(pdgcode, p.x()*GeV, p.y()*GeV, p.z()*GeV);
+            tmpevent++;
             g4vtx-> SetPrimary(g4prim);
         }
         g4event-> AddPrimaryVertex(g4vtx);
     }
+    RHICFManager::GetInstance()->SetParticleNumber(tmpevent);
+    G4cout <<  "Total particle: " << tmpevent << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

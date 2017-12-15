@@ -13,6 +13,7 @@
 #include "TRandom.h"
 #include "TMath.h"
 #include "Randomize.hh"
+#include "RHICFManager.hh"
 
 
 IPCenterInterface::IPCenterInterface()
@@ -30,6 +31,7 @@ IPCenterInterface::~IPCenterInterface()
 
 void IPCenterInterface::GeneratePrimaryVertex(G4Event* event)
 {
+    G4int tmpevent = 0;
     G4int PDGID = G4ParticleTable::GetParticleTable()->FindParticle(ParticleName)->GetPDGEncoding();
 
     G4PrimaryVertex* fVertex = new G4PrimaryVertex();
@@ -92,7 +94,9 @@ void IPCenterInterface::GeneratePrimaryVertex(G4Event* event)
     }
     
     fVertex-> SetPrimary(fPrimaryParticle);
+    tmpevent++;
     event-> AddPrimaryVertex(fVertex);
+    RHICFManager::GetInstance()->SetParticleNumber(tmpevent);
 }
 
 

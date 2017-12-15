@@ -24,16 +24,11 @@ RHICFTrackingAction::~RHICFTrackingAction()
 void RHICFTrackingAction::PreUserTrackingAction(const G4Track* track)
 {
     G4int tmpID = track->GetTrackID();
-    if (tmpID==1) 
+    if (tmpID<=RHICFManager::GetInstance()->GetParticleNumber()) 
     {
-        G4String tmpstring = track->GetParticleDefinition()->GetParticleName();
-        RHICFManager::GetInstance()->SetParticleName(tmpstring);
-        RHICFManager::GetInstance()->SetMomentumX(track->GetDynamicParticle()->GetMomentum().x()/GeV);
-        RHICFManager::GetInstance()->SetMomentumY(track->GetDynamicParticle()->GetMomentum().x()/GeV);
-        RHICFManager::GetInstance()->SetMomentumZ(track->GetDynamicParticle()->GetMomentum().x()/GeV);
+        StoreIPInfo(track, tmpID);
         ExtractIPInfo(track);
     }
-
 }
 
 
@@ -54,4 +49,13 @@ void RHICFTrackingAction::ExtractIPInfo(const G4Track* track)
     G4AnalysisManager::Instance()->FillNtupleIColumn(7, 8, stoi(FileManager::GetInstance()->GetTime()+FileManager::GetInstance()->GetPID()));
     G4AnalysisManager::Instance()->FillNtupleIColumn(7, 9, G4RunManager::GetRunManager()-> GetCurrentEvent()->GetEventID());
     G4AnalysisManager::Instance()->AddNtupleRow(7);     
+}
+
+void RHICFTrackingAction::StoreIPInfo(const G4Track* track, G4int trackid)
+{
+    RHICFManager::GetInstance()->MapName[trackid] = track->GetParticleDefinition()->GetParticleName();
+    RHICFManager::GetInstance()->MapPX[trackid] = track->GetMomentum().x();
+    RHICFManager::GetInstance()->MapPY[trackid] =  track->GetMomentum().y();
+    RHICFManager::GetInstance()->MapPZ[trackid] =  track->GetMomentum().z();
+    RHICFManager::GetInstance()->MapE[trackid] = track->GetTotalEnergy();
 }

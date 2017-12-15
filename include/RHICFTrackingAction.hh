@@ -16,6 +16,7 @@ class RHICFTrackingAction : public G4UserTrackingAction {
     virtual void  PreUserTrackingAction(const G4Track*);
     virtual void PostUserTrackingAction(const G4Track*);
     void ExtractIPInfo(const G4Track*);
+    void StoreIPInfo(const G4Track*, G4int);
     
     
   private:
