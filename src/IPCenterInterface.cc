@@ -58,36 +58,17 @@ void IPCenterInterface::GeneratePrimaryVertex(G4Event* event)
 
 
 
-    if (Position=="TOP") 
+    if (Tower=="Large") 
     {
-        if (Tower=="Small") 
-        {
-            
-        G4cout << tmpx << ":" << tmpy << G4endl;
-            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y()+(RHICFManager::GetInstance()->GetARM1Y()*10.),(RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
-        }else
-        {
-        fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y()+(RHICFManager::GetInstance()->GetARM1Y()*10.)+47.4, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
-        }
-    }else if(Position=="TS")
+        fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y()+(RHICFManager::GetInstance()->GetARM1Y()*10.),(RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+        //Junsang****G4cout << tmpx << ":" << tmpdirection.y()+(RHICFManager::GetInstance()->GetARM1Y()*10.) << G4endl;
+    }else 
     {
-        if (Tower=="Small") 
-        {
-            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y(), (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
-        }else
-        {
-            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y()+47.4, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
-        }
-    }else
-    {
-        if (Tower=="Small") 
-        {
-            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y()-24, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
-        }else
-        {
-            fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y(), (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
-        }
+        fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x(), tmpdirection.y()+(RHICFManager::GetInstance()->GetARM1Y()*10.)-(30.1*sqrt(2)+5), (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
+        //Junsang****G4cout << tmpx << ":" << tmpdirection.y()+(RHICFManager::GetInstance()->GetARM1Y()*10.+47.4) << G4endl;
     }
+
+
     if (Position=="Manual") 
     {
             fPrimaryParticle->SetMomentumDirection(UnitVector(G4ThreeVector(tmpdirection.x()+fX, tmpdirection.y()+fY, (RHICFManager::GetInstance()->GetARM1Z()*10.)-120.3)));
@@ -116,13 +97,13 @@ void IPCenterInterface::DefineCommands()
 
     // position command
     G4GenericMessenger::Command& positionidCmd = fMessenger->DeclarePropertyWithUnit("position", "G4String", Position, "RHICF position");
-    guidance = "Setting for Position of RHICf\n";   
-    guidance += "eg: TL, TS, TOP, Manual\n";
+    guidance = "Setting for position of beam\n";   
+    guidance += "eg: Manual\n";
     guidance += "Manual is set beam center manually with X,Y value\n";
-    guidance += "eg: /IPUnibeam/position TL";                               
+    guidance += "eg: /IPUnibeam/position Manual";                               
     positionidCmd.SetGuidance(guidance);
     positionidCmd.SetParameterName("position", true);
-    positionidCmd.SetDefaultValue("TL");
+    positionidCmd.SetDefaultValue("NonManual");
     
     // tower command
     G4GenericMessenger::Command& toweridCmd = fMessenger->DeclarePropertyWithUnit("tower", "G4String", Tower, "RHICF tower");
@@ -131,7 +112,7 @@ void IPCenterInterface::DefineCommands()
     guidance += "eg: /IPUnibeam/tower Large";                               
     toweridCmd.SetGuidance(guidance);
     toweridCmd.SetParameterName("tower", true);
-    toweridCmd.SetDefaultValue("Large");
+    toweridCmd.SetDefaultValue("Small");
     
     // shape command
     G4GenericMessenger::Command& shapeidCmd = fMessenger->DeclarePropertyWithUnit("shape", "G4String", Shape, "Beam shape");

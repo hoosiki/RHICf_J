@@ -16,7 +16,7 @@
 #include "RHICFManager.hh"
 
 
-TestInterface::TestInterface() :Position("TL"), Tower("Large"), Shape("Square"), ParticleName("neutron"), fEnergy(100.*GeV), fMessenger(0), fSigmaAngle(0.*deg), fSigmaRange(0.), fX(0.), fY(0.), fRandomizePrimary(false)
+TestInterface::TestInterface() :Tower("Large"), Shape("Square"), ParticleName("neutron"), fEnergy(100.*GeV), fMessenger(0), fSigmaAngle(0.*deg), fSigmaRange(0.), fX(0.), fY(0.), fRandomizePrimary(false)
 {
     DefineCommands();
 }
@@ -35,52 +35,33 @@ void TestInterface::GeneratePrimaryVertex(G4Event* event)
     G4PrimaryParticle* fPrimaryParticle = new G4PrimaryParticle();
     fPrimaryParticle->SetMomentumDirection(G4ThreeVector(0., 0., 1.));
     G4int PDGID = G4ParticleTable::GetParticleTable()->FindParticle(ParticleName)->GetPDGEncoding();
-    G4double tmpx,tmpy;
+    G4double tmpx,tmpy,tmptheta,tmpr;
     G4ThreeVector tmpdirection;
     if (Shape=="Rectangular") 
     {
-        tmpx = gRandom->Uniform(-fSigmaRange,fSigmaRange);
+        tmpx = gRandom->Uniform(-50,50);
         tmpy = gRandom->Uniform(-fSigmaRange,fSigmaRange);
-        fVertex-> SetPosition((tmpx+fX)*mm, (tmpy+fY)*mm, 0.*mm);
     }else if(Shape=="Square")
     {
         tmpx = gRandom->Uniform(-fSigmaRange,fSigmaRange);
         tmpy = gRandom->Uniform(-fSigmaRange,fSigmaRange);
-        fVertex-> SetPosition((tmpx+fX)*mm, (tmpy+fY)*mm, 0.*mm);
     }else if(Shape=="Circle")
     {
-        tmpx = gRandom->Uniform(0.,180.);
-        tmpy = gRandom->Uniform(-fSigmaRange,fSigmaRange);
-        tmpdirection = G4ThreeVector( tmpy, 0., 0.).rotate(G4ThreeVector(0., 0., 1.), tmpx*deg);
-        fVertex-> SetPosition((tmpdirection.x()+fX)*mm, (tmpdirection.y()+fY)*mm, 0.*mm);
+        tmptheta = gRandom->Uniform(0.,180.);
+        tmpr = gRandom->Uniform(-fSigmaRange,fSigmaRange);
+        tmpdirection = G4ThreeVector( tmpr, 0., 0.).rotate(G4ThreeVector(0., 0., 1.), tmptheta*deg);
+        tmpx = tmpdirection.x();
+        tmpy = tmpdirection.y();
     }else if(Shape=="Diamond")
     {
         tmpx = gRandom->Uniform(-fSigmaRange,fSigmaRange);
         tmpy = gRandom->Uniform(-fSigmaRange,fSigmaRange);
         G4ThreeVector tmpdirection = G4ThreeVector( tmpx, tmpy, 0.).rotate(G4ThreeVector(0., 0., 1.), 45*deg);
-
-        if (Position=="TOP") 
-        {
-            if (Tower=="Small") 
-            {
-                fVertex-> SetPosition(tmpdirection.x()*mm,(tmpdirection.y()+24)*mm, 0.*mm);
-            }else
-            {
-                fVertex-> SetPosition(tmpdirection.x()*mm, (tmpdirection.y()+61.4)*mm, 0.*mm);
-            }
-        }
-        if (Position=="TS") 
-        {
-            if (Tower=="Small") 
-            {
-                fVertex-> SetPosition(tmpdirection.x()*mm, tmpdirection.y()*mm, 0.*mm);
-            }else
-            {
-                fVertex-> SetPosition(tmpdirection.x()*mm, (tmpdirection.y()+47.4)*mm, 0.*mm);
-            }
-        }
+        tmpx = tmpdirection.x();
+        tmpy = tmpdirection.y();
     }
 
+    fVertex-> SetPosition((tmpx+fX)*mm, (tmpy+fY)*mm, 0.*mm);
     fPrimaryParticle-> SetPDGcode(PDGID);
     fPrimaryParticle-> SetTotalEnergy(fEnergy);
     tmpevent++;
@@ -103,16 +84,6 @@ void TestInterface::DefineCommands()
     pdgidCmd.SetGuidance(guidance);
     //Junsang****pdgidCmd.SetParameterName("particle", true);
     pdgidCmd.SetDefaultValue("neutron");
-
-    // position command
-    G4GenericMessenger::Command& positionidCmd = fMessenger->DeclarePropertyWithUnit("position", "G4String", Position, "RHICF position");
-    guidance = "Setting for Position of RHICf\n";   
-    guidance += "eg: TL, TS, TOP, Manual\n";
-    guidance += "Manual is set beam center manually with X,Y value\n";
-    guidance += "eg: /Testbeam/position TL";                               
-    positionidCmd.SetGuidance(guidance);
-    positionidCmd.SetParameterName("position", true);
-    positionidCmd.SetDefaultValue("TL");
     
     // tower command
     G4GenericMessenger::Command& toweridCmd = fMessenger->DeclarePropertyWithUnit("tower", "G4String", Tower, "RHICF tower");

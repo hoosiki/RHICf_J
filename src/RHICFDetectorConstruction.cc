@@ -121,9 +121,9 @@ G4VPhysicalVolume* RHICFDetectorConstruction::Construct ( )
     //Junsang****RHICFManager::GetInstance()->SetARM1Z(50.);
     
     /*-*/STARPIPEINSTALL(RHICFManager::GetInstance()->GetARM1Y(), (RHICFManager::GetInstance()->GetARM1Z()-14.15));
-    /*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, RHICFManager::GetInstance()->GetARM1Y()*cm, RHICFManager::GetInstance()->GetARM1Z()*cm), fRotationY180);
+    //Junsang****/*-*/ARM1INSTALL(fWorldPhysical, G4ThreeVector(0.*cm, RHICFManager::GetInstance()->GetARM1Y()*cm, RHICFManager::GetInstance()->GetARM1Z()*cm), fRotationY180);
     //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1867.59*cm), fRotationY180);
-    /*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1854.59*cm), fRotationY180);
+    //Junsang****/*-*/STARZDCINSTALL(fWorldPhysical, G4ThreeVector(0.*cm, 0.*cm, 1854.59*cm), fRotationY180);
 
 
     
