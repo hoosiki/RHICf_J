@@ -503,8 +503,8 @@ void RHICFDetectorConstructionTLwoW::STARZDCINSTALL(G4VPhysicalVolume* world_phy
     /*-*/VectorForEdge.push_back(EdgeOnQuadrant);
     /*-*/EdgeOnQuadrant = {-3.5*mm,0*mm};
     /*-*/VectorForEdge.push_back(EdgeOnQuadrant);
-    /*-*/G4ExtrudedSolid::ZSection Bottom(-9*cm,{0,0},1);
-    /*-*/G4ExtrudedSolid::ZSection Top(9*cm,{0,0},1);
+    /*-*/G4ExtrudedSolid::ZSection Bottom(-8.25*cm,{0,0},1);
+    /*-*/G4ExtrudedSolid::ZSection Top(8.25*cm,{0,0},1);
     /*-*/std::vector<G4ExtrudedSolid::ZSection> zsections;
     /*-*/zsections.push_back(Bottom);
     /*-*/zsections.push_back(Top);

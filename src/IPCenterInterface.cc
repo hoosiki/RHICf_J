@@ -9,6 +9,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4GenericMessenger.hh"
 #include "RHICFManager.hh"
+#include "Seeder.hh"
 #include "G4SystemOfUnits.hh"
 #include "TRandom.h"
 #include "TMath.h"
@@ -40,6 +41,8 @@ void IPCenterInterface::GeneratePrimaryVertex(G4Event* event)
     fPrimaryParticle-> SetPDGcode(PDGID);
     fPrimaryParticle-> SetTotalEnergy(fEnergy);
     G4ThreeVector tmpdirection;
+    
+    gRandom->SetSeed(0);
 
     G4double tmpx,tmpy;
 

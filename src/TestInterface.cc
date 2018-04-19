@@ -37,6 +37,7 @@ void TestInterface::GeneratePrimaryVertex(G4Event* event)
     G4int PDGID = G4ParticleTable::GetParticleTable()->FindParticle(ParticleName)->GetPDGEncoding();
     G4double tmpx,tmpy,tmptheta,tmpr;
     G4ThreeVector tmpdirection;
+    gRandom->SetSeed(0);
     if (Shape=="Rectangular") 
     {
         tmpx = gRandom->Uniform(-50,50);
